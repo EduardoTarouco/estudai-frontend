@@ -42,3 +42,92 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+---
+
+# Git Flow – Guia de Uso
+
+Este projeto segue o modelo de versionamento **Git Flow** para organizar o desenvolvimento de forma clara, previsível e colaborativa.
+
+## O que é Git Flow?
+
+Git Flow é uma estratégia de ramificação que define um fluxo de trabalho padronizado, separando desenvolvimento, produção e funcionalidades.
+
+### Estrutura de branches:
+
+- `main`: contém o código em produção (estável).
+- `dev`: branch de integração para desenvolvimento.
+- `feature/*`: novas funcionalidades.
+- `release/*`: preparação para novos lançamentos.
+- `hotfix/*`: correções críticas em produção.
+
+---
+
+## Configurando Git Flow
+
+Instale o Git Flow no seu ambiente:
+
+### Linux / Ubuntu:
+
+```bash
+sudo apt install git-flow
+```
+
+### MacOS (com Homebrew):
+
+```bash
+brew install git-flow
+```
+
+### Windows:
+- Recomendado: [Git for windows](https://gitforwindows.org/)
+- Ou use um cliente como [Sourcetree](https://www.sourcetreeapp.com/)
+
+Inicie o Git Flow no seu repositório local:
+
+```bash
+git flow init
+```
+
+Aceite os nomes padrão das branches (main, dev, etc.) pressionando ```Enter``` nas opções sugeridas.
+
+## Criando novas funcionalidades
+
+```bash
+git flow feature start nome-da-feature
+```
+> Isso cria e muda para a branch feature/nome-da-feature.
+
+Quando terminar a funcionalidade:
+```bash
+git flow feature finish nome-da-feature
+```
+> Isso faz merge da feature em develop e apaga a branch local.
+
+## Criando uma nova release
+
+Use quando quiser preparar uma nova versão para produção:
+
+```bash
+git flow release start 1.0.0
+```
+Finalize a release após os testes:
+
+```bash
+git flow release finish 1.0.0
+```
+> Isso faz merge em main e develop, cria uma tag com a versão e apaga a branch local.
+
+
+## Corrigindo bugs urgentes (hotfix)
+Quando precisar corrigir algo direto na produção:
+
+```bash
+git flow hotfix start nome-da-correção
+```
+Finalize assim que corrigido:
+
+```bash
+git flow hotfix finish nome-da-correção
+```
+> Isso faz merge direto em main e develop, e cria uma tag da correção.
