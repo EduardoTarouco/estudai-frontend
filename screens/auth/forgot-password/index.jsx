@@ -1,9 +1,9 @@
 import { Text, View } from "react-native";
 
-export default function Index() {
+export default ForgotPassword = () => {
   return (
     <View className="h-screen w-screen flex justify-center items-center">
-      <Text>Hello, world!</Text>
+      <Text>Password recovery working!</Text>
     </View>
   );
 }
