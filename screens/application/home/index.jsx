@@ -1,9 +1,10 @@
 import { Text, View } from "react-native";
 
-export default CreatePassword = () => {
+export const Home = () => {
+  
   return (
     <View className="h-screen w-screen flex justify-center items-center">
-      <Text>Create new password working!</Text>
+      <Text className="text-3xl font-bold">Home page working!</Text>
     </View>
   );
-}
+};
