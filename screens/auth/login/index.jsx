@@ -63,7 +63,10 @@ export const Login = () => {
         </View>
 
         {/* Campo Esqueceu a senha */}
-        <TouchableOpacity className="bg-white border rounded-full py-1 mt-1 w-32 self-end mr-3 -mt-2">
+        <TouchableOpacity 
+          className="bg-white border rounded-full py-1 mt-1 w-32 self-end mr-3 -mt-2"
+          onPress={() => {router.push("auth/forgot-password")}}
+        >
           <Text className="text-blue-500 text-center font-bold text-sm">Esqueceu a senha?</Text>
         </TouchableOpacity>
 
@@ -72,7 +75,7 @@ export const Login = () => {
         <TouchableOpacity 
           className=" bg-[#0DF538] border rounded-full py-4 mb-6 mt-6"
           onPress={() => {router.replace("home")}}
-          >
+        >
           <Text className="text-black text-center font-bold text-lg">Logar</Text>
         </TouchableOpacity>
 
