@@ -63,6 +63,7 @@
     "prettier-plugin-tailwindcss": "^0.5.14",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-hook-form": "^7.62.0",
     "react-native": "0.79.5",
     "react-native-animatable": "^1.4.0",
     "react-native-css-interop": "^0.1.22",
