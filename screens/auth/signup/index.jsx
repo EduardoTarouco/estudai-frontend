@@ -1,25 +1,26 @@
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
 import { Heading } from '@/components/ui/heading';
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form';
+import { MaskedTextInput } from 'react-native-mask-text';
 import { EyeIcon, EyeOffIcon, CalendarDaysIcon, AtSignIcon, MailIcon, LockIcon } from "@/components/ui/icon";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
 import { router } from "expo-router";
 import { useState } from "react";
-import { View } from "react-native";
+import { View, KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
 
 export const SignUp = () => {
   // Hook do react-hook-form que gerencia a lógica de registro dos inputs, retornar seus valores, 
   // gerenciar o envio do formulário e retornar erros das validações.
   const { control, getValues, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
-      name: "",
+      nome: "",
       email: "",
-      password: "",
-      confirmPassword: "",
-      birthDate: ""
+      senha: "",
+      confirmarSenha: "",
+      dataNascimento: ""
     }
   });
 
@@ -29,202 +30,209 @@ export const SignUp = () => {
 
   // Lógica do que acontece ao enviar o formulário com sucesso.
   // Essa função só é chamada se os dados forem validados.
-  const onSubmit = (data) => {
+  const onSubmit = ({confirmarSenha, ...data}) => {
     console.log("Submitted Info: " + JSON.stringify(data));
     router.replace("home");
   };
 
   return (
-    <View className="flex-1 flex justify-center items-center gap-2 bg-yellow-200 p-5">
-      <VStack className="flex justify-center items-center m-2">
-        <Heading size={"4xl"}>Cadastro</Heading>
-        <Text>Cadastre-se e começe a utilizar o Estudai</Text>
-      </VStack>
-
-      <FormControl className="p-5 border rounded-lg border-outline-300 bg-gray-50 w-[95%]">
-        <VStack space="xl">
-
-          {/* 
-            * Os principais campos (nome, email, senha, repetir senha e data de nascimento, respectivamente) estão localizados em VStacks (agrupamentos verticais) abaixo: 
-            */}
-          <VStack space="xs">
-            <Text className={`text-typography-500 ${errors.name ? "text-red-500" : ""}`}>Nome*</Text>
-            {/* Controller é utilizado pelo react-hook-form para registrar componentes de input, registra seus nomes, realiza validações, etc.
-              *
-              * Pode configurar validações passando diferentes objetos ao parâmetro `rules` -> doc: https://react-hook-form.com/docs/useform/register
-              * Também é possível passar mensagens as validações passando um objeto na seguinte estrutura: { valor, mensagem }.
-              */}
-            <Controller
-              control={control}
-              name="name"
-              rules={{required: "O nome é obrigatório"}}
-              render={({ field: { onChange, value } }) => (
-              <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.name ? "border-2" : ""}`} isInvalid={errors.name}>
-                <InputIcon as={AtSignIcon} className="m-3 -mr-1" color={errors.name ? "red" : "currentColor"} />
-                <InputField
-                  placeholder="John Jones"
-                  value={value}
-                  onChangeText={onChange}
-                />
-              </Input>
-            )}
-            />
-            {/* Aqui são renderizados os erros do campo de nome, caso ocorram */}
-            {errors.name && <Text className="text-red-500 text-sm ml-5">{errors.name.message}</Text>}
+    <SafeAreaView className="bg-yellow-200 flex-1">
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardShouldPersistTaps="handled"
+        style={{ flex: 1 }}
+      >
+        <View className="bg-yellow-200 flex-1 flex justify-center items-center gap-2 p-5">
+          <VStack className="flex justify-center items-center m-2">
+            <Heading size={"4xl"}>Cadastro</Heading>
+            <Text>Cadastre-se e começe a utilizar o Estudai</Text>
           </VStack>
 
-          <VStack space="xs">
-            <Text className={`text-typography-500 ${errors.email ? "text-red-500" : ""}`}>Email*</Text>
-            {/* O regex abaixo valida se o email está ou não bem formatado, mas é uma validação básica.
-              * Para um diagrama melhor sobre o que ocorre de verdade, vale visitar o site https://www.regexplained.co.uk/ e colar o regex do pattern lá dentro.
-              */}
-            <Controller
-              control={control}
-              name="email"
-              rules={{
-                required: "O email é obrigatório",
-                pattern: {
-                  value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
-                  message: "E-mail inválido"
-                }
-              }}
-              render={({ field: { onChange, value } }) => (
-              <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.email ? "border-2" : ""}`} isInvalid={errors.email}>
-                <InputIcon as={MailIcon} className="m-3 -mr-1" color={errors.name ? "red" : "currentColor"} />
-                <InputField
-                  placeholder="John@gmail.com"
-                  keyboardType="email-adress" 
-                  value={value}
-                  onChangeText={onChange}
+          <FormControl className="bg-gray-50 p-5 border rounded-lg border-outline-300 w-[95%]">
+            <VStack space="xl">
+
+              {/* 
+                * Os principais campos (nome, email, senha, repetir senha e data de nascimento, respectivamente) estão localizados em VStacks (agrupamentos verticais) abaixo: 
+                */}
+              <VStack space="xs">
+                <Text className={`text-typography-500 ${errors.nome ? "text-red-500" : ""}`}>Nome*</Text>
+                {/* Controller é utilizado pelo react-hook-form para registrar componentes de input, registra seus nomes, realiza validações, etc.
+                  *
+                  * Pode configurar validações passando diferentes objetos ao parâmetro `rules` -> doc: https://react-hook-form.com/docs/useform/register
+                  * Também é possível passar mensagens as validações passando um objeto na seguinte estrutura: { valor, mensagem }.
+                  */}
+                <Controller
+                  control={control}
+                  name="nome"
+                  rules={{required: "O nome é obrigatório"}}
+                  render={({ field: { onChange, value } }) => (
+                  <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.nome ? "border-2" : ""}`} isInvalid={errors.nome}>
+                    <InputIcon as={AtSignIcon} className="m-3 -mr-1" color={errors.nome ? "red" : "currentColor"} />
+                    <InputField
+                      placeholder="John Jones"
+                      value={value}
+                      onChangeText={onChange}
+                    />
+                  </Input>
+                )}
                 />
-              </Input>
-            )}
-            />
-            {errors.email && <Text className="text-red-500 text-sm ml-5">{errors.email.message}</Text>}
-          </VStack>
+                {/* Aqui são renderizados os erros do campo de nome, caso ocorram */}
+                {errors.nome && <Text className="text-red-500 text-sm ml-5">{errors.nome.message}</Text>}
+              </VStack>
 
-          <VStack space="xs">
-            <Text className={`text-typography-500 ${errors.password ? "text-red-500" : ""}`}>Senha*</Text>
-            <Controller 
-              control={control}
-              name="password"
-              rules={{
-                required: "A senha é obrigatória",
-                minLength: {
-                  value: 8,
-                  message: "A senha deve ter no mínimo 8 caracteres"
-                }
-              }}
-              render={({ field: { onChange, value } }) => (
-              <Input variant="rounded" size="xl" className={`text-center ${errors.password ? "border-2" : ""}`} isInvalid={errors.password}>
-                <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.name ? "red" : "currentColor"} />
-                <InputField 
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Senha"
-                  value={value}
-                  onChangeText={onChange}
+              <VStack space="xs">
+                <Text className={`text-typography-500 ${errors.email ? "text-red-500" : ""}`}>Email*</Text>
+                {/* O regex abaixo valida se o email está ou não bem formatado, mas é uma validação básica.
+                  * Para um diagrama melhor sobre o que ocorre de verdade, vale visitar o site https://www.regexplained.co.uk/ e colar o regex do pattern lá dentro.
+                  */}
+                <Controller
+                  control={control}
+                  name="email"
+                  rules={{
+                    required: "O email é obrigatório",
+                    pattern: {
+                      value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
+                      message: "E-mail inválido"
+                    }
+                  }}
+                  render={({ field: { onChange, value } }) => (
+                  <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.email ? "border-2" : ""}`} isInvalid={errors.email}>
+                    <InputIcon as={MailIcon} className="m-3 -mr-1" color={errors.email ? "red" : "currentColor"} />
+                    <InputField
+                      placeholder="John@gmail.com"
+                      keyboardType="email-adress" 
+                      value={value}
+                      onChangeText={onChange}
+                    />
+                  </Input>
+                )}
                 />
-                <InputSlot className="pr-3" onPress={() => {setShowPassword(!showPassword)}}>
-                  <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} />
-                </InputSlot>
-              </Input>
-            )}
-            />
-            {errors.password && <Text className="text-red-500 text-sm ml-5">{errors.password.message}</Text>}
-          </VStack>
+                {errors.email && <Text className="text-red-500 text-sm ml-5">{errors.email.message}</Text>}
+              </VStack>
 
-          <VStack space="xs">
-            <Text className={`text-typography-500 ${errors.confirmPassword ? "text-red-500" : ""}`}>Confirme a senha*</Text>
-            <Controller
-              control={control}
-              name="confirmPassword"
-              rules={{
-                required: "A confirmação da senha é obrigatória",
-                validate: (value) => 
-                  value === getValues("password") || "As senhas não coincidem"
-              }}
-              render={({ field: { onChange, value }}) => (
-              <Input variant="rounded" size="xl" className={`text-center ${errors.confirmPassword ? "border-2" : ""}`} isInvalid={errors.confirmPassword}>
-                <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.name ? "red" : "currentColor"} />
-                <InputField 
-                  type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Repetir senha"
-                  value={value}
-                  onChangeText={onChange}
+              <VStack space="xs">
+                <Text className={`text-typography-500 ${errors.senha ? "text-red-500" : ""}`}>Senha*</Text>
+                <Controller 
+                  control={control}
+                  name="senha"
+                  rules={{
+                    required: "A senha é obrigatória",
+                    minLength: {
+                      value: 8,
+                      message: "A senha deve ter no mínimo 8 caracteres"
+                    }
+                  }}
+                  render={({ field: { onChange, value } }) => (
+                  <Input variant="rounded" size="xl" className={`text-center ${errors.senha ? "border-2" : ""}`} isInvalid={errors.senha}>
+                    <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.senha ? "red" : "currentColor"} />
+                    <InputField 
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Senha"
+                      value={value}
+                      onChangeText={onChange}
+                    />
+                    <InputSlot className="pr-3" onPress={() => {setShowPassword(!showPassword)}}>
+                      <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} />
+                    </InputSlot>
+                  </Input>
+                )}
                 />
-                <InputSlot className="pr-3" onPress={() => {setShowConfirmPassword(!showConfirmPassword)}}>
-                  <InputIcon as={showConfirmPassword ? EyeIcon : EyeOffIcon} />
-                </InputSlot>
-              </Input>
-            )}
-            />
-            {errors.confirmPassword && <Text className="text-red-500 text-sm ml-5">{errors.confirmPassword.message}</Text>}
-          </VStack>
+                {errors.senha && <Text className="text-red-500 text-sm ml-5">{errors.senha.message}</Text>}
+              </VStack>
 
-          <VStack space="xs">
-            <Text className={`text-typography-500 ${errors.birthDate ? "text-red-500" : ""}`}>Data de nascimento*</Text>
-            <Controller
-              control={control}
-              name="birthDate"
-              rules={{
-                required: "A data de nascimento é obrigatória",
-                validate: (value) => {
-                  const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
-                  if (!regex.test(value)) {
-                    return "Use o formato dd/mm/aaaa";
-                  }
-
-                  const [dia, mes, ano] = value.split("/").map(Number);
-                  const date = new Date(ano, mes - 1, dia);
-                  
-                  if (
-                    date.getDate() !== dia ||
-                    date.getMonth() !== mes - 1 ||
-                    date.getFullYear() !== ano
-                  ) {
-                    return "Data inválida";
-                  }
-                  
-                  const hoje = new Date();
-                  let idade = hoje.getFullYear() - ano;
-                  const m = hoje.getMonth() - (mes - 1);
-                  if (m < 0 || (m === 0 && hoje.getDate() < dia)) {
-                    idade--;
-                  }
-
-                  if (idade < idadeMinimaRecomendada) {
-                    return "É recomendado que tenha ao menos 13 anos para se cadastrar";
-                  }
-                  
-                  return true;
-                }
-              }}
-              render={({ field: { onChange, value } }) => (
-              <Input variant="rounded" size="xl" className={`text-center ${errors.birthDate ? "border-2" : ""}`} isInvalid={errors.birthDate}>
-                <InputIcon as={CalendarDaysIcon} className="m-3 -mr-1" color={errors.birthDate ? "red" : "currentColor"} />
-                <InputField 
-                  type="text" 
-                  placeholder="01/01/2000" 
-                  value={value}
-                  onChangeText={onChange}
+              <VStack space="xs">
+                <Text className={`text-typography-500 ${errors.confirmarSenha ? "text-red-500" : ""}`}>Confirme a senha*</Text>
+                <Controller
+                  control={control}
+                  name="confirmarSenha"
+                  rules={{
+                    required: "A confirmação da senha é obrigatória",
+                    validate: (value) => 
+                      value === getValues("senha") || "As senhas não coincidem"
+                  }}
+                  render={({ field: { onChange, value }}) => (
+                  <Input variant="rounded" size="xl" className={`text-center ${errors.confirmarSenha ? "border-2" : ""}`} isInvalid={errors.confirmarSenha}>
+                    <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.confirmarSenha ? "red" : "currentColor"} />
+                    <InputField 
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Repetir senha"
+                      value={value}
+                      onChangeText={onChange}
+                    />
+                    <InputSlot className="pr-3" onPress={() => {setShowConfirmPassword(!showConfirmPassword)}}>
+                      <InputIcon as={showConfirmPassword ? EyeIcon : EyeOffIcon} />
+                    </InputSlot>
+                  </Input>
+                )}
                 />
-              </Input>
-            )}
-            />
-            {errors.birthDate && <Text className="text-red-500 text-sm ml-5">{errors.birthDate.message}</Text>}
-          </VStack>
+                {errors.confirmarSenha && <Text className="text-red-500 text-sm ml-5">{errors.confirmarSenha.message}</Text>}
+              </VStack>
 
-          <Button 
-            action={"primary"} 
-            variant={"solid"} 
-            size={"md"} 
-            onPress={handleSubmit(onSubmit)}
-          >
-            <ButtonText>Enviar</ButtonText>
-          </Button>
+              <VStack space="xs">
+                <Text className={`text-typography-500 ${errors.dataNascimento ? "text-red-500" : ""}`}>Data de nascimento*</Text>
+                <Controller
+                  control={control}
+                  name="dataNascimento"
+                  rules={{
+                    required: "A data de nascimento é obrigatória",
+                    validate: (value) => {
+                      const [dia, mes, ano] = value.split("/").map(Number);
+                      const date = new Date(ano, mes - 1, dia);
+                      
+                      if (
+                        date.getDate() !== dia ||
+                        date.getMonth() !== mes - 1 ||
+                        date.getFullYear() !== ano
+                      ) {
+                        return "Data inválida";
+                      }
+                      
+                      const hoje = new Date();
+                      let idade = hoje.getFullYear() - ano;
+                      const m = hoje.getMonth() - (mes - 1);
+                      if (m < 0 || (m === 0 && hoje.getDate() < dia)) {
+                        idade--;
+                      }
 
-        </VStack>
-      </FormControl>    
-    </View>
+                      if (idade < idadeMinimaRecomendada) {
+                        return "É recomendado que tenha ao menos 13 anos para se cadastrar";
+                      }
+
+                      return true;
+                    }
+                  }}
+                  render={({ field: { onChange, value } }) => (
+                  <Input variant="rounded" size="xl" className={`text-center ${errors.dataNascimento ? "border-2" : ""}`} isInvalid={errors.dataNascimento}>
+                    <InputIcon as={CalendarDaysIcon} className="m-3 -mr-1" color={errors.dataNascimento ? "red" : "currentColor"} />
+                    <MaskedTextInput
+                      style={{flex: 1, paddingHorizontal: 14}}
+                      mask="99/99/9999"
+                      type="text"
+                      placeholder="01/01/2000"
+                      keyboardType="numeric"
+                      value={value}
+                      onChangeText={onChange}
+                    />
+                  </Input>
+                )}
+                />
+                {errors.dataNascimento && <Text className="text-red-500 text-sm ml-5">{errors.dataNascimento.message}</Text>}
+              </VStack>
+
+              <Button 
+                action={"primary"} 
+                variant={"solid"} 
+                size={"lg"} 
+                onPress={handleSubmit(onSubmit)}
+              >
+                <ButtonText>Enviar</ButtonText>
+              </Button>
+
+            </VStack>
+          </FormControl>    
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
