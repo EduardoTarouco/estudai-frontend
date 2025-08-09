@@ -11,6 +11,8 @@ import { useState } from "react";
 import { View } from "react-native";
 
 export const SignUp = () => {
+  // Hook do react-hook-form que gerencia a lógica de registro dos inputs, retornar seus valores, 
+  // gerenciar o envio do formulário e retornar erros das validações.
   const { control, getValues, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       name: "",
@@ -21,13 +23,14 @@ export const SignUp = () => {
     }
   });
 
+  const idadeMinimaRecomendada = 13;
   const [showPassword, setShowPassword] = useState();
   const [showConfirmPassword, setShowConfirmPassword] = useState();
 
-  // Lógica do que acontece ao enviar o formulário com sucesso
-  // Essa função só é chamada se os dados forem validados
+  // Lógica do que acontece ao enviar o formulário com sucesso.
+  // Essa função só é chamada se os dados forem validados.
   const onSubmit = (data) => {
-    console.log("Submitted Info: " + data);
+    console.log("Submitted Info: " + JSON.stringify(data));
     router.replace("home");
   };
 
@@ -38,14 +41,14 @@ export const SignUp = () => {
         <Text>Cadastre-se e começe a utilizar o Estudai</Text>
       </VStack>
 
-      <FormControl className="p-5 border rounded-lg border-outline-300 bg-gray-50">
+      <FormControl className="p-5 border rounded-lg border-outline-300 bg-gray-50 w-[95%]">
         <VStack space="xl">
 
           {/* 
             * Os principais campos (nome, email, senha, repetir senha e data de nascimento, respectivamente) estão localizados em VStacks (agrupamentos verticais) abaixo: 
             */}
           <VStack space="xs">
-            <Text className={`text-typography-500 ${errors.name ? "text-red-500" : ""}`}>Nome</Text>
+            <Text className={`text-typography-500 ${errors.name ? "text-red-500" : ""}`}>Nome*</Text>
             {/* Controller é utilizado pelo react-hook-form para registrar componentes de input, registra seus nomes, realiza validações, etc.
               *
               * Pode configurar validações passando diferentes objetos ao parâmetro `rules` -> doc: https://react-hook-form.com/docs/useform/register
@@ -71,9 +74,9 @@ export const SignUp = () => {
           </VStack>
 
           <VStack space="xs">
-            <Text className={`text-typography-500 ${errors.email ? "text-red-500" : ""}`}>Email</Text>
-            {/* O regex abaixo valida se o email está ou não bem formatado, mas é uma validação básica
-              * Para um diagrama melhor sobre o que ocorre de verdade, vale visitar o site https://www.regexplained.co.uk/ e colar o regex do pattern lá dentro
+            <Text className={`text-typography-500 ${errors.email ? "text-red-500" : ""}`}>Email*</Text>
+            {/* O regex abaixo valida se o email está ou não bem formatado, mas é uma validação básica.
+              * Para um diagrama melhor sobre o que ocorre de verdade, vale visitar o site https://www.regexplained.co.uk/ e colar o regex do pattern lá dentro.
               */}
             <Controller
               control={control}
@@ -101,7 +104,7 @@ export const SignUp = () => {
           </VStack>
 
           <VStack space="xs">
-            <Text className={`text-typography-500 ${errors.password ? "text-red-500" : ""}`}>Senha</Text>
+            <Text className={`text-typography-500 ${errors.password ? "text-red-500" : ""}`}>Senha*</Text>
             <Controller 
               control={control}
               name="password"
@@ -131,7 +134,7 @@ export const SignUp = () => {
           </VStack>
 
           <VStack space="xs">
-            <Text className={`text-typography-500 ${errors.confirmPassword ? "text-red-500" : ""}`}>Confirme a senha</Text>
+            <Text className={`text-typography-500 ${errors.confirmPassword ? "text-red-500" : ""}`}>Confirme a senha*</Text>
             <Controller
               control={control}
               name="confirmPassword"
@@ -159,12 +162,42 @@ export const SignUp = () => {
           </VStack>
 
           <VStack space="xs">
-            <Text className={`text-typography-500 ${errors.birthDate ? "text-red-500" : ""}`}>Data de nascimento</Text>
+            <Text className={`text-typography-500 ${errors.birthDate ? "text-red-500" : ""}`}>Data de nascimento*</Text>
             <Controller
               control={control}
               name="birthDate"
               rules={{
-                required: "A data de nascimento é obrigatória"
+                required: "A data de nascimento é obrigatória",
+                validate: (value) => {
+                  const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+                  if (!regex.test(value)) {
+                    return "Use o formato dd/mm/aaaa";
+                  }
+
+                  const [dia, mes, ano] = value.split("/").map(Number);
+                  const date = new Date(ano, mes - 1, dia);
+                  
+                  if (
+                    date.getDate() !== dia ||
+                    date.getMonth() !== mes - 1 ||
+                    date.getFullYear() !== ano
+                  ) {
+                    return "Data inválida";
+                  }
+                  
+                  const hoje = new Date();
+                  let idade = hoje.getFullYear() - ano;
+                  const m = hoje.getMonth() - (mes - 1);
+                  if (m < 0 || (m === 0 && hoje.getDate() < dia)) {
+                    idade--;
+                  }
+
+                  if (idade < idadeMinimaRecomendada) {
+                    return "É recomendado que tenha ao menos 13 anos para se cadastrar";
+                  }
+                  
+                  return true;
+                }
               }}
               render={({ field: { onChange, value } }) => (
               <Input variant="rounded" size="xl" className={`text-center ${errors.birthDate ? "border-2" : ""}`} isInvalid={errors.birthDate}>
