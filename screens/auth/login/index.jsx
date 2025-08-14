@@ -1,14 +1,14 @@
-import { EyeIcon, EyeOffIcon, MailIcon, LockIcon } from "@/components/ui/icon";
-import { View, KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
-import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
-import { useForm, Controller } from 'react-hook-form';
 import { Heading } from '@/components/ui/heading';
-import { VStack } from '@/components/ui/vstack';
+import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "@/components/ui/icon";
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Text } from '@/components/ui/text';
+import { VStack } from '@/components/ui/vstack';
 import { router } from "expo-router";
 import { useState } from "react";
+import { Controller, useForm } from 'react-hook-form';
+import { KeyboardAvoidingView, Platform, SafeAreaView, View } from "react-native";
 
 export const Login = () => {
     // Hook do react-hook-form que gerencia a lógica de registro dos inputs, retornar seus valores, 
@@ -50,7 +50,7 @@ export const Login = () => {
                 * Os principais campos (email, senha, respectivamente) localizados em VStacks (agrupamentos verticais) abaixo: 
                 */}
               <VStack space="xs">
-                <Text className={`text-typography-500 ${errors.email ? "text-red-500" : ""}`}>Nome*</Text>
+                <Text className={`text-typography-500 ${errors.email ? "text-red-500" : ""}`}>Email*</Text>
                 {/* Controller é utilizado pelo react-hook-form para registrar componentes de input, registra seus nomes, realiza validações, etc.
                   *
                   * Pode configurar validações passando diferentes objetos ao parâmetro `rules` -> doc: https://react-hook-form.com/docs/useform/register
