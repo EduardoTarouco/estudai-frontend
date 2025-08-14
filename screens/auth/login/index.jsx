@@ -1,97 +1,117 @@
-import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { EyeIcon, EyeOffIcon, MailIcon, LockIcon } from "@/components/ui/icon";
+import { View, KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { Button, ButtonText } from "@/components/ui/button";
+import { FormControl } from "@/components/ui/form-control";
+import { useForm, Controller } from 'react-hook-form';
+import { Heading } from '@/components/ui/heading';
+import { VStack } from '@/components/ui/vstack';
+import { Text } from '@/components/ui/text';
 import { router } from "expo-router";
-import { useState } from 'react';
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import * as Animatable from 'react-native-animatable';
+import { useState } from "react";
 
 export const Login = () => {
+    // Hook do react-hook-form que gerencia a lógica de registro dos inputs, retornar seus valores, 
+    // gerenciar o envio do formulário e retornar erros das validações.
+    const { control, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      email: "",
+      senha: ""
+    }
+  });
 
-  const [mostrarSenha, setMostrarSenha] = useState(false);
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Lógica do que acontece ao enviar o formulário com sucesso.
+  // Essa função só é chamada se os dados forem validados.
+  const onSubmit = (data) => {
+    console.log("Submitted Info: " + JSON.stringify(data));
+    router.replace("home");
+  };
 
   return (
+    <SafeAreaView className="bg-green-200 flex-1">
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardShouldPersistTaps="handled"
+        style={{ flex: 1 }}
+      >
+        <View className="bg-green-200 flex-1 flex justify-center items-center gap-2 p-5">
+          <VStack className="flex justify-center items-center m-2">
+            <Heading size={"4xl"}>Login</Heading>
+            <Text>Entre na sua conta e comece a utilizar o Estudaí</Text>
+          </VStack>
 
-    <>
-      {/* Campo Com a Tag ESTUDAI */}
-      <Text className='bg-black color-white text-center p-6 w-full text-4xl'>Estudaí</Text>
+          <FormControl className="bg-gray-50 p-5 border rounded-lg border-outline-300 w-[95%]">
+            <VStack space="xl">
 
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-[#539ADF] px-6 py-10">
+              {/* 
+                * Os principais campos (email, senha, respectivamente) localizados em VStacks (agrupamentos verticais) abaixo: 
+                */}
+              <VStack space="xs">
+                <Text className={`text-typography-500 ${errors.email ? "text-red-500" : ""}`}>Nome*</Text>
+                {/* Controller é utilizado pelo react-hook-form para registrar componentes de input, registra seus nomes, realiza validações, etc.
+                  *
+                  * Pode configurar validações passando diferentes objetos ao parâmetro `rules` -> doc: https://react-hook-form.com/docs/useform/register
+                  * Também é possível passar mensagens as validações passando um objeto na seguinte estrutura: { valor, mensagem }.
+                  */}
+                <Controller
+                  control={control}
+                  name="email"
+                  rules={{required: "O email é obrigatório"}}
+                  render={({ field: { onChange, value } }) => (
+                  <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.email ? "border-2" : ""}`} isInvalid={errors.email}>
+                    <InputIcon as={MailIcon} className="m-3 -mr-1" color={errors.email ? "red" : "currentColor"} />
+                    <InputField
+                      placeholder="estudante@gmail.com"
+                      value={value}
+                      onChangeText={onChange}
+                    />
+                  </Input>
+                )}
+                />
+                {/* Aqui são renderizados os erros do campo de nome, caso ocorram */}
+                {errors.email && <Text className="text-red-500 text-sm ml-5">{errors.email.message}</Text>}
+              </VStack>
 
-        {/* Campo Com a Tag Login */}
-        <Text className="text-center text-white text-4xl font-SemiBold mb-6 ">LOGIN</Text>
+              <VStack space="xs">
+                <Text className={`text-typography-500 ${errors.senha ? "text-red-500" : ""}`}>Senha*</Text>
+                <Controller 
+                  control={control}
+                  name="senha"
+                  rules={{required: "A senha é obrigatória"}}
+                  render={({ field: { onChange, value } }) => (
+                  <Input variant="rounded" size="xl" className={`text-center ${errors.senha ? "border-2" : ""}`} isInvalid={errors.senha}>
+                    <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.senha ? "red" : "currentColor"} />
+                    <InputField 
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Senha"
+                      value={value}
+                      onChangeText={onChange}
+                    />
+                    <InputSlot className="pr-3" onPress={() => {setShowPassword(!showPassword)}}>
+                      <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} />
+                    </InputSlot>
+                  </Input>
+                )}
+                />
+                {errors.senha && <Text className="text-red-500 text-sm ml-5">{errors.senha.message}</Text>}
+              </VStack>
 
-        <View className='absolute top-[110px] ml-[70px]'>
-          <Animatable.Image className='h-[300px] w-[300px] self-center'
-            animation="flipInY"
-            source={require('./assets/welcome-img.png')}
-          />
+              <Button 
+                action={"primary"} 
+                variant={"solid"} 
+                size={"lg"} 
+                onPress={handleSubmit(onSubmit)}
+              >
+                <ButtonText>Enviar</ButtonText>
+              </Button>
+
+            </VStack>
+          </FormControl>    
         </View>
-
-        {/* Campo Email */}
-        <View className="flex-row items-center bg-white border rounded-full px-4 py-3 mb-6 mt-[400px]">
-          <FontAwesome name="envelope" size={20} color="#888" style={{ marginRight: 10 }} />
-          <TextInput
-            className="flex-1 text-base text-gray-800"
-            placeholder="Email"
-            placeholderTextColor="#888"
-            keyboardType="email-address"
-            value={email}
-            onChangeText={setEmail}
-          />
-        </View>
-
-
-        {/* Campo Senha */}
-        <View className="flex-row items-center bg-white border rounded-full px-4 py-3 mb-6">
-          <FontAwesome name="lock" size={20} color="#888" style={{ marginRight: 10 }} />
-          <TextInput
-            className="flex-1 text-base text-gray-800"
-            placeholder="Senha"
-            placeholderTextColor="#888"
-            secureTextEntry={!mostrarSenha}
-            value={senha}
-            onChangeText={setSenha}
-          />
-          <TouchableOpacity onPress={() => setMostrarSenha(!mostrarSenha)}>
-            <MaterialCommunityIcons
-              name={mostrarSenha ? 'eye-outline' : 'eye-off-outline'}
-              size={20}
-              color="#888"
-            />
-          </TouchableOpacity>
-        </View>
-
-        {/* Campo Esqueceu a senha */}
-        <TouchableOpacity 
-          className="bg-white border rounded-full py-1 mt-1 w-32 self-end mr-3 -mt-2"
-          onPress={() => {router.push("auth/forgot-password")}}
-        >
-          <Text className="text-blue-500 text-center font-bold text-sm">Esqueceu a senha?</Text>
-        </TouchableOpacity>
-
-
-        {/* Botão Logar */}
-        <TouchableOpacity 
-          className=" bg-[#0DF538] border rounded-full py-4 mb-6 mt-6"
-          onPress={() => {router.replace("home")}}
-        >
-          <Text className="text-black text-center font-bold text-lg">Logar</Text>
-        </TouchableOpacity>
-
-        {/* Campo do Ou */}
-        <View className="flex-row items-center justify-center mb-6">
-          <View className="h-px bg-white flex-1 mx-2" />
-          <Text className="text-white"> ou </Text>
-          <View className="h-px bg-white flex-1 mx-2" />
-        </View>
-
-        {/* Botao logar com o Google */}
-        <TouchableOpacity className="flex-row bg-white py-4 border rounded-full items-center justify-center">
-          <FontAwesome name="google" size={20} color="red" />
-          <Text className="ml-2 text-black font-semibold">Continuar com o Google</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };

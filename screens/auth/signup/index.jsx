@@ -1,15 +1,15 @@
+import { EyeIcon, EyeOffIcon, CalendarDaysIcon, AtSignIcon, MailIcon, LockIcon } from "@/components/ui/icon";
+import { View, KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
-import { Heading } from '@/components/ui/heading';
-import { useForm, Controller } from 'react-hook-form';
 import { MaskedTextInput } from 'react-native-mask-text';
-import { EyeIcon, EyeOffIcon, CalendarDaysIcon, AtSignIcon, MailIcon, LockIcon } from "@/components/ui/icon";
-import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
-import { Text } from '@/components/ui/text';
+import { useForm, Controller } from 'react-hook-form';
+import { Heading } from '@/components/ui/heading';
 import { VStack } from '@/components/ui/vstack';
+import { Text } from '@/components/ui/text';
 import { router } from "expo-router";
 import { useState } from "react";
-import { View, KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
 
 export const SignUp = () => {
   // Hook do react-hook-form que gerencia a lógica de registro dos inputs, retornar seus valores, 
@@ -25,8 +25,8 @@ export const SignUp = () => {
   });
 
   const idadeMinimaRecomendada = 13;
-  const [showPassword, setShowPassword] = useState();
-  const [showConfirmPassword, setShowConfirmPassword] = useState();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Lógica do que acontece ao enviar o formulário com sucesso.
   // Essa função só é chamada se os dados forem validados.
