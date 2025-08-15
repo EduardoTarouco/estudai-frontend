@@ -1,10 +1,10 @@
-import { EyeIcon, EyeOffIcon, CalendarDaysIcon, AtSignIcon, MailIcon, LockIcon } from "@/components/ui/icon";
-import { View, KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
+import { AtSignIcon, CalendarDaysIcon, EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "@/components/ui/icon";
+import { KeyboardAvoidingView, Platform, SafeAreaView, View } from "react-native";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
 import { MaskedTextInput } from 'react-native-mask-text';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Heading } from '@/components/ui/heading';
 import { VStack } from '@/components/ui/vstack';
 import { Text } from '@/components/ui/text';
@@ -25,14 +25,12 @@ export const SignUp = () => {
     }
   });
 
-  /* 
-   * FUTURAMENTE, TROCAR A URL DO BANCO PARA UM ARQUIVO SEPARADO, EVITANDO REPETIÇÕES
-   *
-   * URL do backend local 
-   * (precisa ser o ip e estar na mesma rede, caso contrário, deverá serS
+    /* 
+   * URL do backend local configurado no .env
+   * (precisa ser o ip e estar na mesma rede, caso contrário, deverá ser
    * um servidor em nuvem que possa receber essa requisição)
    */
-  const baseBackendUrl = "http://10.0.8.32:8084"
+  const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL
   const idadeMinimaRecomendada = 13;
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
