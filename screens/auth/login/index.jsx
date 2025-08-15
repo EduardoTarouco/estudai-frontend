@@ -1,14 +1,15 @@
+import { KeyboardAvoidingView, Platform, SafeAreaView, View } from "react-native";
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "@/components/ui/icon";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
+import { Controller, useForm } from 'react-hook-form';
 import { Heading } from '@/components/ui/heading';
-import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "@/components/ui/icon";
-import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
-import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
+import { Text } from '@/components/ui/text';
 import { router } from "expo-router";
 import { useState } from "react";
-import { Controller, useForm } from 'react-hook-form';
-import { KeyboardAvoidingView, Platform, SafeAreaView, View } from "react-native";
+import axios from "axios";
 
 export const Login = () => {
     // Hook do react-hook-form que gerencia a lógica de registro dos inputs, retornar seus valores, 
@@ -20,13 +21,30 @@ export const Login = () => {
     }
   });
 
+  /* 
+   * URL do backend local configurado no .env
+   * (precisa ser o ip e estar na mesma rede, caso contrário, deverá ser
+   * um servidor em nuvem que possa receber essa requisição)
+   */
+  const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL
   const [showPassword, setShowPassword] = useState(false);
 
   // Lógica do que acontece ao enviar o formulário com sucesso.
   // Essa função só é chamada se os dados forem validados.
   const onSubmit = (data) => {
+
+    // Método POST do Axios, enviando os dados de cadastro a URL do backend
+    // Em caso de sucesso, imprime no console e redireciona o usuário a página principal
+    axios.post(baseBackendUrl + "/auth/login", data)
+      .then(function (response) {
+        console.log(response);
+        router.replace("home");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
     console.log("Submitted Info: " + JSON.stringify(data));
-    router.replace("home");
   };
 
   return (
