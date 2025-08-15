@@ -13,10 +13,10 @@ export const ForgotPassword = () => {
 
   useEffect(() => {
     if (tempo > 0) {
-      const interval = setInterval(() => {
+      const intervalo = setIntervalo(() => {
         setTempo((t) => t - 1);
       }, 1000);
-      return () => clearInterval(interval);
+      return () => clearIntervalo(intervalo);
     }
   }, [tempo]);
 
