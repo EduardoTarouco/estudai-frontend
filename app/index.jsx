@@ -28,7 +28,7 @@ const index = () => {
           variant={"solid"}
           size={"md"}
           isDisabled={false}
-          onPress={() => {router.push("auth/login")}}
+          onPress={() => {router.push("auth/forgot-password")}}
         >
           <ButtonText>Já tenho uma conta</ButtonText>
         </Button>
