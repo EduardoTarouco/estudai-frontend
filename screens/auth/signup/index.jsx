@@ -3,6 +3,7 @@ import { KeyboardAvoidingView, Platform, SafeAreaView, View } from "react-native
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
+import { useSession } from "../../../contexts/AuthContext";
 import { MaskedTextInput } from 'react-native-mask-text';
 import { Controller, useForm } from 'react-hook-form';
 import { Heading } from '@/components/ui/heading';
@@ -13,6 +14,9 @@ import { useState } from "react";
 import axios from "axios";
 
 export const SignUp = () => {
+
+  const { signIn } = useSession();
+
   // Hook do react-hook-form que gerencia a lógica de registro dos inputs, retornar seus valores, 
   // gerenciar o envio do formulário e retornar erros das validações.
   const { control, getValues, handleSubmit, formState: { errors } } = useForm({
@@ -25,11 +29,11 @@ export const SignUp = () => {
     }
   });
 
-    /* 
-   * URL do backend local configurado no .env
-   * (precisa ser o ip e estar na mesma rede, caso contrário, deverá ser
-   * um servidor em nuvem que possa receber essa requisição)
-   */
+ /* 
+  * URL do backend local configurado no .env
+  * (precisa ser o ip e estar na mesma rede, caso contrário, deverá ser
+  * um servidor em nuvem que possa receber essa requisição)
+  */
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL
   const idadeMinimaRecomendada = 13;
   const [showPassword, setShowPassword] = useState(false);
@@ -37,20 +41,20 @@ export const SignUp = () => {
 
   // Lógica do que acontece ao enviar o formulário com sucesso.
   // Essa função só é chamada se os dados forem validados.
-  const onSubmit = ({confirmarSenha, ...data}) => {
+  const onSubmit = async ({confirmarSenha, ...data}) => {
     const [dia, mes, ano] = data.dataNascimento.split("/").map(Number);
     data.dataNascimento = new Date(ano, mes - 1, dia);
 
     // Método POST do Axios, enviando os dados de cadastro a URL do backend
     // Em caso de sucesso, imprime no console e redireciona o usuário a página principal
     axios.post(baseBackendUrl + "/auth/cadastro", data)
-      .then(function (response) {
-        console.log(response);
-        router.replace("home");
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    .then(function (response) {
+      console.log("Resposta do backend: " + response);
+      router.replace("login");
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
     console.log("Submitted Info: " + JSON.stringify(data));
   };
 

@@ -1,34 +1,36 @@
+import { SplashScreenController } from "../components/application/SplashScreenController/SplashScreenController";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
-import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { SessionProvider, useSession } from "../contexts/AuthContext";
 import { SafeAreaView } from "react-native";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import { Stack } from "expo-router";
 import "../global.css";
 
-SplashScreen.preventAutoHideAsync();
-
 export default function RootLayout() {
-
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hide();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
 
   return (
     <GluestackUIProvider>
       <SafeAreaView style={{ flex: 1 }}>
-       <Stack screenOptions={{ headerShown: false }} />
+        <SessionProvider>
+          <SplashScreenController />
+          <RootNavigator />
+        </SessionProvider>
       </SafeAreaView>
     </GluestackUIProvider>
+  );
+}
+
+function RootNavigator() {
+  const { session } = useSession();
+
+  return (
+    <Stack>
+      <Stack.Protected guard={session}>
+        <Stack.Screen name="(application)" />
+      </Stack.Protected>
+
+      <Stack.Protected guard={!session}>
+        <Stack.Screen name="index" />
+      </Stack.Protected>
+    </Stack>
   );
 }
