@@ -8,6 +8,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Heading } from '@/components/ui/heading';
 import { VStack } from '@/components/ui/vstack';
 import { Text } from '@/components/ui/text';
+import { router } from "expo-router";
 import { useState } from "react";
 
 export const Login = () => {
@@ -30,8 +31,9 @@ export const Login = () => {
   const onSubmit = (data) => {
     try {
       signIn(data);
-    } catch (e) {
-      console.log("Erro ao entrar na conta: " + e);
+      router.replace("home");
+    } catch (error) {
+      console.log("Erro ao entrar na conta: ", error);
     }
     console.log("Submitted Info: " + JSON.stringify(data));
   };

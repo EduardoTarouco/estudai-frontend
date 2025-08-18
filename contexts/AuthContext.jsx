@@ -28,19 +28,23 @@ export function SessionProvider({ children }) {
     <AuthContext
       value={{
         signIn: async (data) => {
-        // Método POST do Axios, enviando os dados de cadastro a URL do backend
-        // Em caso de sucesso, imprime no console e redireciona o usuário a página principal
-        const response = await axios.post(baseBackendUrl + "/auth/login", data)
-            .then(function () {
-                router.replace("home");
-            })
-            .catch(function (error) {
-                console.log(error);
+          // Método POST do Axios, enviando os dados de cadastro a URL do backend
+          // Em caso de sucesso, imprime no console e redireciona o usuário a página principal
+          try {
+            const response = await axios.post(baseBackendUrl + "/auth/login", data)
+            console.log("Login funcionando: ", response.data);
+
+            setSession({
+              nome: response.data.nome,
+              token: response.data.token
             });
-        setSession(response);
+          } catch (error) {
+            console.log("Erro no login: ", error);
+          }
         },
         signOut: () => {
           setSession(null);
+          router.replace("/");
         },
         session,
         isLoading,

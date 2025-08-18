@@ -15,8 +15,6 @@ import axios from "axios";
 
 export const SignUp = () => {
 
-  const { signIn } = useSession();
-
   // Hook do react-hook-form que gerencia a lógica de registro dos inputs, retornar seus valores, 
   // gerenciar o envio do formulário e retornar erros das validações.
   const { control, getValues, handleSubmit, formState: { errors } } = useForm({
@@ -49,8 +47,8 @@ export const SignUp = () => {
     // Em caso de sucesso, imprime no console e redireciona o usuário a página principal
     axios.post(baseBackendUrl + "/auth/cadastro", data)
     .then(function (response) {
-      console.log("Resposta do backend: " + response);
-      router.replace("login");
+      console.log("Resposta do backend: " + JSON.stringify(response));
+      router.replace("/auth/login");
     })
     .catch(function (error) {
       console.log(error);
