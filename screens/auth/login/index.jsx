@@ -3,7 +3,7 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "@/components/ui/icon";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
-import { useSession } from "../../../contexts/AuthContext";
+import { useSession } from "@/contexts/AuthContext";
 import { Controller, useForm } from 'react-hook-form';
 import { Heading } from '@/components/ui/heading';
 import { VStack } from '@/components/ui/vstack';
@@ -116,7 +116,15 @@ export const Login = () => {
               >
                 <ButtonText>Enviar</ButtonText>
               </Button>
-
+                
+              <Button
+                className="self-end -mt-5" 
+                variant={"link"}
+                size={"sm"}
+                onPress={() => {router.push("auth/forgot-password")}}
+              >
+                <ButtonText className="text-blue-500 underline">Esqueci a senha</ButtonText>
+              </Button>
             </VStack>
           </FormControl>    
         </View>

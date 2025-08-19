@@ -1,73 +1,73 @@
-import {
-  Button,
-  ButtonText
-} from "@/components/ui/button";
-import { router } from "expo-router";
-import { useState, useEffect } from "react";
-import { Text, View, TextInput } from "react-native";
 
+import { Input, InputField, InputIcon } from "@/components/ui/input";
+import { Button, ButtonText } from "@/components/ui/button";
+import { FormControl } from "@/components/ui/form-control";
+import { Controller, useForm } from 'react-hook-form';
+import { Heading } from '@/components/ui/heading';
+import { VStack } from '@/components/ui/vstack';
+import { MailIcon } from "@/components/ui/icon";
+import { SafeAreaView } from "react-native";
+import { Text } from '@/components/ui/text';
+import { router } from "expo-router";
+import axios from "axios";
+
+// Tela inserindo email
 export const ForgotPassword = () => {
 
-  const [codigo, setCodigo] = useState('');
-  const [tempo, setTempo] = useState(0);
-
-  useEffect(() => {
-    if (tempo > 0) {
-      const intervalo = setIntervalo(() => {
-        setTempo((t) => t - 1);
-      }, 1000);
-      return () => clearIntervalo(intervalo);
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      email: ""
     }
-  }, [tempo]);
+  });
 
-  const reenviarCodigo = () => {
-    console.log("Código reenviado!");
-    setTempo(30); 
-  };
+  const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post(baseBackendUrl + "/auth/recuperar-senha", data);
+      console.log(response.data);
+      router.replace("auth/password-code");
+    } catch (error) {
+      console.log("Erro ao resetar senha: ", error);
+    }
+  }
 
   return (
-    <View className="h-screen w-screen flex justify-center items-center gap-6 bg-blue-200 p-4">
+    <SafeAreaView className="h-screen w-screen flex justify-center items-center gap-3 bg-gray-200">
+      <Heading>Esqueci a senha</Heading>
 
-      <Text className="text-center text-xl font-bold rounded-[8px] ">
-        Insira o codigo que lhe foi enviado 
-      </Text>
+      <FormControl className="bg-gray-50 p-5 border rounded-lg border-outline-300 w-[95%]">
+        <VStack space={"xl"}>
+          <VStack space="xs">
+            <Text className={`text-typography-500 ${errors.email ? "text-red-500" : ""}`}>Email</Text>
+            <Controller
+              control={control}
+              name="email"
+              rules={{required: "O email é obrigatório"}}
+              render={({ field: { onChange, value } }) => (
+              <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.email ? "border-2" : ""}`} isInvalid={errors.email}>
+                <InputIcon as={MailIcon} className="m-3 -mr-1" color={errors.email ? "red" : "currentColor"} />
+                <InputField
+                  placeholder="estudante@gmail.com"
+                  value={value}
+                  onChangeText={onChange}
+                />
+              </Input>
+            )}
+            />
+            {errors.email && <Text className="text-red-500 text-sm ml-5">{errors.email.message}</Text>}
+          </VStack>
 
-      <TextInput
-        className="w-40 h-12 border border-gray-400 rounded-lg bg-white text-center text-lg"
-        placeholder="Digite o código"
-        value={codigo}
-        onChangeText={setCodigo}
-        keyboardType="numeric"
-        maxLength={6}
-      />
-
-      <View className="items-center gap-2">
-       
-        <Button
-          action={"secondary"}
-          variant={"outline"}
-          size={"xs"} 
-          isDisabled={tempo > 0}
-          onPress={reenviarCodigo}
-        >
-          <ButtonText>
-            {tempo > 0 ? `Reenviar em ${tempo}s` : "Reenviar código"}
-          </ButtonText>
-        </Button>
-
-        <Button
-          action={"secondary"}
-          variant={"solid"}
-          size={"sm"}
-          isDisabled={!codigo}
-          onPress={() => {
-            router.push("auth/reset-password");
-          }}
-        >
-          <ButtonText>Enviar</ButtonText>
-        </Button>
-      </View>
-
-    </View>
+          <Button 
+            action={"primary"} 
+            variant={"solid"} 
+            size={"lg"} 
+            onPress={handleSubmit(onSubmit)}
+          >
+            <ButtonText>Enviar</ButtonText>
+          </Button>
+        </VStack>
+      </FormControl>
+    </SafeAreaView>
   );
 };

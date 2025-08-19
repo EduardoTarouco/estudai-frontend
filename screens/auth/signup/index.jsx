@@ -3,7 +3,6 @@ import { KeyboardAvoidingView, Platform, SafeAreaView, View } from "react-native
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
-import { useSession } from "../../../contexts/AuthContext";
 import { MaskedTextInput } from 'react-native-mask-text';
 import { Controller, useForm } from 'react-hook-form';
 import { Heading } from '@/components/ui/heading';
@@ -249,7 +248,6 @@ export const SignUp = () => {
               >
                 <ButtonText>Enviar</ButtonText>
               </Button>
-
             </VStack>
           </FormControl>    
         </View>

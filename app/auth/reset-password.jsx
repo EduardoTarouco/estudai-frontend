@@ -1,2 +1,2 @@
-import { CreatePassword } from "@/screens/auth/reset-password";
-export default CreatePassword;
+import { ResetPassword } from "@/screens/auth/reset-password";
+export default ResetPassword;
