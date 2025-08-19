@@ -1,10 +1,115 @@
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { EyeIcon, EyeOffIcon, LockIcon } from "@/components/ui/icon";
+import { Button, ButtonText } from "@/components/ui/button";
+import { router, useLocalSearchParams } from "expo-router";
+import { FormControl } from "@/components/ui/form-control";
+import { Controller, useForm } from 'react-hook-form';
+import { Heading } from '@/components/ui/heading';
+import { VStack } from '@/components/ui/vstack';
+import { SafeAreaView } from "react-native";
+import { Text } from '@/components/ui/text';
+import { useState } from "react";
+import axios from "axios";
 
-// Redefinir a senha
 export const CreatePassword = () => {
 
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      novaSenha: ""
+    }
+  });
+
+  const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
+  const { email, codigo } = useLocalSearchParams();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const onSubmit = async ({confirmarSenha, ...data}) => {
+    data.email = email;
+    data.codigo = codigo;
+    try {
+      const response = await axios.post(baseBackendUrl + "/auth/validar-codigo", data);
+      console.log(response.data);
+      router.replace({ pathname: "auth/login"});
+    } catch (error) {
+      console.log("Erro ao resetar senha: ", error);
+    }
+  }
+
   return (
-    <View>
-      <Text>Tela redefinindo a senha</Text>
-    </View>
+    <SafeAreaView className="h-screen w-screen flex justify-center items-center gap-3 bg-gray-200">
+      <Heading size={"4xl"}>Esqueci a senha</Heading>
+
+      <VStack space="xs">
+        <Text className={`text-typography-500 ${errors.senha ? "text-red-500" : ""}`}>Senha*</Text>
+        <Controller 
+          control={control}
+          name="senha"
+          rules={{
+            required: "A senha é obrigatória",
+            minLength: {
+              value: 8,
+              message: "A senha deve ter no mínimo 8 caracteres"
+            }
+          }}
+          render={({ field: { onChange, value } }) => (
+          <Input variant="rounded" size="xl" className={`text-center ${errors.senha ? "border-2" : ""}`} isInvalid={errors.senha}>
+            <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.senha ? "red" : "currentColor"} />
+            <InputField 
+              type={showPassword ? "text" : "password"}
+              placeholder="Senha"
+              value={value}
+              onChangeText={onChange}
+            />
+            <InputSlot className="pr-3" onPress={() => {setShowPassword(!showPassword)}}>
+              <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} />
+            </InputSlot>
+          </Input>
+        )}
+        />
+        {errors.senha && <Text className="text-red-500 text-sm ml-5">{errors.senha.message}</Text>}
+      </VStack>
+
+      <VStack space="xs">
+        <Text className={`text-typography-500 ${errors.confirmarSenha ? "text-red-500" : ""}`}>Confirme a senha*</Text>
+        <Controller
+          control={control}
+          name="confirmarSenha"
+          rules={{
+            required: "A confirmação da senha é obrigatória",
+            validate: (value) => 
+              value === getValues("senha") || "As senhas não coincidem"
+          }}
+          render={({ field: { onChange, value }}) => (
+          <Input variant="rounded" size="xl" className={`text-center ${errors.confirmarSenha ? "border-2" : ""}`} isInvalid={errors.confirmarSenha}>
+            <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.confirmarSenha ? "red" : "currentColor"} />
+            <InputField 
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="Repetir senha"
+              value={value}
+              onChangeText={onChange}
+            />
+            <InputSlot className="pr-3" onPress={() => {setShowConfirmPassword(!showConfirmPassword)}}>
+              <InputIcon as={showConfirmPassword ? EyeIcon : EyeOffIcon} />
+            </InputSlot>
+          </Input>
+        )}
+        />
+        {errors.confirmarSenha && <Text className="text-red-500 text-sm ml-5">{errors.confirmarSenha.message}</Text>}
+      </VStack>
+
+      <FormControl className="bg-gray-50 p-5 border rounded-lg border-outline-300 w-[95%]">
+        <VStack space={"xl"}>
+          <Button 
+            action={"primary"} 
+            variant={"solid"} 
+            size={"lg"} 
+            onPress={handleSubmit(onSubmit)}
+          >
+            <ButtonText>Enviar</ButtonText>
+          </Button>
+        </VStack>
+      </FormControl>
+    </SafeAreaView>
   );
 };

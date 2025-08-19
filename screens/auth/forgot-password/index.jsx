@@ -1,4 +1,3 @@
-
 import { Input, InputField, InputIcon } from "@/components/ui/input";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
@@ -11,7 +10,6 @@ import { Text } from '@/components/ui/text';
 import { router } from "expo-router";
 import axios from "axios";
 
-// Tela inserindo email
 export const ForgotPassword = () => {
 
   const { control, handleSubmit, formState: { errors } } = useForm({
@@ -26,7 +24,7 @@ export const ForgotPassword = () => {
     try {
       const response = await axios.post(baseBackendUrl + "/auth/recuperar-senha", data);
       console.log(response.data);
-      router.replace("auth/password-code");
+      router.replace({ pathname: "auth/password-code", params: { email: data.email }});
     } catch (error) {
       console.log("Erro ao resetar senha: ", error);
     }
@@ -34,7 +32,7 @@ export const ForgotPassword = () => {
 
   return (
     <SafeAreaView className="h-screen w-screen flex justify-center items-center gap-3 bg-gray-200">
-      <Heading>Esqueci a senha</Heading>
+      <Heading size={"4xl"}>Esqueci a senha</Heading>
 
       <FormControl className="bg-gray-50 p-5 border rounded-lg border-outline-300 w-[95%]">
         <VStack space={"xl"}>
