@@ -1,12 +1,11 @@
-
 import { Input, InputField, InputIcon } from "@/components/ui/input";
+import { router, useLocalSearchParams } from "expo-router";
 import { Button, ButtonText } from "@/components/ui/button";
-import { useLocalSearchParams, router } from "expo-router";
 import { FormControl } from "@/components/ui/form-control";
 import { Controller, useForm } from 'react-hook-form';
 import { Heading } from '@/components/ui/heading';
-import { VStack } from '@/components/ui/vstack';
 import { ClockIcon } from "@/components/ui/icon";
+import { VStack } from '@/components/ui/vstack';
 import { SafeAreaView } from "react-native";
 import { Text } from '@/components/ui/text';
 import axios from "axios";
@@ -20,6 +19,8 @@ export const PasswordCode = () => {
   });
 
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
+
+  // Dados recebidos da tela anterior (forgot-password)
   const { email } = useLocalSearchParams();
 
   const onSubmit = async (data) => {
@@ -47,6 +48,10 @@ export const PasswordCode = () => {
               rules={{
                 required: "O código de verificação é obrigatório",
                 minLength: {
+                  value: 6,
+                  message: "O código deve ter exatamente 6 números"
+                },
+                maxLength: {
                   value: 6,
                   message: "O código deve ter exatamente 6 números"
                 }

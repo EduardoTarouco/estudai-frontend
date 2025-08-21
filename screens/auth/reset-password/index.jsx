@@ -11,7 +11,7 @@ import { Text } from '@/components/ui/text';
 import { useState } from "react";
 import axios from "axios";
 
-export const CreatePassword = () => {
+export const ResetPassword = () => {
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
@@ -20,16 +20,19 @@ export const CreatePassword = () => {
   });
 
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
-  const { email, codigo } = useLocalSearchParams();
+  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Dados recebidos da tela anterior (password-code)
+  const { email, codigo } = useLocalSearchParams();
 
   const onSubmit = async ({confirmarSenha, ...data}) => {
     data.email = email;
     data.codigo = codigo;
     try {
       const response = await axios.post(baseBackendUrl + "/auth/validar-codigo", data);
-      console.log(response.data);
+      console.log(`Reset password status: ${response.status} (${response.statusText})`);
       router.replace({ pathname: "auth/login"});
     } catch (error) {
       console.log("Erro ao resetar senha: ", error);
@@ -41,10 +44,10 @@ export const CreatePassword = () => {
       <Heading size={"4xl"}>Esqueci a senha</Heading>
 
       <VStack space="xs">
-        <Text className={`text-typography-500 ${errors.senha ? "text-red-500" : ""}`}>Senha*</Text>
+        <Text className={`text-typography-500 ${errors.novaSenha ? "text-red-500" : ""}`}>Senha*</Text>
         <Controller 
           control={control}
-          name="senha"
+          name="novaSenha"
           rules={{
             required: "A senha é obrigatória",
             minLength: {
@@ -53,9 +56,9 @@ export const CreatePassword = () => {
             }
           }}
           render={({ field: { onChange, value } }) => (
-          <Input variant="rounded" size="xl" className={`text-center ${errors.senha ? "border-2" : ""}`} isInvalid={errors.senha}>
-            <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.senha ? "red" : "currentColor"} />
-            <InputField 
+          <Input variant="rounded" size="xl" className={`text-center ${errors.novaSenha ? "border-2" : ""}`} isInvalid={errors.novaSenha}>
+            <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.novaSenha ? "red" : "currentColor"} />
+            <InputField
               type={showPassword ? "text" : "password"}
               placeholder="Senha"
               value={value}
@@ -67,7 +70,7 @@ export const CreatePassword = () => {
           </Input>
         )}
         />
-        {errors.senha && <Text className="text-red-500 text-sm ml-5">{errors.senha.message}</Text>}
+        {errors.novaSenha && <Text className="text-red-500 text-sm ml-5">{errors.novaSenha.message}</Text>}
       </VStack>
 
       <VStack space="xs">
