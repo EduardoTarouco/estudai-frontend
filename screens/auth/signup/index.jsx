@@ -42,17 +42,17 @@ export const SignUp = () => {
     const [dia, mes, ano] = data.dataNascimento.split("/").map(Number);
     data.dataNascimento = new Date(ano, mes - 1, dia);
 
+    
+    console.log("Submitted Info: ", data);
     // Método POST do Axios, enviando os dados de cadastro a URL do backend
     // Em caso de sucesso, imprime no console e redireciona o usuário a página principal
-    axios.post(baseBackendUrl + "/auth/cadastro", data)
-    .then(function (response) {
-      console.log("Resposta do backend: " + JSON.stringify(response));
+    try {
+      const response = await axios.post(baseBackendUrl + "/auth/cadastro", data);
+      console.log("Resposta do backend: ", response.data);
       router.replace("/auth/login");
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-    console.log("Submitted Info: " + JSON.stringify(data));
+    } catch (error) {
+      console.log(error.response.data);
+    }
   };
 
   return (

@@ -10,7 +10,7 @@ const AuthContext = createContext();
 * (precisa ser o ip e estar na mesma rede, caso contrário, deverá ser
 * um servidor em nuvem que possa receber essa requisição)
 */
-const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL
+const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
 
 export function useSession() {
   const value = use(AuthContext);
@@ -31,7 +31,7 @@ export function SessionProvider({ children }) {
           // Método POST do Axios, enviando os dados de cadastro a URL do backend
           // Em caso de sucesso, imprime no console e redireciona o usuário a página principal
           try {
-            const response = await axios.post(baseBackendUrl + "/auth/login", data)
+            const response = await axios.post(baseBackendUrl + "/auth/login", data);
             console.log("Login funcionando: ", response.data);
 
             setSession({
@@ -39,7 +39,7 @@ export function SessionProvider({ children }) {
               token: response.data.token
             });
           } catch (error) {
-            console.log("Erro no login: ", error);
+            throw new Error("Erro ao realizar login: " + JSON.stringify(error.response.data));
           }
         },
         signOut: () => {

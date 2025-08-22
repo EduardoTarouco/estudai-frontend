@@ -28,14 +28,14 @@ export const Login = () => {
 
   // Lógica do que acontece ao enviar o formulário com sucesso.
   // Essa função só é chamada se os dados forem validados.
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     try {
-      signIn(data);
+      await signIn(data);
       router.replace("home");
     } catch (error) {
-      console.log("Erro ao entrar na conta: ", error);
+      console.log(error);
     }
-    console.log("Submitted Info: " + JSON.stringify(data));
+    console.log("Submitted Info: ", data);
   };
 
   return (
