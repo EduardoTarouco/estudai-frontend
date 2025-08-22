@@ -16,7 +16,7 @@ export const Home = () => {
           action={"primary"} 
           variant={"solid"} 
           size={"lg"} 
-          onPress={() => {signOut()}}
+          onPress={async () => {await signOut()}}
         >
           <ButtonText>Log-out</ButtonText>
         </Button>
