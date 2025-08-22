@@ -3,10 +3,10 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
 import { Controller, useForm } from 'react-hook-form';
 import { Heading } from '@/components/ui/heading';
-import { VStack } from '@/components/ui/vstack';
 import { MailIcon } from "@/components/ui/icon";
-import { SafeAreaView } from "react-native";
+import { VStack } from '@/components/ui/vstack';
 import { Text } from '@/components/ui/text';
+import { SafeAreaView } from "react-native";
 import { router } from "expo-router";
 import axios from "axios";
 
@@ -26,7 +26,7 @@ export const ForgotPassword = () => {
       console.log(response.data);
       router.replace({ pathname: "auth/password-code", params: { email: data.email }});
     } catch (error) {
-      console.log("Erro ao resetar senha: ", error);
+      console.log("Erro ao resetar senha: ", error.response.data);
     }
   }
 

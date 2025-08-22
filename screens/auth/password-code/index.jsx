@@ -1,6 +1,6 @@
 import { Input, InputField, InputIcon } from "@/components/ui/input";
-import { router, useLocalSearchParams } from "expo-router";
 import { Button, ButtonText } from "@/components/ui/button";
+import { router, useLocalSearchParams } from "expo-router";
 import { FormControl } from "@/components/ui/form-control";
 import { Controller, useForm } from 'react-hook-form';
 import { Heading } from '@/components/ui/heading';
@@ -30,7 +30,7 @@ export const PasswordCode = () => {
       console.log(response.data);
       router.replace({ pathname: "auth/reset-password", params: {email: data.email, codigo: data.codigo}});
     } catch (error) {
-      console.log("Erro ao resetar senha: ", error);
+      console.log("Erro ao resetar senha: ", error.response.data);
     }
   }
 
