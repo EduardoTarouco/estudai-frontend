@@ -1,13 +1,14 @@
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { EyeIcon, EyeOffIcon, LockIcon } from "@/components/ui/icon";
+import { useRecovery } from "@/contexts/PasswordResetContext";
 import { Button, ButtonText } from "@/components/ui/button";
-import { router, useLocalSearchParams } from "expo-router";
 import { FormControl } from "@/components/ui/form-control";
 import { Controller, useForm } from 'react-hook-form';
 import { Heading } from '@/components/ui/heading';
 import { VStack } from '@/components/ui/vstack';
 import { SafeAreaView } from "react-native";
 import { Text } from '@/components/ui/text';
+import { router } from "expo-router";
 import { useState } from "react";
 import axios from "axios";
 
@@ -24,15 +25,15 @@ export const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Dados recebidos da tela anterior (password-code)
-  const { email, codigo } = useLocalSearchParams();
+  const { getEmail, getCode, resetCodeAndEmail } = useRecovery();
 
   const onSubmit = async ({confirmarSenha, ...data}) => {
-    data.email = email;
-    data.codigo = codigo;
+    data.email = await getEmail();
+    data.codigo = await getCode();
     try {
       const response = await axios.post(baseBackendUrl + "/auth/redefinir-senha", data);
       console.log(`Reset password status: ${response.status} (${response.statusText})`);
+      resetCodeAndEmail();
       router.replace({ pathname: "auth/login"});
     } catch (error) {
       console.log("Erro ao resetar senha: ", error.response.data);

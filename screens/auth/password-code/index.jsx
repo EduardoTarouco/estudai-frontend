@@ -1,6 +1,6 @@
 import { Input, InputField, InputIcon } from "@/components/ui/input";
+import { useRecovery } from "@/contexts/PasswordResetContext";
 import { Button, ButtonText } from "@/components/ui/button";
-import { router, useLocalSearchParams } from "expo-router";
 import { FormControl } from "@/components/ui/form-control";
 import { Controller, useForm } from 'react-hook-form';
 import { Heading } from '@/components/ui/heading';
@@ -8,6 +8,7 @@ import { ClockIcon } from "@/components/ui/icon";
 import { VStack } from '@/components/ui/vstack';
 import { SafeAreaView } from "react-native";
 import { Text } from '@/components/ui/text';
+import { router } from "expo-router";
 import axios from "axios";
 
 export const PasswordCode = () => {
@@ -20,18 +21,29 @@ export const PasswordCode = () => {
 
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
 
-  // Dados recebidos da tela anterior (forgot-password)
-  const { email } = useLocalSearchParams();
+  const { getEmail, setCode, resetCodeAndEmail } = useRecovery();
 
   const onSubmit = async (data) => {
+    const email = getEmail();
+    if (!email) {
+      resetCodeAndEmail();
+      router.replace("auth/forgot-password");
+    }
+
     data.email = email;
     try {
       const response = await axios.post(baseBackendUrl + "/auth/validar-codigo", data);
       console.log(response.data);
-      router.replace({ pathname: "auth/reset-password", params: {email: data.email, codigo: data.codigo}});
+      await setCode(data.codigo);
+      router.replace("auth/reset-password");
     } catch (error) {
       console.log("Erro ao resetar senha: ", error.response.data);
     }
+  }
+
+  const getBackToEmailScreen = () => {
+    resetCodeAndEmail();
+    router.replace("auth/forgot-password");
   }
 
   return (
@@ -77,6 +89,15 @@ export const PasswordCode = () => {
             onPress={handleSubmit(onSubmit)}
           >
             <ButtonText>Enviar</ButtonText>
+          </Button>
+
+          <Button
+            className="self-end -mt-5" 
+            variant={"link"}
+            size={"sm"}
+            onPress={() => {getBackToEmailScreen()}}
+          >
+            <ButtonText className="text-blue-500 underline">Inserir novo email</ButtonText>
           </Button>
         </VStack>
       </FormControl>

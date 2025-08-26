@@ -1,4 +1,5 @@
 import { Input, InputField, InputIcon } from "@/components/ui/input";
+import { useRecovery } from "@/contexts/PasswordResetContext";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
 import { Controller, useForm } from 'react-hook-form';
@@ -8,6 +9,7 @@ import { VStack } from '@/components/ui/vstack';
 import { Text } from '@/components/ui/text';
 import { SafeAreaView } from "react-native";
 import { router } from "expo-router";
+import { useEffect } from "react";
 import axios from "axios";
 
 export const ForgotPassword = () => {
@@ -19,12 +21,23 @@ export const ForgotPassword = () => {
   });
 
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
+  const { registerEmail, getEmail, isEmailLoading } = useRecovery();
 
+  useEffect(() => {
+    if (isEmailLoading) return;
+
+    const email = getEmail();
+    if (email) {
+      navigateToPasswordCodeScreen();
+    }
+  }, [getEmail, isEmailLoading]);
+  
   const onSubmit = async (data) => {
     try {
       const response = await axios.post(baseBackendUrl + "/auth/recuperar-senha", data);
       console.log(response.data);
-      router.replace({ pathname: "auth/password-code", params: { email: data.email }});
+      await registerEmail(data.email);
+      navigateToPasswordCodeScreen();
     } catch (error) {
       console.log("Erro ao resetar senha: ", error.response.data);
     }
@@ -69,3 +82,7 @@ export const ForgotPassword = () => {
     </SafeAreaView>
   );
 };
+
+function navigateToPasswordCodeScreen() {
+  router.replace("auth/password-code");
+}
