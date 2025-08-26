@@ -6,6 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Heading } from '@/components/ui/heading';
 import { ClockIcon } from "@/components/ui/icon";
 import { VStack } from '@/components/ui/vstack';
+import { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native";
 import { Text } from '@/components/ui/text';
 import { router } from "expo-router";
@@ -22,6 +23,21 @@ export const PasswordCode = () => {
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
 
   const { getEmail, setCode, resetCodeAndEmail } = useRecovery();
+  const [time, setTime] = useState(0);
+
+  useEffect(() => {
+    if (time > 0) {
+      const interval = setInterval(() => {
+        setTime(time - 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [time]);
+
+  const resendCode = () => {
+    console.log("Código reenviado!");
+    setTime(30); 
+  };
 
   const onSubmit = async (data) => {
     const email = getEmail();
@@ -82,14 +98,26 @@ export const PasswordCode = () => {
             {errors.codigo && <Text className="text-red-500 text-sm ml-5">{errors.codigo.message}</Text>}
           </VStack>
 
-          <Button 
-            action={"primary"} 
-            variant={"solid"} 
-            size={"lg"} 
-            onPress={handleSubmit(onSubmit)}
-          >
-            <ButtonText>Enviar</ButtonText>
-          </Button>
+          <VStack space="xs">
+            <Button 
+              action={"primary"} 
+              variant={"solid"} 
+              size={"lg"} 
+              onPress={handleSubmit(onSubmit)}
+            >
+              <ButtonText>Enviar</ButtonText>
+            </Button>
+
+            <Button 
+              isDisabled={time > 0 ? true : false}
+              action={"secondary"} 
+              variant={"solid"} 
+              size={"lg"} 
+              onPress={() => {resendCode()}}
+            >
+              <ButtonText>{ time > 0 ? `Reenviar código em ${time}s` : "Reenviar código" }</ButtonText>
+            </Button>
+          </VStack>
 
           <Button
             className="self-end -mt-5" 
