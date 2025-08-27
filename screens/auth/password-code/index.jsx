@@ -34,9 +34,20 @@ export const PasswordCode = () => {
     }
   }, [time]);
 
-  const resendCode = () => {
-    console.log("Código reenviado!");
-    setTime(30); 
+  const resendCode = async () => {
+    try {
+      const email = getEmail();
+      if(email) {
+        const response = await axios.post(baseBackendUrl + "/auth/recuperar-senha", { email });
+        console.log(response.data);
+        console.log("Código reenviado!");
+        setTime(30); 
+      } else {
+        console.log("Erro ao retornar email do armazenamento local");
+      }
+    } catch (error) {
+      console.log("Erro ao reenviar código verificador: ", error.response.data);
+    }
   };
 
   const onSubmit = async (data) => {
@@ -113,7 +124,7 @@ export const PasswordCode = () => {
               action={"secondary"} 
               variant={"solid"} 
               size={"lg"} 
-              onPress={() => {resendCode()}}
+              onPress={async () => {await resendCode()}}
             >
               <ButtonText>{ time > 0 ? `Reenviar código em ${time}s` : "Reenviar código" }</ButtonText>
             </Button>
