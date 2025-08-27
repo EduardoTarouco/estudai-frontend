@@ -23,7 +23,7 @@ export const PasswordCode = () => {
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
 
   const { getEmail, setCode, resetCodeAndEmail } = useRecovery();
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState(60);
 
   useEffect(() => {
     if (time > 0) {
