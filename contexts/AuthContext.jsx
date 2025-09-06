@@ -22,7 +22,8 @@ export function useSession() {
 }
 
 export function SessionProvider({ children }) {
-  const [[isLoading, session], setSession] = useStorageState('session');
+  const [[isLoading, sessionRaw], setSession] = useStorageState('session');
+  const session = sessionRaw ? JSON.parse(sessionRaw) : null;
 
   return (
     <AuthContext
@@ -34,10 +35,10 @@ export function SessionProvider({ children }) {
             const response = await axios.post(baseBackendUrl + "/auth/login", data);
             console.log("Login funcionando: ", response.data);
 
-            setSession({
+            setSession(JSON.stringify({
               nome: response.data.nome,
               token: response.data.token
-            });
+            }));
           } catch (error) {
             throw new Error("Erro ao realizar login: " + JSON.stringify(error.response.data));
           }
