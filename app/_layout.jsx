@@ -25,18 +25,13 @@ function RootNavigator() {
   console.log("session atual: ", JSON.stringify(session, null, 2));
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      {session ? (
-        // Rotas disponíveis apenas para usuários logados
-        <Stack.Protected guard={session}>
-          <Stack.Screen name="(application)" />
-        </Stack.Protected>
-      ) : (
-        // Rotas disponíveis apenas para usuários não logados
-        <Stack.Protected guard={!session}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="auth" />
-        </Stack.Protected>
-      )}
+      <Stack.Protected guard={session}>
+        <Stack.Screen name="(application)" />
+      </Stack.Protected>
+      <Stack.Protected guard={!session}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="auth" />
+      </Stack.Protected>
     </Stack>
   );
 }
