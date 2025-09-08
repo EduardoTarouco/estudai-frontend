@@ -1,7 +1,7 @@
 import { SplashScreenController } from "../components/application/SplashScreenController/SplashScreenController";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { SessionProvider, useSession } from "@/contexts/AuthContext";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Stack } from "expo-router";
 import "../global.css";
 
