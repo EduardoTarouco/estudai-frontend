@@ -40,7 +40,13 @@ export function SessionProvider({ children }) {
               token: response.data.token
             }));
           } catch (error) {
-            throw new Error("Erro ao realizar login: " + JSON.stringify(error.response.data));
+            let msg = "Erro desconhecido";
+            if (error.response) {
+              msg = `Status: ${error.response.status} - ${JSON.stringify(error.response.data)}`;
+            } else if (error.message) {
+              msg = error.message;
+            }
+            throw new Error("Erro ao realizar login: " + msg);
           }
         },
         signOut: () => {
