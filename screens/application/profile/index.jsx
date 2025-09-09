@@ -4,10 +4,10 @@ import { View, Text } from "react-native";
 export const Profile = () => {
 
   return (
-    <View>
+    <View className="flex-1">
       <EstudaiHeader />
       <View className="justify-center items-center flex-1">
-        <Text>Profile screen working...</Text>
+        <Text className="text-2xl text-center">Profile screen working...</Text>
       </View>
     </View>
   );

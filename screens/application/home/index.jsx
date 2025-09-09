@@ -2,18 +2,18 @@ import { EstudaiHeader } from "@/components/application/EstudaiHeader";
 import { Button, ButtonText } from "@/components/ui/button";
 import { useSession } from "@/contexts/AuthContext";
 import { VStack } from '@/components/ui/vstack';
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 export const Home = () => {
   
   const { signOut } = useSession();
 
   return (
-    <View className="h-screen w-screen flex justify-center items-center">
+    <View className="flex-1">
       <EstudaiHeader />
-      <VStack space="lg" className="flex-1">
-        <Button 
-          className="fixed right-2 top-3.5"
+      <VStack space={"md"} className="flex-1 justify-center items-center">
+        <Text className="text-2xl text-center">Home screen working...</Text>
+        <Button
           action={"secondary"} 
           variant={"solid"} 
           size={"sm"} 
