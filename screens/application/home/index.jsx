@@ -1,15 +1,15 @@
 import { EstudaiHeader } from "@/components/application/EstudaiHeader";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, ButtonText } from "@/components/ui/button";
 import { useSession } from "@/contexts/AuthContext";
 import { VStack } from '@/components/ui/vstack';
+import { View } from "react-native";
 
 export const Home = () => {
   
   const { signOut } = useSession();
 
   return (
-    <SafeAreaView className="h-screen w-screen flex justify-center items-center">
+    <View className="h-screen w-screen flex justify-center items-center">
       <EstudaiHeader />
       <VStack space="lg" className="flex-1">
         <Button 
@@ -21,8 +21,7 @@ export const Home = () => {
         >
           <ButtonText>Log-out</ButtonText>
         </Button>
-
       </VStack>
-    </SafeAreaView>
+    </View>
   );
 };
