@@ -2,8 +2,12 @@ import { SubjectItem } from '@/components/application/SubjectItem';
 import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 
-export const SubjectGroup = () => {
-
+/**
+ * Componente que representa um grupo de matérias (subjects) na tela inicial.
+ * Utiliza o componente SubjectItem para renderizar cada matéria.
+ * @Param {string} size - Tamanho dos itens (opções: "sm", "md", "lg", "xl").
+ */
+export const SubjectGroup = ({ size }) => {
 	const subjectsObject = [
 		{ title: "LING", color: "blue",   href: "linguagens" },
 		{ title: "HUM",  color: "green",  href: "humanas" },
@@ -22,7 +26,8 @@ export const SubjectGroup = () => {
 						key={href} 
 						title={title} 
 						color={color} 
-						href={href}
+						href={href} 
+						size={size}
 					/>
 				))}
 			</HStack>
@@ -32,7 +37,8 @@ export const SubjectGroup = () => {
 						key={href} 
 						title={title} 
 						color={color} 
-						href={href}
+						href={href} 
+						size={size}
 					/>
 				))}
 			</HStack>
