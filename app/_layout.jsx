@@ -9,7 +9,7 @@ export default function RootLayout() {
 
   return (
     <GluestackUIProvider>
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1 }} className="bg-black">
         <SessionProvider>
           <SplashScreenController />
           <RootNavigator />
