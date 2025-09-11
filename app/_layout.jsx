@@ -1,9 +1,9 @@
-import { SplashScreenController } from "../components/application/SplashScreenController/SplashScreenController";
+import { SplashScreenController } from "@/components/application/SplashScreenController/SplashScreenController";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { SessionProvider, useSession } from "@/contexts/AuthContext";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Stack } from "expo-router";
-import "../global.css";
+import "@/global.css";
 
 export default function RootLayout() {
 
