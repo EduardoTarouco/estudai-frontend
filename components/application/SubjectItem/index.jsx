@@ -24,7 +24,9 @@ export const SubjectItem = ({ title, href, color = "default", size = "lg" }) => 
 			sm: "w-10 h-10",
 			md: "w-20 h-20",
 			lg: "w-32 h-32",
-			xl: "w-40 h-40"
+			xl: "w-40 h-40",
+			textSm: "font-semibold text-2xl",
+			textLg: "font-bold text-4xl"
 		}
 	};
 
@@ -34,10 +36,11 @@ export const SubjectItem = ({ title, href, color = "default", size = "lg" }) => 
 			activeOpacity={0.7}
 			onPress={() => {
 				console.log("navegando para " + href);
-				router.push(`/questions/${href}`);
+				router.push(`/questions/${href}`); // Futuramente, passar de parâmetro o href da matéria, que é seu identificador e também passar a cor atual, para manter a consistência visual em telas posteriores
 			}}
 		>
-			<Text className="font-bold text-4xl">{title}</Text>
+			{/* Componentes de moedas e streak serão adicionado aqui no futuro, ao invés do Text */}
+			<Text className={`${size === "lg" || size === "xl" ? variantStyles.size.textLg : variantStyles.size.textSm}`}>{title}</Text>
 		</TouchableOpacity>
 	);
 }
