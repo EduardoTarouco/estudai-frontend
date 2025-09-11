@@ -5,7 +5,7 @@ import { VStack } from '@/components/ui/vstack';
 /**
  * Componente que representa um grupo de matérias (subjects) na tela inicial.
  * Utiliza o componente SubjectItem para renderizar cada matéria.
- * @Param {string} size - Tamanho dos itens (opções: "sm", "md", "lg", "xl").
+ * @param {string} size - Tamanho dos itens (opções: "sm", "md", "lg", "xl").
  */
 export const SubjectGroup = ({ size }) => {
 	const subjectsObject = [
@@ -19,7 +19,7 @@ export const SubjectGroup = ({ size }) => {
 	const secondRow = subjectsObject.slice(subjectsObject.length/2, subjectsObject.length);
 
 	return (
-		<VStack space={"md"}>
+		<VStack space={"md"} className="bg-gray-600 p-4 rounded-lg">
 			<HStack space={"md"}>
 				{firstRow.map(({ title, color, href }) => (
 					<SubjectItem 
