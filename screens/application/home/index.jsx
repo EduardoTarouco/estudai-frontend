@@ -1,4 +1,4 @@
-import { EstudaiHeader } from "@/components/application/EstudaiHeader";
+import { EstudaiHeader } from "@/components/application/headers/EstudaiHeader";
 import { SubjectGroup } from "@/components/application/SubjectGroup";
 import { Button, ButtonText } from "@/components/ui/button";
 import { useSession } from "@/contexts/AuthContext";
