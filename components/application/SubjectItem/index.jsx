@@ -35,8 +35,7 @@ export const SubjectItem = ({ title, href, color = "default", size = "lg" }) => 
 			className={`${variantStyles.color[color]} ${variantStyles.size[size]} justify-center items-center rounded-lg`}
 			activeOpacity={0.7}
 			onPress={() => {
-				console.log("navegando para " + href);
-				router.push(`/questions/${href}`); // Futuramente, passar de parâmetro o href da matéria, que é seu identificador e também passar a cor atual, para manter a consistência visual em telas posteriores
+				router.push({ pathname:`/questions/${href}`, params: { title, href, color }});
 			}}
 		>
 			{/* Componentes de moedas e streak serão adicionado aqui no futuro, ao invés do Text */}
