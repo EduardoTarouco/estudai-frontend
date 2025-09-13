@@ -26,7 +26,8 @@ function RootNavigator() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Protected guard={session}>
-        <Stack.Screen name="(application)" />
+        <Stack.Screen name="(application)/(tabs)" />
+        <Stack.Screen name="(application)/questions" />
       </Stack.Protected>
       <Stack.Protected guard={!session}>
         <Stack.Screen name="index" />
