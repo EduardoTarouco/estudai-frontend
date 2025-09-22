@@ -1,22 +1,38 @@
-import { VStack } from '@/components/ui/vstack';
-import { HStack } from '@/components/ui/hstack';
-import { Text, View } from "react-native";
+import { Progress, ProgressFilledTrack } from '@/components/ui/progress';
+import { Heading } from "@/components/ui/heading";
+import { VStack } from "@/components/ui/vstack";
+import { HStack } from "@/components/ui/hstack";
+import { Check, X } from "lucide-react-native";
+import { Text } from "react-native";
 
-export const QuestionListItem = ({ title, creationDate, total, answered, correct, wrong }) => {
+export const QuestionListItem = ({ title, creationDate, total, correct, wrong }) => {
+
+  const answered = correct + wrong;
+  const percentage = Math.round((answered * 100) / total);
+  
+  const date = new Date(creationDate);
+  const localDate = date.toLocaleDateString("pt-BR");
 
   return (
-    <View className="bg-gray-300 p-4 mb-4 rounded-lg flex-row justify-between items-center gap-2">
-      <VStack space="md">
-        <HStack space="lg">
-          <Text>{title}</Text>
-          <Text>{creationDate}</Text>
+    <VStack space="sm" className="bg-gray-300 p-4 mb-4 rounded-xl">
+      <Heading size="xl">{title}</Heading>
+      <Text>{localDate}</Text>
+      <HStack space="md" className="w-full justify-between">
+        <HStack space="sm">
+          <Text>`{answered} | {total}`</Text>
         </HStack>
-        <HStack space="md">
-          <Text>{answered} / {total}</Text>
+        <HStack space="sm">
+          <Check color="green" />
           <Text>{correct}</Text>
+        </HStack>
+        <HStack space="sm">
+          <X color="red" className="bg-yellow-500 p-2 rounded-full" />
           <Text>{wrong}</Text>
         </HStack>
-      </VStack>
-    </View>
+      </HStack>
+      <Progress value={percentage} className="w-full bg-gray-200 h-1" >
+        <ProgressFilledTrack className="h-1" />
+      </Progress>
+    </VStack>
   );
 }
