@@ -15,7 +15,7 @@
             "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXRldXN0YXJvdWNvMDU4QGdtYWlsLmNvbSIsImlhdCI6MTc1NzE3NjcyMCwiZXhwIjoxNzU3MjYzMTIwfQ.aimFDW8MmI1aoI0WPO5kUxsZDq6xe3P3DgV2W-tuHRg"
         }
    ],
-    "questions": [
+    "questoes_puras": [
         {
         "title": "Questão 1 - ENEM 2020",
         "index": 1,
@@ -448,5 +448,85 @@
             }
         ]
         }
-  ]
+    ],
+    "matematica": [
+        {
+            "id": 1,
+            "title": "Lista de questões 1 - Matemática",
+            "questionsId": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            "answered": [1, 4, 6, 7, 8],
+            "right": [1, 6, 7],
+            "wrong": [4, 8],
+            "creationDate": "2025-09-22T15:30:00Z"
+        },
+        {
+            "id": 2,
+            "title": "Lista de questões 2 - Matemática",
+            "questionsId": [1, 2, 3, 4, 5, 6],
+            "answered": [1, 4, 6],
+            "right": [1, 6],
+            "wrong": [4],
+            "creationDate": "2025-09-21T15:30:00Z"
+        }
+    ],
+    "naturezas": [
+        {
+            "id": 1,
+            "title": "Lista de questões 1 - Naturezas",
+            "questionsId": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            "answered": [1, 4, 6, 7],
+            "right": [1, 6, 7],
+            "wrong": [4],
+            "creationDate": "2025-09-22T15:30:00Z"
+        },
+        {
+            "id": 2,
+            "title": "Lista de questões 2 - Naturezas",
+            "questionsId": [1, 2, 3, 4, 5, 6],
+            "answered": [1, 4, 6],
+            "right": [1, 6],
+            "wrong": [4],
+            "creationDate": "2025-09-21T15:30:00Z"
+        }
+    ],
+    "humanas": [
+        {
+            "id": 1,
+            "title": "Lista de questões 1 - Humanas",
+            "questionsId": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            "answered": [1, 4, 6, 7],
+            "right": [1, 6, 7],
+            "wrong": [4],
+            "creationDate": "2025-09-22T15:30:00Z"
+        },
+        {
+            "id": 2,
+            "title": "Lista de questões 2 - Humanas",
+            "questionsId": [1, 2, 3, 4, 5, 6],
+            "answered": [1, 4, 6],
+            "right": [1, 6],
+            "wrong": [4],
+            "creationDate": "2025-09-21T15:30:00Z"
+        }
+    ],
+    "linguagens": [
+        {
+            "id": 1,
+            "title": "Lista de questões 1 - Linguagens",
+            "questionsId": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            "answered": [1, 4, 6, 7],
+            "right": [1, 6, 7],
+            "wrong": [4],
+            "creationDate": "2025-09-22T15:30:00Z"
+        },
+        {
+            "id": 2,
+            "title": "Lista de questões 2 - Linguagens",
+            "questionsId": [1, 2, 3, 4, 5, 6],
+            "answered": [1, 4, 6],
+            "right": [1, 6],
+            "wrong": [4],
+            "creationDate": "2025-09-21T15:30:00Z"
+        }
+    ]
 }
