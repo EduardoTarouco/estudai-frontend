@@ -3,7 +3,7 @@ import { Heading } from "@/components/ui/heading";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Check, X } from "lucide-react-native";
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export const QuestionListItem = ({ title, creationDate, total, correct, wrong }) => {
 
@@ -20,19 +20,17 @@ export const QuestionListItem = ({ title, creationDate, total, correct, wrong })
       <VStack space="sm" className="bg-gray-300 p-4 mb-4 rounded-xl">
         <Heading size="xl">{title}</Heading>
         <Text>{localDate}</Text>
-        <HStack space="md" className="w-full justify-between">
-          <HStack space="sm">
-            <Text>{answered} | {total}</Text>
-          </HStack>
+        <View className="flex-row justify-between">
+          <Text>{answered} | {total}</Text>
           <HStack space="sm">
             <Check color="green" />
             <Text>{correct}</Text>
           </HStack>
           <HStack space="sm">
-            <X color="red" className="bg-yellow-500 p-2 rounded-full" />
+            <X color="red" />
             <Text>{wrong}</Text>
           </HStack>
-        </HStack>
+        </View>
         <Progress value={percentage} className="w-full bg-gray-200 h-1" >
           <ProgressFilledTrack className="h-1" />
         </Progress>
