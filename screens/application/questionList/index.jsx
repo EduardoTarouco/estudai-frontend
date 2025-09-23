@@ -34,9 +34,7 @@ export const QuestionList = () => {
           className="w-full p-4"
           data={questions}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => {
-            console.log(`item recebido (${item.id}): `, item);
-            return (
+          renderItem={({ item }) => (
               <QuestionListItem 
                 title={item.title}
                 total={item.questionsId?.length || "nulo"}
@@ -44,8 +42,7 @@ export const QuestionList = () => {
                 wrong={item.wrong?.length || "nulo"}
                 creationDate={item.creationDate}
               />
-            );
-          }}
+          )}
         />
       </View>
     </View>
