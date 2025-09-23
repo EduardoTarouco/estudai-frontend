@@ -36,6 +36,7 @@ export const QuestionList = () => {
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
               <QuestionListItem 
+                mainColor={color}
                 title={item.title}
                 total={item.questionsId?.length || "nulo"}
                 correct={item.right?.length || "nulo"}
