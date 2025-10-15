@@ -35,6 +35,7 @@ export const SubjectItem = ({ title, href, color = "default", size = "lg" }) => 
 			className={`${variantStyles.color[color]} ${variantStyles.size[size]} justify-center items-center rounded-lg`}
 			activeOpacity={0.7}
 			onPress={() => {
+				if (!href) {router.back(); return;}
 				router.push({ pathname:`/questions/${href}`, params: { title, href, color }});
 			}}
 		>
