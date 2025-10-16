@@ -1,6 +1,7 @@
 import { QuestionListHeader } from "@/components/application/headers/QuestionListHeader";
 import { QuestionListItem } from "@/components/application/QuestionListItem";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Button, ButtonText } from "@/components/ui/button";
 import { View, FlatList } from "react-native";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -11,6 +12,7 @@ export const QuestionList = () => {
 
   const { title, color, href } = useLocalSearchParams();
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,9 +31,21 @@ export const QuestionList = () => {
   return (
     <View className="flex-1">
       <QuestionListHeader title={title} color={color} />
-      <View className="justify-center items-center flex-1">
+      <View className="justify-center items-center flex-1 p-4">
+        <Button 
+          action={"primary"} 
+          variant={"solid"} 
+          size={"lg"} 
+          className="w-full mb-2 bg-blue-500"
+          onPress={() => {router.push({ 
+            pathname:`/questions/createQuestionList`, 
+            params: { title, href, color }});
+          }}
+        >
+          <ButtonText>Nova lista</ButtonText>
+        </Button>
         <FlatList
-          className="w-full p-4"
+          className="w-full p-2"
           data={questions}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
