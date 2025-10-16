@@ -15,9 +15,9 @@ import { ChevronDown } from "lucide-react-native";
 export const SelectButton = ({ placeholder, disabled=false, IconComponent=ChevronDown }) => {
 
   return (
-    <Select className="w-full">
-      <SelectTrigger>
-        <SelectInput placeholder={placeholder} className="flex-1" />
+    <Select>
+      <SelectTrigger variant="outline" size="md" >
+        <SelectInput placeholder={placeholder} className="text-md" />
         <SelectIcon className="mr-3" as={IconComponent} />
       </SelectTrigger>
       <SelectPortal>
@@ -26,11 +26,11 @@ export const SelectButton = ({ placeholder, disabled=false, IconComponent=Chevro
           <SelectDragIndicatorWrapper>
             <SelectDragIndicator />
           </SelectDragIndicatorWrapper>
-          <SelectItem label="Red" value="red" />
-          <SelectItem label="Blue" value="blue" />
-          <SelectItem label="Black" value="black" />
-          <SelectItem label="Pink" value="pink" isDisabled={true} />
-          <SelectItem label="Green" value="green" />
+          <SelectItem label="2019" value="2019" />
+          <SelectItem label="2020" value="2020" />
+          <SelectItem label="2021" value="2021" />
+          <SelectItem label="2022" value="2022" isDisabled={true} />
+          <SelectItem label="2023" value="2023" />
         </SelectContent>
       </SelectPortal>
     </Select>
