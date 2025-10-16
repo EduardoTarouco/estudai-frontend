@@ -1,4 +1,4 @@
-import { EstudaiHeader } from "@/components/application/EstudaiHeader";
+import { EstudaiHeader } from "@/components/application/headers/EstudaiHeader";
 import { SubjectGroup } from "@/components/application/SubjectGroup";
 import { Button, ButtonText } from "@/components/ui/button";
 import { useSession } from "@/contexts/AuthContext";
@@ -13,7 +13,7 @@ export const Home = () => {
     <View className="flex-1">
       <EstudaiHeader />
       <VStack space={"md"} className="flex-1 p-5 items-center">
-        <SubjectGroup />
+        <SubjectGroup size={"xl"} />
         <Text className="text-2xl text-center">Home screen working...</Text>
         <Button
           action={"secondary"} 

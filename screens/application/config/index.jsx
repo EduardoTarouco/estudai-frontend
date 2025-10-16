@@ -1,4 +1,4 @@
-import { EstudaiHeader } from "@/components/application/EstudaiHeader";
+import { EstudaiHeader } from "@/components/application/headers/EstudaiHeader";
 import { View, Text } from "react-native";
 
 export const Config = () => {

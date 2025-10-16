@@ -1,2 +1,2 @@
-import { QuestionList } from "@/screens/application/questionList";
+import { QuestionList } from "@/screens/application/questions/questionList";
 export default QuestionList;

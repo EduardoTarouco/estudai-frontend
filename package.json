@@ -9,7 +9,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "start:mock": "json-server --watch ./mockServer/db.json --routes ./mockServer/routes.json --host 0.0.0.0 --port 8080"
+    "start:mock": "node mockServer/server.js"
   },
   "dependencies": {
     "@expo/html-elements": "^0.4.2",
@@ -87,6 +87,7 @@
     "eslint": "^9.25.0",
     "eslint-config-expo": "~9.2.0",
     "jscodeshift": "^0.15.2",
+    "json-server": "^0.17.4",
     "typescript": "~5.8.3"
   },
   "private": true
