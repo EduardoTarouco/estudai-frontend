@@ -9,16 +9,16 @@ import "@/global.css";
 export default function RootLayout() {
 
   return (
-    <GluestackUIProvider>
-      <SafeAreaView style={{ flex: 1 }} className="bg-black">
+    <SafeAreaView style={{ flex: 1 }} className="bg-black">
+      <GluestackUIProvider>
         <SessionProvider>
           <PopUpProvider>
             <SplashScreenController />
             <RootNavigator />
           </PopUpProvider>
         </SessionProvider>
-      </SafeAreaView>
-    </GluestackUIProvider>
+      </GluestackUIProvider>
+    </SafeAreaView>
   );
 }
 
