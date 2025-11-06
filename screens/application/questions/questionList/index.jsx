@@ -31,7 +31,7 @@ export const QuestionList = () => {
     <View className="flex-1">
       <QuestionListHeader title={title} color={color} />
       <View className="justify-center items-center flex-1 p-4">
-        <CreateQuestionListModal />
+        <CreateQuestionListModal disciplina={href} />
         <FlatList
           className="w-full p-2"
           data={questions}
