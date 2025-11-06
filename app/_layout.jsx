@@ -2,20 +2,23 @@ import { SplashScreenController } from "@/components/application/SplashScreenCon
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { SessionProvider, useSession } from "@/contexts/AuthContext";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { PopUpProvider } from "../contexts/PopUpContext";
 import { Stack } from "expo-router";
 import "@/global.css";
 
 export default function RootLayout() {
 
   return (
-    <GluestackUIProvider>
-      <SafeAreaView style={{ flex: 1 }} className="bg-black">
+    <SafeAreaView style={{ flex: 1 }} className="bg-black">
+      <GluestackUIProvider>
         <SessionProvider>
-          <SplashScreenController />
-          <RootNavigator />
+          <PopUpProvider>
+            <SplashScreenController />
+            <RootNavigator />
+          </PopUpProvider>
         </SessionProvider>
-      </SafeAreaView>
-    </GluestackUIProvider>
+      </GluestackUIProvider>
+    </SafeAreaView>
   );
 }
 
