@@ -1,8 +1,8 @@
 import { CreateQuestionListModal } from "@/components/application/CreateQuestionListModal";
 import { QuestionListHeader } from "@/components/application/headers/QuestionListHeader";
 import { QuestionListItem } from "@/components/application/QuestionListItem";
+import { View, Text, FlatList } from "react-native";
 import { useLocalSearchParams } from "expo-router";
-import { View, FlatList } from "react-native";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -16,7 +16,7 @@ export const QuestionList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Ajustar para o endpoint correto posteriormente, atualmente, aponta as listas mockadas
+        // Ajustar para o endpoint correto posteriormente, atualmente, aponta para as listas mockadas
         const response = await axios.get(`${baseBackendUrl}/${href}`);
         setQuestions(response.data);
       } catch (error) {
@@ -44,8 +44,10 @@ export const QuestionList = () => {
               correct={item.right?.length || "nulo"}
               wrong={item.wrong?.length || "nulo"}
               creationDate={item.creationDate}
+              questionListHeaderTitle={title}
             />
           )}
+          ListEmptyComponent={<Text className="text-2xl font-bold text-center">Crie uma nova lista de questões para que ela apareça aqui!</Text>}
         />
       </View>
     </View>
