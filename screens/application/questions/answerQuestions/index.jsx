@@ -231,7 +231,8 @@ export const AnswerQuestions = () => {
 
   const { questionListHeaderTitle, color, percentage } = useLocalSearchParams();
 
-  const [question, setQuestion] = useState(questionListData[0]);
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const [question, setQuestion] = useState(questionListData[questionIndex]);
   const [selectedAlternative, setSelectedAlternative] = useState(null);
   const [answeredQuestions, setAnsweredQuestions] = useState({});
 
@@ -242,27 +243,33 @@ export const AnswerQuestions = () => {
 
     setAnsweredQuestions(prev => ({
       ...prev,
-      [question.index]: { chosen: letter, correct: isCorrect }
+      [question.index]: { 
+        chosen: letter,
+        correct: isCorrect,
+        correctAlternative: question.correctAlternative,
+        answeredAt: new Date()
+      }
     }));
   };
 
-  const previousQuestion = () => { };
+  const handlePreviousQuestion = () => {
+    if (questionIndex > 0) {
+      setQuestionIndex(prev => prev - 1);
+      setSelectedAlternative(null);
+    }
+  };
 
-  const handleNext = () => {
-    const nextIndex = question.index;
-    if (nextIndex < questionListData.length) {
-      setQuestion(questionListData[nextIndex]); // pois index começa em 1
+  const handleNextQuestion = () => {
+    if (questionIndex < questionListData.length - 1) {
+      setQuestionIndex(prev => prev + 1);
       setSelectedAlternative(null);
     }
   };
 
   useEffect(() => {
-    // console.log("Local search params: ", questionListHeaderTitle, color, percentage);
-    if (!question) return;
-    console.log("Texto da questão:", question.context);
-    console.log("Introdução da questão:", question.alternativesIntroduction);
-    console.log("Alternativas da questão:", question.alternatives);
-  }, [question]);
+    setQuestion(questionListData[questionIndex]);
+    console.log(answeredQuestions);
+  }, [questionIndex, answeredQuestions]);
 
   return (
     <ScrollView className="flex-1">
@@ -289,15 +296,19 @@ export const AnswerQuestions = () => {
           if (showResult) {
             if (isCorrect) {
               bgColor = "green";
-            } else if (isSelected) bgColor = "red";
-          } else if (isSelected) {
-            bgColor = "blue";
+            } 
+            else if (isSelected || showResult.chosen === alternative.letter) {
+              bgColor = "red"
+            } else {
+              bgColor = "gray"
+            }
           }
+
           const bgColors = {
             white: "bg-white",
-            red: "bg-red-500",
+            red: "bg-red-600",
             green: "bg-green-500",
-            blue: "bg-blue-400"
+            gray: "bg-gray-300"
           };
 
           return (
@@ -309,7 +320,7 @@ export const AnswerQuestions = () => {
               activeOpacity={0.8}
             >
               <Text className="font-bold text-lg">
-                {alternative.letter})
+                {alternative.letter}
               </Text>
               <Text className="flex-1 font-medium text-base">
                 {alternative.text}
@@ -318,22 +329,26 @@ export const AnswerQuestions = () => {
           );
         })}
 
-        <View className="w-full flex flex-row justify-between p-2">
+        <View className="w-full flex flex-row justify-between p-2 mt-4">
           <Button
+            className={`${questionIndex === 0 ? 'opacity-85' : ''}`}
+            disabled={questionIndex === 0}
             action={"primary"}
             variant={"solid"}
             size={"lg"}
-            onPress={previousQuestion}
+            onPress={handlePreviousQuestion}
           >
             <ButtonIcon as={ArrowLeft} className="mr-2" />
             <ButtonText>Questão anterior</ButtonText>
           </Button>
 
           <Button
+            className={`${questionIndex === questionListData.length - 1 ? 'opacity-85' : ''}`}
+            disabled={questionIndex === questionListData.length - 1}
             action={"primary"}
             variant={"solid"}
             size={"lg"}
-            onPress={handleNext}
+            onPress={handleNextQuestion}
           >
             <ButtonText>Próxima questão</ButtonText>
             <ButtonIcon as={ArrowRight} className="ml-2" />
