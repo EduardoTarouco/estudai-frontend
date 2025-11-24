@@ -3,8 +3,8 @@ import { Progress, ProgressFilledTrack } from '@/components/ui/progress';
 import { Button, ButtonText, ButtonIcon } from '@/components/ui/button';
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { ArrowLeft, ArrowRight } from "lucide-react-native";
+import Markdown from "react-native-markdown-display";
 import { useLocalSearchParams } from "expo-router";
-import { Divider } from '@/components/ui/divider';
 import { Heading } from '@/components/ui/heading';
 import { Center } from '@/components/ui/center';
 import { useState, useEffect } from "react";
@@ -13,217 +13,219 @@ export const AnswerQuestions = () => {
 
   const questionListData = [
     {
-      "title": "Questão 1 - ENEM 2020",
-      "index": 1,
+      "title": "Questão 12 - ENEM 2019",
+      "index": 12,
       "discipline": "linguagens",
-      "language": "espanhol",
-      "year": 2020,
-      "context": "**Pablo Pueblo**\n\nRegresa un hombre en silencio  \nDe su trabajo cansado  \nSu paso no lleva prisa  \nSu sombra nunca lo alcanza\n\nLo espera el barrio de siempre  \nCon el farol en la esquina  \nCon la basura allá en frente  \nY el ruido de la cantina\n\nPablo Pueblo  \nllega hasta el zaguán oscuro  \nY vuelve a ver las paredes  \nCon las viejas papeletas  \nQue prometían futuros  \nen lides politiqueras  \nY en su cara se dibuja  \nla decepción de la espera.\n\n**BLADES. R.** DisponíveI em: http://rubenblades.com. _Acesso em: 26 jun. 2012 (fragmento)_",
-      "files": [],
-      "correctAlternative": "A",
-      "alternativesIntroduction": "Rubén Blades é um compositor panamenho de canções socialmente engajadas. O título Pablo Pueblo, associado ao conteúdo da letra da canção, revela uma crítica social ao",
+      "language": null,
+      "year": 2019,
+      "context": "![](https://enem.dev/2019/questions/12/cbc6cd51-59ad-446d-823e-2bd9c979d5a1.png)\n\n**TEXTO II**\n\n**Quadrinista surda faz sucesso na CCXP com narrativas silenciosas**\n\nA área de artistas independentes da Comic Con Experience (CCXP) deste ano é a maior da história do evento geek, são mais de 450 quadrinistas e ilustradores no Artists’ Alley.\n\nE a diversidade vai além do estilo das HQ. Em uma das mesas na fila F, senta a quadrinista com deficiência auditiva Ju Loyola, com suas histórias que classifica como “narrativas silenciosas”. São histórias que podem ser compreendidas por crianças e adultos, e pessoas de qualquer nacionalidade, pelo simples motivo de não terem uma única palavra.\n\nA artista não escreve roteiros convencionais para suas obras. Sua experiência de ter que entender a comunicação pelo que vê faz com que ela se identifique muito mais com o que observa do que com o que as pessoas dizem.\n\nE basta folhear suas obras que fica claro que elas não são histórias em quadrinhos que perderam as palavras, mas sim que ganharam uma nova perspectiva.\n\n**Disponível em:** https://catracalivre.com.br. Acesso em: 8 dez. 2018 (adaptado).",
+      "files": [
+        "https://enem.dev/2019/questions/12/cbc6cd51-59ad-446d-823e-2bd9c979d5a1.png"
+      ],
+      "correctAlternative": "D",
+      "alternativesIntroduction": "O Texto I exemplifica a obra de uma artista surda, que promove uma experiência de leitura inovadora, divulgada no Texto II. Independentemente de seus objetivos, ambos os textos",
       "alternatives": [
         {
           "letter": "A",
-          "text": "Contrapor a individualidade de um sujeito a uma estrutura social marcada pela decepção na atuação política.",
+          "text": "Incentivam a produção de roteiros compostos por imagens.",
           "file": null,
-          "isCorrect": true
+          "isCorrect": false
         },
         {
           "letter": "B",
-          "text": "Demonstrar que o problema sofrido pelo indivíduo atinge toda a comunidade.",
+          "text": "Colaboram para a valorização de enredos românticos.",
           "file": null,
           "isCorrect": false
         },
         {
           "letter": "C",
-          "text": "Relativizar a importância que se dá ao sofrimento individual em uma estrutura social baseada na exploração.",
+          "text": "Revelam o sucesso de um evento de cartunistas.",
           "file": null,
           "isCorrect": false
         },
         {
           "letter": "D",
-          "text": "Descrever a vida de um sujeito que nunca resolve suas inquietações e, por isso, mantém-se silencioso.",
+          "text": "Contribuem com o processo de acessibilidade.",
           "file": null,
-          "isCorrect": false
+          "isCorrect": true
         },
         {
           "letter": "E",
-          "text": "Usar um apelido jocoso para designar a atuação de um indivíduo em seu próprio bairro.",
+          "text": "Questionam o padrão tradicional das HQ.",
           "file": null,
           "isCorrect": false
         }
       ]
     },
     {
-      "title": "Questão 2 - ENEM 2020",
-      "index": 2,
+      "title": "Questão 13 - ENEM 2019",
+      "index": 13,
       "discipline": "linguagens",
-      "language": "espanhol",
-      "year": 2020,
-      "context": "**Los propietarios de la libertad**\n\nLas palabras cumplen ciclos; las actitudes también. Sin embargo, cuando las palabras designan actitudes, los ciclos se vuelven más complejos. Cuando el hoy tan denostado Sartre puso la palabra compromiso sobre el tapete y hasta Mac Leish publicó un libro sobre la responsabilidad de los intelectuales, estas dos palabras, compromiso y responsabilidad, designaban actitudes que, sin ser gemelas, eran bastante afines. Salvo contadas excepciones, los intelectuales de entonces los hicieron suyas y, equivocados o no, dijeron sin eufemismos por  \nqué empeño se la jugaban.\n\nLos intelectuales latinoamericanos tambiéncomprendieron dónde estaba esta vez el enemigo. Sólo entonces empezó la mala prensa. Los grandes pontífices de la propaganda subrayaron una y otra vez la palabra libertad y denostaron el compromiso. Libertad no era librarse de Batista o de Somoza, sino mantener la prensa libre. Libertad es la emocionada comprobación de que la gran prensa norteamericana es capaz de descubrir que Lumumba o Aliende fueron liquidados por la CIA, sin poner el acento en que eso no sirve para resucitarlos.\n\n¿Y compromiso? Es la actitud que adoptan ciertos intelectuales, cuya carga ideológica perjudica notoriamente su arte. Después de todo, ¿cómo se atrevena frecuentar las provincias del espiritu, si es público y notorio que tales ámbitos son patrimonio exclusivo de los propietarios de la Iibertad?\n\n**BENEDETTI, M**. _Perplejidades de fin de siglo_. Buenos Aires: Sudamericana, 1993 (adaptado)",
+      "language": null,
+      "year": 2019,
+      "context": "HELOÍSA: Faz versos?\n\nPINOTE: Sendo preciso… Quadrinhas… Acrósticos… Sonetos… Reclames.\n\nHELOÍSA: Futuristas?\n\nPINOTE: Não senhora! Eu já fui futurista. Cheguei a acreditar na independência… Mas foi uma tragédia! Começaram a me tratar de maluco. A me olhar de esguelha. A não me receber mais. As crianças choravam em casa. Tenho três filhos. No jornal também não pagavam, devido à crise. Precisei viver de bicos. Ah! Reneguei tudo. Arranjei aquele instrumento (Mostra a faca) e fiquei passadista.\n\n**ANDRADE, O.** _O rei da vela_. São Paulo: Globo, 2003.",
+      "files": [],
+      "correctAlternative": "B",
+      "alternativesIntroduction": "O fragmento da peça teatral de Oswald de Andrade ironiza a reação da sociedade brasileira dos anos 1930 diante de determinada vanguarda europeia. Nessa visão, atribui-se ao público leitor uma postura",
+      "alternatives": [
+        {
+          "letter": "A",
+          "text": "Preconceituosa, ao evitar formas poéticas simplificadas.",
+          "file": null,
+          "isCorrect": false
+        },
+        {
+          "letter": "B",
+          "text": "Conservadora, ao optar por modelos consagrados.",
+          "file": null,
+          "isCorrect": true
+        },
+        {
+          "letter": "C",
+          "text": "Preciosista, ao preferir modelos literários eruditos.",
+          "file": null,
+          "isCorrect": false
+        },
+        {
+          "letter": "D",
+          "text": "Nacionalista, ao negar modelos estrangeiros.",
+          "file": null,
+          "isCorrect": false
+        },
+        {
+          "letter": "E",
+          "text": "Eclética, ao aceitar diversos estilos poéticos.",
+          "file": null,
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "title": "Questão 14 - ENEM 2019",
+      "index": 14,
+      "discipline": "linguagens",
+      "language": null,
+      "year": 2019,
+      "context": null,
+      "files": [],
+      "correctAlternative": "E",
+      "alternativesIntroduction": "A viagem\nQue coisas devo levar\nnesta viagem em que partes?\nAs cartas de navegação só servem\na quem fica.\nCom que mapas desvendar\num continente\nque falta?\nEstrangeira do teu corpo\ntão comum\nquantas línguas aprender\npara calar-me?\nTambém quem fica\nprocura\num oriente.\nTambém\na quem fica\ncabe uma paisagem nova\ne a travessia insone do desconhecido\ne a alegria difícil da descoberta.\nO que levas do que fica,\no que, do que levas, retiro?\nMARQUES, A. M. In: SANT’ANNA, A (Org.).\nRua Aribau. Porto Alegre: Tag, 2018\n \n\n\n\n\nA viagem e a ausência remetem a um repertório poético tradicional. No poema, a voz lírica dialoga com essa tradição, repercutindo a",
+      "alternatives": [
+        {
+          "letter": "A",
+          "text": "Saudade como experiência de apatia.",
+          "file": null,
+          "isCorrect": false
+        },
+        {
+          "letter": "B",
+          "text": "Presença da fragmentação da identidade.",
+          "file": null,
+          "isCorrect": false
+        },
+        {
+          "letter": "C",
+          "text": "Negação do desejo como expressão de culpa.",
+          "file": null,
+          "isCorrect": false
+        },
+        {
+          "letter": "D",
+          "text": "Persistência da memória na valorização do passado.",
+          "file": null,
+          "isCorrect": false
+        },
+        {
+          "letter": "E",
+          "text": "Revelação de rumos projetada pela vivência da solidão.",
+          "file": null,
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "title": "Questão 15 - ENEM 2019",
+      "index": 15,
+      "discipline": "linguagens",
+      "language": null,
+      "year": 2019,
+      "context": null,
       "files": [],
       "correctAlternative": "C",
-      "alternativesIntroduction": "Transformar palavras em atitudes tem sido um dos grandes dilemas dos intelectuais. Ao ponderar sobre essa temática, o autor, um dos grandes críticos e literatos latino-americanos da atualidade, leva o leitor a perceber que",
+      "alternativesIntroduction": "O Instituto de Arte de Chicago disponibilizou para visualização on-line, compartilhamento ou download (sob licença Creative Commons), 44 mil imagens de obras de arte em altíssíma resolução, além de livros, estudos e pesquisas sobre a história da arte.\nPara o historiador da arte, Bendor Grosvenor, o sucesso das coleções on-line de acesso aberto, além de democratizar a arte, vem ajudando a formar um novo público museológico. Grosvenor acredita que quanto mais pessoas forem expostas à arte on-line, mais visitas pessoais acontecerão aos museus.\nA coleção está disponível em seis categorias: paisagens urbanas, impressionismo, essenciais, arte africana, moda e animais. Também é possível pesquisar pelo nome da obra, estilo, autor ou período. Para navegar pela imagem em alta definição, basta clicar sobre ela e utilizar a ferramenta de zoom. Para fazer o download, disponível para obras de domínio público, é preciso utilizar a seta localizada do lado inferior direito da imagem.\nDisponível em: www.revistabula.com. Acesso em: 5 dez. 2018 (adaptado).\n \nA função da linguagem que predomina nesse texto se caracteriza por",
       "alternatives": [
         {
           "letter": "A",
-          "text": "O compromisso político afasta o artista da criação.",
+          "text": "Evidenciar a subjetividade da reportagem com base na fala do historiador de arte.",
           "file": null,
           "isCorrect": false
         },
         {
           "letter": "B",
-          "text": "Os costumes sociais governam a linguagem e as atitudes das pessoas.",
+          "text": "Convencer o leitor a fazer o acesso on-line, levando-o a conhecer as obras de arte.",
           "file": null,
           "isCorrect": false
         },
         {
           "letter": "C",
-          "text": "O compromisso ideológico de alguns intelectuais está refletido em suas obras.",
+          "text": "Informar sobre o acesso às imagens por meio da descrição do modo como acessá-las.",
           "file": null,
           "isCorrect": true
         },
         {
           "letter": "D",
-          "text": "A complexidade relacionada ao conceito de liberdade impede o compromisso.",
+          "text": "Estabelecer interlocução com o leitor, orientando-o a fazer o download das obras de arte.",
           "file": null,
           "isCorrect": false
         },
         {
           "letter": "E",
-          "text": "Os intelectuais latino-americanos têm um posiciona - mento acrítico perante o poder.",
+          "text": "Enaltecer a arte, buscando popularizá-la por meio da possibilidade de visualização on-line.",
           "file": null,
           "isCorrect": false
         }
       ]
     },
     {
-      "title": "Questão 3 - ENEM 2020",
-      "index": 3,
+      "title": "Questão 16 - ENEM 2019",
+      "index": 16,
       "discipline": "linguagens",
-      "language": "espanhol",
-      "year": 2020,
-      "context": "**La violencia como bella arte**\n\nPues bien, ‘Relatos Salvajes’, de Damián Szifrón, es  \nsobre todo un brilhante esfuerzo por poner rostro, por  \nfotografiar, a la parte de la violencia que tanto cuesta ver  \nen el cine. De repente, el director argentino coloca la  \nespectador ante el espectáculo, digamos putrefacto, de  \nuna sociedad enferma de su propia indolencia,  \nanestesiada por su ira, incapaz de entender el origen de  \nla insatisfacción que la habita. ¿Cómo se quedan? Sí,  \nestamos delante de la una película vocacionalmente  \nviolenta, obligadamente salvaje, pero, y sobre todo,  \ndeslumbrante en su claridad.  \nMás allá del esplendor sabio de una producción  \nperfecta, lo que más duele, lo que más divierte, lo que  \nmás conmueve es la sensación de reconocimiento. Cada  \nuno de los damnificados, pese a su acento marcadamente  \nargentino, somos nosotros. O, mejor, cada insulto  \nproferido, y no siempre entendido, es nuestro, en algún  \nmomento ha salido de nuestra boca. O saldrá.  \nLa violencia no es sólo eso que tanto desagrada a los  \nprofesionales del buen gusto, a los programadores de  \nópera o a los filósofos de la nada; la violencia, la  \nrealmente insoportable, es también una cuestión de  \nactitud, un simple gesto. Y esa violencia está por todas  \npartes, está dentro. Y Szifrón acierta a retrataria tan  \nfielmente que no queda otra cosa que romper a reír.  \nAunque sólo sea de simple desesperación. Brillante,  \nmagistral incluso.\n\n**MARTÍNEZ, L**. Disponível em: www.elmundo.es. _Acesso em: 13 abr. 2015_ (adaptado).",
-      "files": [],
-      "correctAlternative": "E",
-      "alternativesIntroduction": "Nessa resenha crítica acerca do filme Relatos Salvajes, o autor evidencia o",
-      "alternatives": [
-        {
-          "letter": "A",
-          "text": "Cômico como fuga da sociedade diante de situações violentas.",
-          "file": null,
-          "isCorrect": false
-        },
-        {
-          "letter": "B",
-          "text": "Estado de apatia da sociedade perante a violência rotineira do mundo atual.",
-          "file": null,
-          "isCorrect": false
-        },
-        {
-          "letter": "C",
-          "text": "Empecilho para o espectador vivenciar a violência bruta na realidade e na ficção.",
-          "file": null,
-          "isCorrect": false
-        },
-        {
-          "letter": "D",
-          "text": "Sotaque reforçado dos personagens a fim de marca.r o espaço do cinema argentino.",
-          "file": null,
-          "isCorrect": false
-        },
-        {
-          "letter": "E",
-          "text": "Autorreconhecimento diante dos diversos tipos de comportamento humano frente à violência.",
-          "file": null,
-          "isCorrect": true
-        }
-      ]
-    },
-    {
-      "title": "Questão 4 - ENEM 2020",
-      "index": 4,
-      "discipline": "linguagens",
-      "language": "espanhol",
-      "year": 2020,
-      "context": "Oye, Pito, ésta es: la vida bruta de un boy  \nmis tierras eran  \nnuevo méxico, colorado,  \ncalifornia, arizona, tejas,  \ny muchos otros senderos,  \naún cuando la luz existía  \nsonrientemente  \nen las palabras  \nde mis antepasados…  \nera entonces hombre,  \nmaduro y sencillo  \ncomo los cerros y los peñascos,  \ny mi cultura era el atole,  \nel chaquehue, y los buenos días;  \nmi idioma cantaba  \nversículos  \npor los cañones  \nde tierra roja  \ny tierra amarilla…  \nHoy sí, hoy ya no soy  \nmejicano ni hispano  \nni tampoco americano,  \npero soy — y bien lo siento ser —  \nuna sombra del pasado  \ny un esfuerzo  \nhacia el futuro…\n\n**SÁNCHEZ. R**. Disponível em: www.materialdelectura.unam.mx. _Acesso em: 4 dez. 2017._",
-      "files": [],
-      "correctAlternative": "E",
-      "alternativesIntroduction": "Ao abordar a expropriação de territórios mexicanos pelos Estados Unidos, o eu lírico do poema revela um(a)",
-      "alternatives": [
-        {
-          "letter": "A",
-          "text": "Rejeição da língua utilizada por seus antepassados.",
-          "file": null,
-          "isCorrect": false
-        },
-        {
-          "letter": "B",
-          "text": "Desejo de pertencimento ao espaço estadunidense.",
-          "file": null,
-          "isCorrect": false
-        },
-        {
-          "letter": "C",
-          "text": "Certeza de manutenção de suas tradições.",
-          "file": null,
-          "isCorrect": false
-        },
-        {
-          "letter": "D",
-          "text": "Reivindicação de um mundo unificado.",
-          "file": null,
-          "isCorrect": false
-        },
-        {
-          "letter": "E",
-          "text": "Sentimento de conflito de identidades.",
-          "file": null,
-          "isCorrect": true
-        }
-      ]
-    },
-    {
-      "title": "Questão 5 - ENEM 2020",
-      "index": 5,
-      "discipline": "ciencias-humanas",
       "language": null,
-      "year": 2020,
-      "context": "Poco después apareció en casa de Elisenda Morales,  \narrastrando su cansancio y las contrariedades de un largo  \ndía que habla dejado su ánimo en ruínas. A pesar de todo,  \nsupo resistirlo, y cuando ella le ofreció una copa de  \nmistela, abandonó su asiento para ir hasta la tienda en  \nbusca de algo más estimulante.  \nAllí, en el corredor dela casa, en taburetes separados,  \nrecibieron los primeros cálidos soplos de la noche. Con su  \nhabitual entereza, Elisenda entró a conectar la luz de la  \nsala, sofocando parte de su reflejo, mientras comentaba  \nque así estarían mejor. Al menos, pensó el tio Camarillo,  \nno habia sacado la lámpara como otras veces, ni le había  \nentregado alguno de sus álbumes, y parecía en cambio  \ndecidida a mantener en ascuas al vecindario. Aquélla fue  \nla primera vez que en mucho tiempo dejaron de lado el  \ntema de las rentas, para entrar con pies de plomo en el  \nespinoso terreno de las confidencias.\n\n**SÁNCHEZ, H. El héroe de la familia. Bogotá. Tercer Mundo, 1988.**",
+      "year": 2019,
+      "context": null,
       "files": [],
-      "correctAlternative": "E",
-      "alternativesIntroduction": "No texto, no qual é narrada a visita à casa de uma personagem, a expressão “entrar con pies de plomo” é utilizada para se referir ao(à)",
+      "correctAlternative": "D",
+      "alternativesIntroduction": "Ed Mort só vai Mort.\nEd Mort. Detetive particular. Está na plaqueta. Tenho um escritório numa galeria de Copacabana entre um fliperama e uma loja de carimbos. Dá só para o essencial, um telefone mudo e um cinzeiro. Mas insisto numa mesa e numa cadeira. Apesar do protesto das baratas. Elas não vencerão. Comprei um jogo de máscaras. No meu trabalho o disfarce é essencial. Para escapar dos credores. Outro dia entrei na sala e vi a cara do King Kong andando pelo chão. As baratas estavam roubando as máscaras. Espisoteei meia dúzia. As outras atacaram a mesa. Consegui salvar a minha Bic e o jornal. O jornal era novo, tinha só uma semana. Mas elas levaram a agenda. Saí ganhando. A agenda estava em branco. Meu último caso fora com a funcionária do Erótica, a primeira ótica da cidade com balconista topless. Acabara mal. Mort. Ed Mort. Está na plaqueta.\nVERISSIMO, L. F. Ed Mort: todas as histórias. Porto Alegre: L&PM, 1997 (adaptado).\n \nNessa crônica, o efeito de humor é basicamente construído por uma",
       "alternatives": [
         {
           "letter": "A",
-          "text": "Determinação para conduzir discussões pessoais.",
+          "text": "Segmentação de enunciados baseada na descrição dos hábitos do personagem.",
           "file": null,
           "isCorrect": false
         },
         {
           "letter": "B",
-          "text": "Insensibilidade para lidar com temas do passado.",
+          "text": "Ordenação dos constituintes oracionais na qual se destaca o núcleo verbal.",
           "file": null,
           "isCorrect": false
         },
         {
           "letter": "C",
-          "text": "Discrição para administrar questões financeiras.",
+          "text": "Estrutura composicional caracterizada pelo arranjo singular dos períodos.",
           "file": null,
           "isCorrect": false
         },
         {
           "letter": "D",
-          "text": "Disposição para resolver problemas familiares.",
+          "text": "Sequenciação narrativa na qual se articulam eventos absurdos.",
           "file": null,
-          "isCorrect": false
+          "isCorrect": true
         },
         {
           "letter": "E",
-          "text": "Cuidado para tratar de assuntos íntimos.",
+          "text": "Seleção lexical na qual predominam informações redundantes.",
           "file": null,
-          "isCorrect": true
+          "isCorrect": false
         }
       ]
     }
@@ -232,6 +234,7 @@ export const AnswerQuestions = () => {
   const { questionListHeaderTitle, color, percentage } = useLocalSearchParams();
 
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [questionMarkdown, setQuestionMarkdown] = useState("");
   const [question, setQuestion] = useState(questionListData[questionIndex]);
   const [selectedAlternative, setSelectedAlternative] = useState(null);
   const [answeredQuestions, setAnsweredQuestions] = useState({});
@@ -243,7 +246,7 @@ export const AnswerQuestions = () => {
 
     setAnsweredQuestions(prev => ({
       ...prev,
-      [question.index]: { 
+      [question.index]: {
         chosen: letter,
         correct: isCorrect,
         correctAlternative: question.correctAlternative,
@@ -268,22 +271,33 @@ export const AnswerQuestions = () => {
 
   useEffect(() => {
     setQuestion(questionListData[questionIndex]);
-    console.log(answeredQuestions);
-  }, [questionIndex, answeredQuestions]);
+  }, [questionIndex]);
+
+  useEffect(() => {
+    if (!question) return;
+
+    const markdown = `
+${question.context}
+
+**${question.alternativesIntroduction}**
+`
+
+    setQuestionMarkdown(markdown);
+  }, [question]);
 
   return (
-    <ScrollView className="flex-1">
+    <ScrollView className={`flex-1 bg-${color}-400`}>
       <QuestionListHeader title={questionListHeaderTitle} color={color} />
-      <View className={`flex-1 items-center bg-${color}-400 px-4`}>
+      <View className={`flex-1 items-center px-4`}>
         <Progress value={percentage} className="w-full h-2 m-4" >
           <ProgressFilledTrack className="h-1" />
         </Progress>
 
         <Center className="bg-white rounded-xl p-4 mb-2">
           <Heading className="text-xl font-bold mb-2">{question.title}</Heading>
-          <Text className="font-semibold">{question.context}</Text>
-          <Divider className="bg-black h-0.5 my-0.5" />
-          <Text className="font-semibold">{question.alternativesIntroduction}</Text>
+          <Markdown>
+            {questionMarkdown}
+          </Markdown>
         </Center>
 
         {question.alternatives.map((alternative) => {
@@ -296,7 +310,7 @@ export const AnswerQuestions = () => {
           if (showResult) {
             if (isCorrect) {
               bgColor = "green";
-            } 
+            }
             else if (isSelected || showResult.chosen === alternative.letter) {
               bgColor = "red"
             } else {
@@ -339,7 +353,7 @@ export const AnswerQuestions = () => {
             onPress={handlePreviousQuestion}
           >
             <ButtonIcon as={ArrowLeft} className="mr-2" />
-            <ButtonText>Questão anterior</ButtonText>
+            <ButtonText>Voltar</ButtonText>
           </Button>
 
           <Button
@@ -350,11 +364,11 @@ export const AnswerQuestions = () => {
             size={"lg"}
             onPress={handleNextQuestion}
           >
-            <ButtonText>Próxima questão</ButtonText>
+            <ButtonText>Próximo</ButtonText>
             <ButtonIcon as={ArrowRight} className="ml-2" />
           </Button>
         </View>
       </View>
-    </ScrollView>
+    </ScrollView >
   );
 }
