@@ -34,7 +34,7 @@ export const ForgotPassword = () => {
   
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(baseBackendUrl + "/auth/recuperar-senha", data);
+      const response = await axios.post(baseBackendUrl + "/auth/password/recovery", data);
       console.log(response.data);
       await registerEmail(data.email);
       navigateToPasswordCodeScreen();

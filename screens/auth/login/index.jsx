@@ -20,7 +20,7 @@ export const Login = () => {
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       email: "",
-      senha: ""
+      password: ""
     }
   });
 
@@ -85,14 +85,14 @@ export const Login = () => {
               </VStack>
 
               <VStack space="xs">
-                <Text className={`text-typography-500 ${errors.senha ? "text-red-500" : ""}`}>Senha*</Text>
+                <Text className={`text-typography-500 ${errors.password ? "text-red-500" : ""}`}>Senha*</Text>
                 <Controller 
                   control={control}
-                  name="senha"
+                  name="password"
                   rules={{required: "A senha é obrigatória"}}
                   render={({ field: { onChange, value } }) => (
-                  <Input variant="rounded" size="xl" className={`text-center ${errors.senha ? "border-2" : ""}`} isInvalid={errors.senha}>
-                    <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.senha ? "red" : "currentColor"} />
+                  <Input variant="rounded" size="xl" className={`text-center ${errors.password ? "border-2" : ""}`} isInvalid={errors.password}>
+                    <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.password ? "red" : "currentColor"} />
                     <InputField 
                       type={showPassword ? "text" : "password"}
                       placeholder="Senha"
@@ -105,7 +105,7 @@ export const Login = () => {
                   </Input>
                 )}
                 />
-                {errors.senha && <Text className="text-red-500 text-sm ml-5">{errors.senha.message}</Text>}
+                {errors.password && <Text className="text-red-500 text-sm ml-5">{errors.password.message}</Text>}
               </VStack>
 
               <Button 
