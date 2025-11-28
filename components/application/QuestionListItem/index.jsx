@@ -6,7 +6,7 @@ import { HStack } from "@/components/ui/hstack";
 import { Check, X } from "lucide-react-native";
 import { useRouter } from "expo-router";
 
-export const QuestionListItem = ({ questionListHeaderTitle, title, creationDate, total, correct, wrong, mainColor = "default" }) => {
+export const QuestionListItem = ({ questionListHeaderTitle, title, description, creationDate, total, correct, wrong, mainColor = "default" }) => {
 
   const router = useRouter();
   const answered = correct + wrong;
@@ -31,6 +31,8 @@ export const QuestionListItem = ({ questionListHeaderTitle, title, creationDate,
     >
       <VStack space="sm" className={`bg-gray-300 ${borderColorVariantStyles[mainColor]} border-l-8 p-4 mb-4 rounded-xl`}>
         <Heading size="xl">{title}</Heading>
+
+        {description && <Text>{description}</Text>}
 
         <Text>{localDate}</Text>
 

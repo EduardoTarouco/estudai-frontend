@@ -36,8 +36,10 @@ export function SessionProvider({ children }) {
             console.log("Login funcionando: ", response.data);
 
             setSession(JSON.stringify({
-              nome: response.data.nome,
-              token: response.data.token
+              name: response.data.name,
+              token: response.data.token,
+              streakDays: response.data.streakDays,
+              coins: response.data.coins
             }));
           } catch (error) {
             let msg = "Erro desconhecido";

@@ -2,6 +2,7 @@ import { CreateQuestionListModal } from "@/components/application/CreateQuestion
 import { QuestionListHeader } from "@/components/application/headers/QuestionListHeader";
 import { QuestionListItem } from "@/components/application/QuestionListItem";
 import { View, Text, FlatList } from "react-native";
+import { useSession } from "@/contexts/AuthContext";
 import { useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -10,14 +11,15 @@ export const QuestionList = () => {
 
   const [questions, setQuestions] = useState([]);
 
+  const authToken = useSession().session.token;
   const { title, color, href } = useLocalSearchParams();
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Ajustar para o endpoint correto posteriormente, atualmente, aponta para as listas mockadas
-        const response = await axios.get(`${baseBackendUrl}/${href}`);
+        // Atualmente, puxa todas as listas, independentemente da disciplina
+        const response = await axios.get(`${baseBackendUrl}/custom-lists`, {}, {"Autorization": `Bearer ${authToken}`});
         setQuestions(response.data);
       } catch (error) {
         console.error("Erro ao buscar questões:", error);
@@ -25,7 +27,7 @@ export const QuestionList = () => {
     }
 
     fetchData();
-  }, [baseBackendUrl, href]);
+  }, [baseBackendUrl, href, authToken]);
 
   return (
     <View className="flex-1">
@@ -39,7 +41,8 @@ export const QuestionList = () => {
           renderItem={({ item }) => (
             <QuestionListItem
               mainColor={color}
-              title={item.title}
+              title={item.name}
+              description={item?.description}
               total={item.questionsId?.length || "nulo"}
               correct={item.right?.length || "nulo"}
               wrong={item.wrong?.length || "nulo"}

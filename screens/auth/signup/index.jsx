@@ -5,6 +5,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
 import { MaskedTextInput } from 'react-native-mask-text';
 import { Controller, useForm } from 'react-hook-form';
+import { usePopUp } from "@/contexts/PopUpContext";
 import { Heading } from '@/components/ui/heading';
 import { VStack } from '@/components/ui/vstack';
 import { Text } from '@/components/ui/text';
@@ -18,7 +19,7 @@ export const SignUp = () => {
   // gerenciar o envio do formulário e retornar erros das validações.
   const { control, getValues, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
-      nome: "",
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -31,7 +32,8 @@ export const SignUp = () => {
   * (precisa ser o ip e estar na mesma rede, caso contrário, deverá ser
   * um servidor em nuvem que possa receber essa requisição)
   */
-  const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL
+  const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
+  const popUp = usePopUp();
   const idadeMinimaRecomendada = 13;
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -51,7 +53,10 @@ export const SignUp = () => {
       console.log("Resposta do backend: ", response.data);
       router.replace("/auth/login");
     } catch (error) {
-      console.log(error.response.data);
+      if (error.response && error.response.data && error.response.data.message) {
+        popUp.showDefaultToast("Erro ao realizar cadastro", error.response.data.message, "negative", "top");
+      }
+      console.error("Erro ao realizar cadastro", error.response);
     }
   };
 
@@ -76,7 +81,7 @@ export const SignUp = () => {
                 * Os principais campos (nome, email, senha, repetir senha e data de nascimento, respectivamente) estão localizados em VStacks (agrupamentos verticais) abaixo: 
                 */}
               <VStack space="xs">
-                <Text className={`text-typography-500 ${errors.nome ? "text-red-500" : ""}`}>Nome*</Text>
+                <Text className={`text-typography-500 ${errors.name ? "text-red-500" : ""}`}>Nome*</Text>
                 {/* Controller é utilizado pelo react-hook-form para registrar componentes de input, registra seus nomes, realiza validações, etc.
                   *
                   * Pode configurar validações passando diferentes objetos ao parâmetro `rules` -> doc: https://react-hook-form.com/docs/useform/register
@@ -84,13 +89,13 @@ export const SignUp = () => {
                   */}
                 <Controller
                   control={control}
-                  name="nome"
+                  name="name"
                   rules={{required: "O nome é obrigatório"}}
                   render={({ field: { onChange, value } }) => (
-                  <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.nome ? "border-2" : ""}`} isInvalid={errors.nome}>
-                    <InputIcon as={AtSignIcon} className="m-3 -mr-1" color={errors.nome ? "red" : "currentColor"} />
+                  <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.name ? "border-2" : ""}`} isInvalid={errors.name}>
+                    <InputIcon as={AtSignIcon} className="m-3 -mr-1" color={errors.name ? "red" : "currentColor"} />
                     <InputField
-                      placeholder="John Jones"
+                      placeholder="Fulano de Tal"
                       value={value}
                       onChangeText={onChange}
                     />
@@ -98,7 +103,7 @@ export const SignUp = () => {
                 )}
                 />
                 {/* Aqui são renderizados os erros do campo de nome, caso ocorram */}
-                {errors.nome && <Text className="text-red-500 text-sm ml-5">{errors.nome.message}</Text>}
+                {errors.name && <Text className="text-red-500 text-sm ml-5">{errors.name.message}</Text>}
               </VStack>
 
               <VStack space="xs">
@@ -120,7 +125,7 @@ export const SignUp = () => {
                   <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.email ? "border-2" : ""}`} isInvalid={errors.email}>
                     <InputIcon as={MailIcon} className="m-3 -mr-1" color={errors.email ? "red" : "currentColor"} />
                     <InputField
-                      placeholder="John@gmail.com"
+                      placeholder="Fulano@gmail.com"
                       keyboardType="email-adress" 
                       value={value}
                       onChangeText={onChange}

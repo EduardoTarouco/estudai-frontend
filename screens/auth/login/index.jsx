@@ -3,8 +3,9 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "@/components/ui/icon";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
-import { useSession } from "@/contexts/AuthContext";
 import { Controller, useForm } from 'react-hook-form';
+import { useSession } from "@/contexts/AuthContext";
+import { usePopUp } from "@/contexts/PopUpContext";
 import { Heading } from '@/components/ui/heading';
 import { VStack } from '@/components/ui/vstack';
 import { Text } from '@/components/ui/text';
@@ -24,6 +25,7 @@ export const Login = () => {
     }
   });
 
+  const popUp = usePopUp();
   const [showPassword, setShowPassword] = useState(false);
 
   // Lógica do que acontece ao enviar o formulário com sucesso.
@@ -33,7 +35,10 @@ export const Login = () => {
       await signIn(data);
       router.replace("home");
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.data && error.response.data.message) {
+        popUp.showDefaultToast("Erro ao realizar cadastro", error.response.data.message, "negative", "top");
+      }
+      console.error("Erro ao realizar cadastro", error.response);
     }
     console.log("Submitted Info: ", data);
   };
