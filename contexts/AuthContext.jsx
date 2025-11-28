@@ -55,6 +55,14 @@ export function SessionProvider({ children }) {
           setSession(null);
           router.replace("/");
         },
+        getAuthHeaders: () => {
+          if (!session || !session.token) return {};
+          return {
+            headers: {
+              Authorization: `Bearer ${session?.token}`
+            }
+          };
+        },
         session,
         isLoading,
       }}>

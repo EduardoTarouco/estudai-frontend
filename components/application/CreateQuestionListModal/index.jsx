@@ -7,6 +7,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { Input, InputField } from "@/components/ui/input";
 import { MaskedTextInput } from 'react-native-mask-text';
 import { Controller, useForm } from "react-hook-form";
+import { useSession } from "@/contexts/AuthContext";
 import { usePopUp } from "@/contexts/PopUpContext";
 import { Heading } from "@/components/ui/heading";
 import { VStack } from "@/components/ui/vstack";
@@ -15,14 +16,14 @@ import { Text } from "react-native";
 import { useState } from "react";
 import axios from "axios";
 
-export const CreateQuestionListModal = ({ disciplina = null }) => {
+export const CreateQuestionListModal = ({ onCreated, disciplina = null }) => {
 
   const { control, setValue, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       name: "",
       description: "",
       filterSubject: disciplina,
-      filterYear: "2009",
+      filterYear: "2022",
       includeAnswered: false,
       includeCorrect: false,
       includeWrong: false,
@@ -30,6 +31,7 @@ export const CreateQuestionListModal = ({ disciplina = null }) => {
     }
   });
 
+  const { getAuthHeaders } = useSession();
   const popUp = usePopUp();
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL
   const [showModal, setShowModal] = useState(false);
@@ -37,9 +39,16 @@ export const CreateQuestionListModal = ({ disciplina = null }) => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(baseBackendUrl + "/custom-lists", data);
+      let questions = [];
+      for (let i = 1; i <= parseInt(data.questionsCount); i++) {
+        questions.push(i);
+      }
+      data.questions = questions;
+
+      const response = await axios.post(baseBackendUrl + "/custom-lists", data, getAuthHeaders());
       console.log("Lista de questões criada com sucesso: ", response.data);
       setShowModal(false);
+      onCreated();
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
         popUp.showDefaultToast("Erro ao criar lista de questões", error.response.data.message, "negative", "top");
@@ -76,7 +85,7 @@ export const CreateQuestionListModal = ({ disciplina = null }) => {
                   render={({ field: { onChange, value } }) => (
                     <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.name ? "border-2" : ""}`} isInvalid={errors.name}>
                       <InputField
-                        placeholder="nome da lista"
+                        placeholder="Nome da lista"
                         value={value}
                         onChangeText={onChange}
                       />
@@ -113,9 +122,7 @@ export const CreateQuestionListModal = ({ disciplina = null }) => {
                       setSelected={onChange}
                       selectedValue={value}
                       title="Ano*"
-                      items={["2009", "2010", "2011", "2012", "2013", 
-                              "2014", "2015", "2016", "2017", "2018", 
-                              "2019", "2020", "2021", "2022", "2023"]}
+                      items={["2022", "2023"]}
                     />
                   )}
                 />

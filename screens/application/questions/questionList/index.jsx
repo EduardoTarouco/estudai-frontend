@@ -11,29 +11,30 @@ export const QuestionList = () => {
 
   const [questions, setQuestions] = useState([]);
 
-  const authToken = useSession().session.token;
+  const { getAuthHeaders } = useSession();
   const { title, color, href } = useLocalSearchParams();
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Atualmente, puxa todas as listas, independentemente da disciplina
-        const response = await axios.get(`${baseBackendUrl}/custom-lists`, {}, {"Autorization": `Bearer ${authToken}`});
-        setQuestions(response.data);
-      } catch (error) {
-        console.error("Erro ao buscar questões:", error);
-      }
+  const fetchData = async () => {
+    try {
+      // Atualmente, puxa todas as listas, independentemente da disciplina
+      const response = await axios.get(`${baseBackendUrl}/custom-lists`, getAuthHeaders());
+      setQuestions(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar questões:", error);
     }
+  }
 
+  useEffect(() => {
     fetchData();
-  }, [baseBackendUrl, href, authToken]);
+  }, [href]);
 
   return (
     <View className="flex-1">
       <QuestionListHeader title={title} color={color} />
       <View className="justify-center items-center flex-1 p-4">
-        <CreateQuestionListModal disciplina={href} />
+        <CreateQuestionListModal disciplina={href} onCreated={fetchData} />
         <FlatList
           className="w-full p-2"
           data={questions}
@@ -46,7 +47,7 @@ export const QuestionList = () => {
               total={item.questionsId?.length || "nulo"}
               correct={item.right?.length || "nulo"}
               wrong={item.wrong?.length || "nulo"}
-              creationDate={item.creationDate}
+              creationDate={item.createdAt}
               questionListHeaderTitle={title}
             />
           )}
