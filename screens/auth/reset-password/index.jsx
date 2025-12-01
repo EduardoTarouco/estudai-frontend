@@ -4,6 +4,7 @@ import { useRecovery } from "@/contexts/PasswordResetContext";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
 import { Controller, useForm } from 'react-hook-form';
+import { useSession } from "@/contexts/AuthContext";
 import { Heading } from '@/components/ui/heading';
 import { VStack } from '@/components/ui/vstack';
 import { SafeAreaView } from "react-native";
@@ -26,11 +27,13 @@ export const ResetPassword = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { getCode, resetCodeAndEmail } = useRecovery();
+  const { getAuthHeaders } = useSession();
 
   const onSubmit = async ({confirmPassword, ...data}) => {
-    data.codigo = await getCode();
+    data.code = await getCode();
+    
     try {
-      const response = await axios.post(baseBackendUrl + "/auth/password/reset", data);
+      const response = await axios.post(baseBackendUrl + "/auth/password/reset", data, getAuthHeaders());
       console.log(`Reset password status: ${response.status} (${response.statusText})`);
       resetCodeAndEmail();
       router.replace({ pathname: "auth/login"});

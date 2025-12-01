@@ -3,6 +3,7 @@ import { useRecovery } from "@/contexts/PasswordResetContext";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
 import { Controller, useForm } from 'react-hook-form';
+import { useSession } from "@/contexts/AuthContext";
 import { Heading } from '@/components/ui/heading';
 import { ClockIcon } from "@/components/ui/icon";
 import { VStack } from '@/components/ui/vstack';
@@ -23,6 +24,7 @@ export const PasswordCode = () => {
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
 
   const { getEmail, setCode, resetCodeAndEmail } = useRecovery();
+  const { getAuthHeaders } = useSession();
   const [time, setTime] = useState(60);
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export const PasswordCode = () => {
     try {
       const email = getEmail();
       if(email) {
-        const response = await axios.post(baseBackendUrl + "/auth/password/validate-code", { email });
+        const response = await axios.post(baseBackendUrl + `/auth/password/recovery?email=${email}`);
         console.log(response.data);
         console.log("Código reenviado!");
         setTime(30); 
@@ -59,12 +61,13 @@ export const PasswordCode = () => {
 
     data.email = email;
     try {
-      const response = await axios.post(baseBackendUrl + "/auth/validate-code", data);
+      const response = await axios.post(baseBackendUrl + `/auth/password/validate-code?code=${data.code}`, null, getAuthHeaders());
       console.log(response.data);
-      await setCode(data.codigo);
+      await setCode(data.code);
       router.replace("auth/reset-password");
     } catch (error) {
       console.log("Erro ao resetar senha: ", error.response.data);
+      // console.log("Error response: ", error.response);
     }
   }
 
@@ -83,7 +86,7 @@ export const PasswordCode = () => {
             <Text className={`text-typography-500 ${errors.code ? "text-red-500" : ""}`}>Código de verificação</Text>
             <Controller
               control={control}
-              name="codigo"
+              name="code"
               rules={{
                 required: "O código de verificação é obrigatório",
                 minLength: {

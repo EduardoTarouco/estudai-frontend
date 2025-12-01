@@ -20,14 +20,13 @@ export const CreateQuestionListModal = ({ onCreated, disciplina = null }) => {
 
   const { control, setValue, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
-      name: "",
-      description: "",
-      filterSubject: disciplina,
-      filterYear: "2022",
-      includeAnswered: false,
-      includeCorrect: false,
-      includeWrong: false,
-      questionsCount: ""
+        name: "",
+        description: "",
+        filterYear: "2023",
+        filterSubject: disciplina,
+        questionsCount: 2,
+        includeAnswered: false,
+        questionIds: []
     }
   });
 
@@ -150,6 +149,7 @@ export const CreateQuestionListModal = ({ onCreated, disciplina = null }) => {
                     </Checkbox>
                   )}
                 />
+                  {/* Código ainda não integrado
                   <HStack space="md" className="ml-5">
                     <Controller
                       control={control}
@@ -186,10 +186,10 @@ export const CreateQuestionListModal = ({ onCreated, disciplina = null }) => {
                         </Checkbox>
                       )}
                     />
-                  </HStack>
+                  </HStack> */}
               </VStack>
               <VStack space="xs">
-                <Text className={`text-typography-500 ${errors.questionsCount ? "text-red-500" : ""}`}>quantidade de questoes*</Text>
+                <Text className={`text-typography-500 ${errors.questionsCount ? "text-red-500" : ""}`}>Quantidade de questoes*</Text>
                 <Controller
                   control={control}
                   name="questionsCount"
