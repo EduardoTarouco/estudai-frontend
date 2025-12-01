@@ -41,14 +41,16 @@ export const QuestionList = () => {
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <QuestionListItem
+              onExclusion={fetchData}
+              questionListHeaderTitle={title}
               mainColor={color}
+              questionId={item.id}
               title={item.name}
               description={item?.description}
               total={item.questionsId?.length || "nulo"}
               correct={item.right?.length || "nulo"}
               wrong={item.wrong?.length || "nulo"}
               creationDate={item.createdAt}
-              questionListHeaderTitle={title}
             />
           )}
           ListEmptyComponent={<Text className="text-2xl font-bold text-center">Crie uma nova lista de questões para que ela apareça aqui!</Text>}

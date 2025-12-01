@@ -24,7 +24,7 @@ export const CreateQuestionListModal = ({ onCreated, disciplina = null }) => {
         description: "",
         filterYear: "2023",
         filterSubject: disciplina,
-        questionsCount: 2,
+        questionsCount: "",
         includeAnswered: false,
         questionIds: []
     }
@@ -138,8 +138,8 @@ export const CreateQuestionListModal = ({ onCreated, disciplina = null }) => {
                       onChange={() => {
                         onChange(!value); 
                         setIncluirRespondidas(!incluirRespondidas);
-                        setValue("includeCorrect", false);
-                        setValue("includeWrong", false);
+                        // setValue("includeCorrect", false);
+                        // setValue("includeWrong", false);
                       }}
                     >
                       <CheckboxIndicator>
