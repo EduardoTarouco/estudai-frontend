@@ -9,7 +9,7 @@ import { Icon } from '@/components/ui/icon';
 import { useRouter } from "expo-router";
 import axios from 'axios';
 
-export const QuestionListItem = ({ onExclusion, questionId, questionListHeaderTitle, title, description, creationDate, total, correct, wrong, mainColor = "default" }) => {
+export const QuestionListItem = ({ onExclusion, questionListId, questionList, questionListHeaderTitle, title, description, creationDate, total, correct, wrong, mainColor = "default" }) => {
 
   const { getAuthHeaders } = useSession();
 
@@ -30,8 +30,10 @@ export const QuestionListItem = ({ onExclusion, questionId, questionListHeaderTi
   return (
     <TouchableOpacity
       activeOpacity={0.5}
+      disabled={questionList.length === 0}
+      className={`${questionList.length === 0 ? "opacity-70" : ""}`}
       onPress={() => {
-        router.push({ pathname: "questions/answer-questions", params: { questionListHeaderTitle, color: mainColor, percentage } });
+        router.push({ pathname: "questions/answer-questions", params: { questionListHeaderTitle, color: mainColor, percentage, questionList } });
       }}
     >
       <VStack space="sm" className={`bg-gray-300 ${borderColorVariantStyles[mainColor]} border-l-8 p-4 mb-4 rounded-xl flex-1`}>
@@ -42,8 +44,8 @@ export const QuestionListItem = ({ onExclusion, questionId, questionListHeaderTi
             className="p-2 bg-red-500 rounded-lg items-center"
             onPress={async () => {
               try {
-                const response = await axios.delete(`${process.env.EXPO_PUBLIC_API_URL}/custom-lists/${questionId}`, getAuthHeaders());
-                console.log(`Resposta da exclusão para o ID ${questionId}: `, response.data);
+                const response = await axios.delete(`${process.env.EXPO_PUBLIC_API_URL}/custom-lists/${questionListId}`, getAuthHeaders());
+                console.log(`Resposta da exclusão para o ID ${questionListId}: `, response.data);
                 onExclusion();
               } catch (error) {
                 console.log("Erro ao excluir lista de questões: ", error.response.data);

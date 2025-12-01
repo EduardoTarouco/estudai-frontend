@@ -44,7 +44,8 @@ export const QuestionList = () => {
               onExclusion={fetchData}
               questionListHeaderTitle={title}
               mainColor={color}
-              questionId={item.id}
+              questionListId={item.id}
+              questionList={item.questions}
               title={item.name}
               description={item?.description}
               total={item.questionsId?.length || "nulo"}
