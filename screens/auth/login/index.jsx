@@ -78,7 +78,7 @@ export const Login = () => {
                   <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.email ? "border-2" : ""}`} isInvalid={errors.email}>
                     <InputIcon as={MailIcon} className="m-3 -mr-1" color={errors.email ? "red" : "currentColor"} />
                     <InputField
-                      placeholder="estudante@gmail.com"
+                      placeholder="Estudante@gmail.com"
                       value={value}
                       onChangeText={onChange}
                     />

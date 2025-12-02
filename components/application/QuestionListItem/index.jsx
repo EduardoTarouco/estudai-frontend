@@ -33,7 +33,7 @@ export const QuestionListItem = ({ onExclusion, questionListId, questionList, qu
       disabled={questionList.length === 0}
       className={`${questionList.length === 0 ? "opacity-70" : ""}`}
       onPress={() => {
-        router.push({ pathname: "questions/answer-questions", params: { questionListHeaderTitle, color: mainColor, percentage, questionList } });
+        router.push({ pathname: "questions/answer-questions", params: { questionListHeaderTitle, color: mainColor, questionList: JSON.stringify(questionList) } });
       }}
     >
       <VStack space="sm" className={`bg-gray-300 ${borderColorVariantStyles[mainColor]} border-l-8 p-4 mb-4 rounded-xl flex-1`}>
