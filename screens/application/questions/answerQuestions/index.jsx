@@ -1,48 +1,62 @@
 import { QuestionListHeader } from "@/components/application/headers/QuestionListHeader";
-import { Progress, ProgressFilledTrack } from '@/components/ui/progress';
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Button, ButtonText, ButtonIcon } from '@/components/ui/button';
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { ArrowLeft, ArrowRight } from "lucide-react-native";
 import { useState, useEffect, useMemo } from "react";
 import Markdown from "react-native-markdown-display";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useSession } from '@/contexts/AuthContext';
 import { Heading } from '@/components/ui/heading';
 import { Center } from '@/components/ui/center';
+import axios from "axios";
 
 export const AnswerQuestions = () => {
 
   const searchParams = useLocalSearchParams();
-  const questionList = useMemo(() => {
-    return JSON.parse(searchParams.questionList);
-  }, []);
+  const allListData = JSON.parse(searchParams.list);
+  const questionList = JSON.parse(searchParams.questionList);
   const { questionListHeaderTitle, color } = searchParams;
 
+  const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
   const router = useRouter();
+  const { getAuthHeaders } = useSession();
   const [questionIndex, setQuestionIndex] = useState(0);
   const [questionMarkdown, setQuestionMarkdown] = useState("");
   const [question, setQuestion] = useState(questionList[0] ?? null);
   const [selectedAlternative, setSelectedAlternative] = useState(null);
   const [answeredQuestions, setAnsweredQuestions] = useState({});
 
-  const handleAnswer = (letter) => {
-    setSelectedAlternative(letter);
+  const handleAnswer = async (letter) => {
+    try {
+      const postData = {
+        questionId: question.id,
+        userAnswer: letter,
+        responseTimeSeconds: Math.floor((new Date().getTime() - question.startTime.getTime()) / 1000)
+      };
+      await axios.post(`${baseBackendUrl}/answers`, postData, getAuthHeaders());
+      setSelectedAlternative(letter);
 
-    const isCorrect = letter === question.correctAlternative;
+      const isCorrect = letter === question.correctAlternative;
 
-    setAnsweredQuestions(prev => ({
-      ...prev,
-      [question.index]: {
-        chosen: letter,
-        correct: isCorrect,
-        correctAlternative: question.correctAlternative,
-        answeredAt: new Date()
-      }
-    }));
+      setAnsweredQuestions(prev => ({
+        ...prev,
+        [question.index]: {
+          userAnswer: postData.userAnswer,
+          correct: isCorrect,
+          correctAlternative: question.correctAlternative
+        }
+      }));
+      console.log("Resposta enviada com sucesso!");
+    } catch (error) {
+      console.error("Erro ao enviar resposta: ", error);
+    }
   };
 
   // Atualiza a questão atual quando o índice da questão muda
   useEffect(() => {
-    setQuestion(questionList[questionIndex]);
+    let question = questionList[questionIndex];
+    question.startTime = new Date();
+    setQuestion(question);
   }, [questionIndex]);
 
   useEffect(() => {
@@ -55,6 +69,7 @@ ${question.context}
 `
 
     setQuestionMarkdown(markdown);
+    console.log("Mudou para a questão: ", question);
   }, [question]);
 
   const handlePreviousQuestion = () => {
@@ -96,7 +111,7 @@ ${question.context}
               if (isCorrect) {
                 bgColor = "green";
               }
-              else if (isSelected || showResult.chosen === alternative.letter) {
+              else if (isSelected || showResult.userAnswer === alternative.letter) {
                 bgColor = "red"
               } else {
                 bgColor = "gray"
@@ -118,6 +133,7 @@ ${question.context}
                 className={`w-full flex flex-row items-center ${bgColors[bgColor]} rounded-xl gap-2 p-2 px-4 m-1`}
                 activeOpacity={0.8}
               >
+                {}
                 <Text className="font-bold text-lg">
                   {alternative.letter}
                 </Text>
@@ -142,14 +158,16 @@ ${question.context}
             </Button>
 
             <Button
-              className={`${questionIndex === questionList.length - 1 ? 'opacity-85' : ''}`}
+              className={`${questionIndex === questionList.length - 1 ? 'bg-green-400' : ''}`}
               action={"primary"}
               variant={"solid"}
               size={"lg"}
               onPress={handleNextQuestion}
             >
-              <ButtonText>{questionIndex === questionList.length-1 ? "Finalizar" : "Próximo"}</ButtonText>
-              <ButtonIcon as={ArrowRight} className="ml-2" />
+              <ButtonText className={`${questionIndex === questionList.length - 1 ? 'text-black' : ''}`}>
+                {questionIndex === questionList.length-1 ? "Finalizar" : "Próximo"}
+              </ButtonText>
+              <ButtonIcon as={ArrowRight} className={`${questionIndex === questionList.length - 1 ? 'text-black ml-2' : 'ml-2'}`} />
             </Button>
           </View>
         </View>

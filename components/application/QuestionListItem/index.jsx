@@ -1,15 +1,14 @@
 import { Progress, ProgressFilledTrack } from '@/components/ui/progress';
 import { Text, TouchableOpacity, View } from "react-native";
-import { Check, Trash, X } from "lucide-react-native";
 import { useSession } from '@/contexts/AuthContext';
 import { Heading } from "@/components/ui/heading";
 import { VStack } from "@/components/ui/vstack";
-import { HStack } from "@/components/ui/hstack";
+import { Trash } from "lucide-react-native";
 import { Icon } from '@/components/ui/icon';
 import { useRouter } from "expo-router";
 import axios from 'axios';
 
-export const QuestionListItem = ({ onExclusion, questionListId, questionList, questionListHeaderTitle, title, description, creationDate, total, correct, wrong, mainColor = "default" }) => {
+export const QuestionListItem = ({ list, onExclusion, questionListId, questionList, questionListHeaderTitle, title, description, creationDate, total, correct, wrong, mainColor = "default" }) => {
 
   const { getAuthHeaders } = useSession();
 
@@ -33,7 +32,7 @@ export const QuestionListItem = ({ onExclusion, questionListId, questionList, qu
       disabled={questionList.length === 0}
       className={`${questionList.length === 0 ? "opacity-70" : ""}`}
       onPress={() => {
-        router.push({ pathname: "questions/answer-questions", params: { questionListHeaderTitle, color: mainColor, questionList: JSON.stringify(questionList) } });
+        router.push({ pathname: "questions/answer-questions", params: { questionListHeaderTitle, color: mainColor, questionList: JSON.stringify(questionList), list: JSON.stringify(list) } });
       }}
     >
       <VStack space="sm" className={`bg-gray-300 ${borderColorVariantStyles[mainColor]} border-l-8 p-4 mb-4 rounded-xl flex-1`}>
@@ -58,20 +57,6 @@ export const QuestionListItem = ({ onExclusion, questionListId, questionList, qu
         {description && <Text>{description}</Text>}
 
         <Text>{localDate}</Text>
-
-        <View className="flex-row justify-between">
-          <Text>{answered} | {total}</Text>
-
-          <HStack space="sm">
-            <Check color="green" />
-            <Text>{correct}</Text>
-          </HStack>
-
-          <HStack space="sm">
-            <X color="red" />
-            <Text>{wrong}</Text>
-          </HStack>
-        </View>
 
         <Progress value={percentage} className="w-full bg-gray-200 h-1" >
           <ProgressFilledTrack className="h-1" />

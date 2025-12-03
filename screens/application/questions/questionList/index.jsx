@@ -41,6 +41,7 @@ export const QuestionList = () => {
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <QuestionListItem
+              list={item}
               onExclusion={fetchData}
               questionListHeaderTitle={title}
               mainColor={color}
