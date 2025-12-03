@@ -29,14 +29,15 @@ export const AnswerQuestions = () => {
   const handleAnswer = async (letter) => {
     try {
       const postData = {
+        customListId: allListData.id,
         questionId: question.id,
         userAnswer: letter,
         responseTimeSeconds: Math.floor((new Date().getTime() - question.startTime.getTime()) / 1000)
       };
-      await axios.post(`${baseBackendUrl}/answers`, postData, getAuthHeaders());
+      const response = await axios.post(`${baseBackendUrl}/list-answers`, postData, getAuthHeaders());
       setSelectedAlternative(letter);
 
-      const isCorrect = letter === question.correctAlternative;
+      const isCorrect = response.data.isCorrect;
 
       setAnsweredQuestions(prev => ({
         ...prev,
@@ -46,7 +47,7 @@ export const AnswerQuestions = () => {
           correctAlternative: question.correctAlternative
         }
       }));
-      console.log("Resposta enviada com sucesso!");
+      console.log("Resposta enviada com sucesso!", response.data);
     } catch (error) {
       console.error("Erro ao enviar resposta: ", error);
     }
