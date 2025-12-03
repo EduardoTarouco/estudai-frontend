@@ -17,8 +17,11 @@ export const QuestionList = () => {
 
   const fetchData = async () => {
     try {
-      // Atualmente, puxa todas as listas, independentemente da disciplina
-      const response = await axios.get(`${baseBackendUrl}/custom-lists`, getAuthHeaders());
+      // Filtra listas por matéria usando o parâmetro subject
+      const url = href 
+        ? `${baseBackendUrl}/custom-lists?subject=${href}`
+        : `${baseBackendUrl}/custom-lists`;
+      const response = await axios.get(url, getAuthHeaders());
       setQuestions(response.data);
       console.log(response.data);
     } catch (error) {
@@ -49,9 +52,9 @@ export const QuestionList = () => {
               questionList={item.questions}
               title={item.name}
               description={item?.description}
-              total={item.questionsId?.length || "nulo"}
-              correct={item.right?.length || "nulo"}
-              wrong={item.wrong?.length || "nulo"}
+              total={item.questions?.length || item.questionsCount || 0}
+              correct={item.correctAnswers || 0}
+              wrong={item.wrongAnswers || 0}
               creationDate={item.createdAt}
             />
           )}
