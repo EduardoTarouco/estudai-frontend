@@ -19,12 +19,25 @@ export const QuestionListItem = ({ list, onExclusion, questionListId, questionLi
 
   const date = new Date(creationDate);
   const localDate = date.toLocaleDateString("pt-BR");
+  
+  // Determina a cor da barra lateral baseado no progresso
+  const getProgressColor = () => {
+    if (percentage === 100) {
+      return "border-green-500"; // Verde para concluída
+    } else if (percentage >= 50) {
+      return "border-yellow-500"; // Amarelo para metade ou mais
+    } else {
+      return "border-red-500"; // Vermelho para poucas respondidas
+    }
+  };
+
   const borderColorVariantStyles = {
     default: "border-gray-500",
     blue: "border-blue-500",
     green: "border-green-500",
     purple: "border-purple-500",
-    red: "border-red-500"
+    red: "border-red-500",
+    yellow: "border-yellow-500"
   }
 
   return (
@@ -36,7 +49,7 @@ export const QuestionListItem = ({ list, onExclusion, questionListId, questionLi
         router.push({ pathname: "questions/answer-questions", params: { questionListHeaderTitle, color: mainColor, questionList: JSON.stringify(questionList), list: JSON.stringify(list) } });
       }}
     >
-      <VStack space="sm" className={`bg-gray-300 ${borderColorVariantStyles[mainColor]} border-l-8 p-4 mb-4 rounded-xl flex-1`}>
+      <VStack space="sm" className={`bg-gray-300 ${getProgressColor()} border-l-8 p-4 mb-4 rounded-xl flex-1`}>
         <View className="flex-row justify-between items-center ">
           <Heading size="xl">{title}</Heading>
           <TouchableOpacity 

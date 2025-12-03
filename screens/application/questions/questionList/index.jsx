@@ -4,7 +4,8 @@ import { QuestionListItem } from "@/components/application/QuestionListItem";
 import { View, Text, FlatList } from "react-native";
 import { useSession } from "@/contexts/AuthContext";
 import { useLocalSearchParams } from "expo-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import axios from "axios";
 
 export const QuestionList = () => {
@@ -15,7 +16,7 @@ export const QuestionList = () => {
   const { title, color, href } = useLocalSearchParams();
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       // Filtra listas por matéria usando o parâmetro subject
       const url = href 
@@ -27,11 +28,18 @@ export const QuestionList = () => {
     } catch (error) {
       console.error("Erro ao buscar questões:", error);
     }
-  }
+  }, [href, baseBackendUrl, getAuthHeaders]);
 
   useEffect(() => {
     fetchData();
-  }, [href]);
+  }, [fetchData]);
+
+  // Atualiza os dados quando a tela recebe foco (quando volta de outra tela)
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [fetchData])
+  );
 
   return (
     <View className="flex-1">

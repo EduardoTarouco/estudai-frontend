@@ -9,6 +9,7 @@ import { useSession } from '@/contexts/AuthContext';
 import { Heading } from '@/components/ui/heading';
 import { Center } from '@/components/ui/center';
 import axios from "axios";
+import { useFocusEffect } from '@react-navigation/native';
 
 export const AnswerQuestions = () => {
 
@@ -77,6 +78,9 @@ ${question.context}
     if (questionIndex > 0) {
       setQuestionIndex(prev => prev - 1);
       setSelectedAlternative(null);
+    } else {
+      // Se está na primeira questão, volta para a listagem
+      router.back();
     }
   };
 
