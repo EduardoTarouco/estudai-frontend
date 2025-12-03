@@ -1,11 +1,11 @@
 import { HStack } from "@/components/ui/hstack";
 import { Button, ButtonText } from "@/components/ui/button";
-import { Globe, Tablet, Book } from "lucide-react-native";
+import { Globe, Laptop, Book } from "lucide-react-native";
 import { View } from "react-native";
 
 const CATEGORIES = [
   { value: "TODOS", label: "Todos", icon: Globe },
-  { value: "ELETRONICOS", label: "Eletrônicos", icon: Tablet },
+  { value: "ELETRONICOS", label: "Eletrônicos", icon: Laptop },
   { value: "MATERIAL_ESCOLAR", label: "Material Escolar", icon: Book },
 ];
 
