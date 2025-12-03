@@ -3,7 +3,8 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { useSession } from '@/contexts/AuthContext';
 import { Heading } from "@/components/ui/heading";
 import { VStack } from "@/components/ui/vstack";
-import { Trash } from "lucide-react-native";
+import { HStack } from "@/components/ui/hstack";
+import { Trash, Check, X } from "lucide-react-native";
 import { Icon } from '@/components/ui/icon';
 import { useRouter } from "expo-router";
 import axios from 'axios';
@@ -54,9 +55,23 @@ export const QuestionListItem = ({ list, onExclusion, questionListId, questionLi
           </TouchableOpacity>
         </View>
 
-        {description && <Text>{description}</Text>}
+        {description && <Text className="text-gray-600">{description}</Text>}
 
-        <Text>{localDate}</Text>
+        <Text className="text-gray-500 text-sm">{localDate}</Text>
+
+        <View className="flex-row justify-between items-center mb-2">
+          <Text className="font-semibold">{answered} / {total}</Text>
+          <HStack space="md" className="items-center">
+            <HStack space="xs" className="items-center">
+              <Check color="green" size={18} />
+              <Text className="font-semibold">{correct || 0}</Text>
+            </HStack>
+            <HStack space="xs" className="items-center">
+              <X color="red" size={18} />
+              <Text className="font-semibold">{wrong || 0}</Text>
+            </HStack>
+          </HStack>
+        </View>
 
         <Progress value={percentage} className="w-full bg-gray-200 h-1" >
           <ProgressFilledTrack className="h-1" />
