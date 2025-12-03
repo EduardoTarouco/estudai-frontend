@@ -36,8 +36,10 @@ export function SessionProvider({ children }) {
             console.log("Login funcionando: ", response.data);
 
             setSession(JSON.stringify({
-              nome: response.data.nome,
-              token: response.data.token
+              name: response.data.name,
+              token: response.data.token,
+              streakDays: response.data.streakDays,
+              coins: response.data.coins
             }));
           } catch (error) {
             let msg = "Erro desconhecido";
@@ -52,6 +54,14 @@ export function SessionProvider({ children }) {
         signOut: () => {
           setSession(null);
           router.replace("/");
+        },
+        getAuthHeaders: () => {
+          if (!session || !session.token) return {};
+          return {
+            headers: {
+              Authorization: `Bearer ${session?.token}`
+            }
+          };
         },
         session,
         isLoading,

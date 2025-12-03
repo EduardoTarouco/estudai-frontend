@@ -3,8 +3,9 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "@/components/ui/icon";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
-import { useSession } from "@/contexts/AuthContext";
 import { Controller, useForm } from 'react-hook-form';
+import { useSession } from "@/contexts/AuthContext";
+import { usePopUp } from "@/contexts/PopUpContext";
 import { Heading } from '@/components/ui/heading';
 import { VStack } from '@/components/ui/vstack';
 import { Text } from '@/components/ui/text';
@@ -20,10 +21,11 @@ export const Login = () => {
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       email: "",
-      senha: ""
+      password: ""
     }
   });
 
+  const popUp = usePopUp();
   const [showPassword, setShowPassword] = useState(false);
 
   // Lógica do que acontece ao enviar o formulário com sucesso.
@@ -33,7 +35,10 @@ export const Login = () => {
       await signIn(data);
       router.replace("home");
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.data && error.response.data.message) {
+        popUp.showDefaultToast("Erro ao realizar cadastro", error.response.data.message, "negative", "top");
+      }
+      console.error("Erro ao realizar cadastro", error.response);
     }
     console.log("Submitted Info: ", data);
   };
@@ -73,7 +78,7 @@ export const Login = () => {
                   <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.email ? "border-2" : ""}`} isInvalid={errors.email}>
                     <InputIcon as={MailIcon} className="m-3 -mr-1" color={errors.email ? "red" : "currentColor"} />
                     <InputField
-                      placeholder="estudante@gmail.com"
+                      placeholder="Estudante@gmail.com"
                       value={value}
                       onChangeText={onChange}
                     />
@@ -85,14 +90,14 @@ export const Login = () => {
               </VStack>
 
               <VStack space="xs">
-                <Text className={`text-typography-500 ${errors.senha ? "text-red-500" : ""}`}>Senha*</Text>
+                <Text className={`text-typography-500 ${errors.password ? "text-red-500" : ""}`}>Senha*</Text>
                 <Controller 
                   control={control}
-                  name="senha"
+                  name="password"
                   rules={{required: "A senha é obrigatória"}}
                   render={({ field: { onChange, value } }) => (
-                  <Input variant="rounded" size="xl" className={`text-center ${errors.senha ? "border-2" : ""}`} isInvalid={errors.senha}>
-                    <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.senha ? "red" : "currentColor"} />
+                  <Input variant="rounded" size="xl" className={`text-center ${errors.password ? "border-2" : ""}`} isInvalid={errors.password}>
+                    <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.password ? "red" : "currentColor"} />
                     <InputField 
                       type={showPassword ? "text" : "password"}
                       placeholder="Senha"
@@ -105,7 +110,7 @@ export const Login = () => {
                   </Input>
                 )}
                 />
-                {errors.senha && <Text className="text-red-500 text-sm ml-5">{errors.senha.message}</Text>}
+                {errors.password && <Text className="text-red-500 text-sm ml-5">{errors.password.message}</Text>}
               </VStack>
 
               <Button 

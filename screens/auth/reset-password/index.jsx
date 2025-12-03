@@ -4,6 +4,7 @@ import { useRecovery } from "@/contexts/PasswordResetContext";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
 import { Controller, useForm } from 'react-hook-form';
+import { useSession } from "@/contexts/AuthContext";
 import { Heading } from '@/components/ui/heading';
 import { VStack } from '@/components/ui/vstack';
 import { SafeAreaView } from "react-native";
@@ -16,7 +17,7 @@ export const ResetPassword = () => {
 
   const { control, getValues, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
-      novaSenha: ""
+      newPassword: ""
     }
   });
 
@@ -25,13 +26,14 @@ export const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { getEmail, getCode, resetCodeAndEmail } = useRecovery();
+  const { getCode, resetCodeAndEmail } = useRecovery();
+  const { getAuthHeaders } = useSession();
 
-  const onSubmit = async ({confirmarSenha, ...data}) => {
-    data.email = await getEmail();
-    data.codigo = await getCode();
+  const onSubmit = async ({confirmPassword, ...data}) => {
+    data.code = await getCode();
+    
     try {
-      const response = await axios.post(baseBackendUrl + "/auth/redefinir-senha", data);
+      const response = await axios.post(baseBackendUrl + "/auth/password/reset", data, getAuthHeaders());
       console.log(`Reset password status: ${response.status} (${response.statusText})`);
       resetCodeAndEmail();
       router.replace({ pathname: "auth/login"});
@@ -47,10 +49,10 @@ export const ResetPassword = () => {
       <FormControl className="bg-gray-50 p-5 border rounded-lg border-outline-300 w-[95%]">
         <VStack space="xl">
           <VStack space="xs">
-            <Text className={`text-typography-500 ${errors.novaSenha ? "text-red-500" : ""}`}>Senha*</Text>
+            <Text className={`text-typography-500 ${errors.newPassword ? "text-red-500" : ""}`}>Senha*</Text>
             <Controller 
               control={control}
-              name="novaSenha"
+              name="newPassword"
               rules={{
                 required: "A senha é obrigatória",
               minLength: {
@@ -59,8 +61,8 @@ export const ResetPassword = () => {
               }
             }}
             render={({ field: { onChange, value } }) => (
-            <Input variant="rounded" size="xl" className={`text-center ${errors.novaSenha ? "border-2" : ""}`} isInvalid={errors.novaSenha}>
-              <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.novaSenha ? "red" : "currentColor"} />
+            <Input variant="rounded" size="xl" className={`text-center ${errors.newPassword ? "border-2" : ""}`} isInvalid={errors.newPassword}>
+              <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.newPassword ? "red" : "currentColor"} />
               <InputField
                 type={showPassword ? "text" : "password"}
                 placeholder="Senha"
@@ -73,22 +75,22 @@ export const ResetPassword = () => {
             </Input>
             )}
             />
-            {errors.novaSenha && <Text className="text-red-500 text-sm ml-5">{errors.novaSenha.message}</Text>}
+            {errors.newPassword && <Text className="text-red-500 text-sm ml-5">{errors.newPassword.message}</Text>}
           </VStack>
 
           <VStack space="xs">
-            <Text className={`text-typography-500 ${errors.confirmarSenha ? "text-red-500" : ""}`}>Confirme a senha*</Text>
+            <Text className={`text-typography-500 ${errors.confirmPassword ? "text-red-500" : ""}`}>Confirme a senha*</Text>
             <Controller
               control={control}
-              name="confirmarSenha"
+              name="confirmPassword"
               rules={{
                 required: "A confirmação da senha é obrigatória",
                 validate: (value) => 
-                  value === getValues("novaSenha") || "As senhas não coincidem"
+                  value === getValues("newPassword") || "As senhas não coincidem"
               }}
               render={({ field: { onChange, value }}) => (
-              <Input variant="rounded" size="xl" className={`text-center ${errors.confirmarSenha ? "border-2" : ""}`} isInvalid={errors.confirmarSenha}>
-                <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.confirmarSenha ? "red" : "currentColor"} />
+              <Input variant="rounded" size="xl" className={`text-center ${errors.confirmPassword ? "border-2" : ""}`} isInvalid={errors.confirmPassword}>
+                <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.confirmPassword ? "red" : "currentColor"} />
                 <InputField 
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="Repetir senha"
@@ -101,7 +103,7 @@ export const ResetPassword = () => {
               </Input>
             )}
             />
-            {errors.confirmarSenha && <Text className="text-red-500 text-sm ml-5">{errors.confirmarSenha.message}</Text>}
+            {errors.confirmPassword && <Text className="text-red-500 text-sm ml-5">{errors.confirmPassword.message}</Text>}
           </VStack>
 
           <Button 

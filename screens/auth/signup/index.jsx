@@ -5,6 +5,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
 import { MaskedTextInput } from 'react-native-mask-text';
 import { Controller, useForm } from 'react-hook-form';
+import { usePopUp } from "@/contexts/PopUpContext";
 import { Heading } from '@/components/ui/heading';
 import { VStack } from '@/components/ui/vstack';
 import { Text } from '@/components/ui/text';
@@ -18,11 +19,11 @@ export const SignUp = () => {
   // gerenciar o envio do formulário e retornar erros das validações.
   const { control, getValues, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
-      nome: "",
+      name: "",
       email: "",
-      senha: "",
-      confirmarSenha: "",
-      dataNascimento: ""
+      password: "",
+      confirmPassword: "",
+      birthDate: ""
     }
   });
 
@@ -31,27 +32,31 @@ export const SignUp = () => {
   * (precisa ser o ip e estar na mesma rede, caso contrário, deverá ser
   * um servidor em nuvem que possa receber essa requisição)
   */
-  const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL
+  const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
+  const popUp = usePopUp();
   const idadeMinimaRecomendada = 13;
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Lógica do que acontece ao enviar o formulário com sucesso.
   // Essa função só é chamada se os dados forem validados.
-  const onSubmit = async ({confirmarSenha, ...data}) => {
-    const [dia, mes, ano] = data.dataNascimento.split("/").map(Number);
-    data.dataNascimento = new Date(ano, mes - 1, dia);
+  const onSubmit = async ({confirmPassword, ...data}) => {
+    const [dia, mes, ano] = data.birthDate.split("/").map(Number);
+    data.birthDate = new Date(ano, mes - 1, dia);
 
     
     console.log("Submitted Info: ", data);
     // Método POST do Axios, enviando os dados de cadastro a URL do backend
     // Em caso de sucesso, imprime no console e redireciona o usuário a página principal
     try {
-      const response = await axios.post(baseBackendUrl + "/auth/cadastro", data);
+      const response = await axios.post(baseBackendUrl + "/auth/register", data);
       console.log("Resposta do backend: ", response.data);
       router.replace("/auth/login");
     } catch (error) {
-      console.log(error.response.data);
+      if (error.response && error.response.data && error.response.data.message) {
+        popUp.showDefaultToast("Erro ao realizar cadastro", error.response.data.message, "negative", "top");
+      }
+      console.error("Erro ao realizar cadastro", error.response);
     }
   };
 
@@ -76,7 +81,7 @@ export const SignUp = () => {
                 * Os principais campos (nome, email, senha, repetir senha e data de nascimento, respectivamente) estão localizados em VStacks (agrupamentos verticais) abaixo: 
                 */}
               <VStack space="xs">
-                <Text className={`text-typography-500 ${errors.nome ? "text-red-500" : ""}`}>Nome*</Text>
+                <Text className={`text-typography-500 ${errors.name ? "text-red-500" : ""}`}>Nome*</Text>
                 {/* Controller é utilizado pelo react-hook-form para registrar componentes de input, registra seus nomes, realiza validações, etc.
                   *
                   * Pode configurar validações passando diferentes objetos ao parâmetro `rules` -> doc: https://react-hook-form.com/docs/useform/register
@@ -84,13 +89,13 @@ export const SignUp = () => {
                   */}
                 <Controller
                   control={control}
-                  name="nome"
+                  name="name"
                   rules={{required: "O nome é obrigatório"}}
                   render={({ field: { onChange, value } }) => (
-                  <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.nome ? "border-2" : ""}`} isInvalid={errors.nome}>
-                    <InputIcon as={AtSignIcon} className="m-3 -mr-1" color={errors.nome ? "red" : "currentColor"} />
+                  <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.name ? "border-2" : ""}`} isInvalid={errors.name}>
+                    <InputIcon as={AtSignIcon} className="m-3 -mr-1" color={errors.name ? "red" : "currentColor"} />
                     <InputField
-                      placeholder="John Jones"
+                      placeholder="Fulano de Tal"
                       value={value}
                       onChangeText={onChange}
                     />
@@ -98,7 +103,7 @@ export const SignUp = () => {
                 )}
                 />
                 {/* Aqui são renderizados os erros do campo de nome, caso ocorram */}
-                {errors.nome && <Text className="text-red-500 text-sm ml-5">{errors.nome.message}</Text>}
+                {errors.name && <Text className="text-red-500 text-sm ml-5">{errors.name.message}</Text>}
               </VStack>
 
               <VStack space="xs">
@@ -120,7 +125,7 @@ export const SignUp = () => {
                   <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.email ? "border-2" : ""}`} isInvalid={errors.email}>
                     <InputIcon as={MailIcon} className="m-3 -mr-1" color={errors.email ? "red" : "currentColor"} />
                     <InputField
-                      placeholder="John@gmail.com"
+                      placeholder="Fulano@gmail.com"
                       keyboardType="email-adress" 
                       value={value}
                       onChangeText={onChange}
@@ -132,10 +137,10 @@ export const SignUp = () => {
               </VStack>
 
               <VStack space="xs">
-                <Text className={`text-typography-500 ${errors.senha ? "text-red-500" : ""}`}>Senha*</Text>
+                <Text className={`text-typography-500 ${errors.password ? "text-red-500" : ""}`}>Senha*</Text>
                 <Controller 
                   control={control}
-                  name="senha"
+                  name="password"
                   rules={{
                     required: "A senha é obrigatória",
                     minLength: {
@@ -144,8 +149,8 @@ export const SignUp = () => {
                     }
                   }}
                   render={({ field: { onChange, value } }) => (
-                  <Input variant="rounded" size="xl" className={`text-center ${errors.senha ? "border-2" : ""}`} isInvalid={errors.senha}>
-                    <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.senha ? "red" : "currentColor"} />
+                  <Input variant="rounded" size="xl" className={`text-center ${errors.password ? "border-2" : ""}`} isInvalid={errors.password}>
+                    <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.password ? "red" : "currentColor"} />
                     <InputField 
                       type={showPassword ? "text" : "password"}
                       placeholder="Senha"
@@ -158,22 +163,22 @@ export const SignUp = () => {
                   </Input>
                 )}
                 />
-                {errors.senha && <Text className="text-red-500 text-sm ml-5">{errors.senha.message}</Text>}
+                {errors.password && <Text className="text-red-500 text-sm ml-5">{errors.password.message}</Text>}
               </VStack>
 
               <VStack space="xs">
-                <Text className={`text-typography-500 ${errors.confirmarSenha ? "text-red-500" : ""}`}>Confirme a senha*</Text>
+                <Text className={`text-typography-500 ${errors.confirmPassword ? "text-red-500" : ""}`}>Confirme a senha*</Text>
                 <Controller
                   control={control}
-                  name="confirmarSenha"
+                  name="confirmPassword"
                   rules={{
                     required: "A confirmação da senha é obrigatória",
                     validate: (value) => 
-                      value === getValues("senha") || "As senhas não coincidem"
+                      value === getValues("password") || "As senhas não coincidem"
                   }}
                   render={({ field: { onChange, value }}) => (
-                  <Input variant="rounded" size="xl" className={`text-center ${errors.confirmarSenha ? "border-2" : ""}`} isInvalid={errors.confirmarSenha}>
-                    <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.confirmarSenha ? "red" : "currentColor"} />
+                  <Input variant="rounded" size="xl" className={`text-center ${errors.confirmPassword ? "border-2" : ""}`} isInvalid={errors.confirmPassword}>
+                    <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.confirmPassword ? "red" : "currentColor"} />
                     <InputField 
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Repetir senha"
@@ -186,14 +191,14 @@ export const SignUp = () => {
                   </Input>
                 )}
                 />
-                {errors.confirmarSenha && <Text className="text-red-500 text-sm ml-5">{errors.confirmarSenha.message}</Text>}
+                {errors.confirmPassword && <Text className="text-red-500 text-sm ml-5">{errors.confirmPassword.message}</Text>}
               </VStack>
 
               <VStack space="xs">
-                <Text className={`text-typography-500 ${errors.dataNascimento ? "text-red-500" : ""}`}>Data de nascimento*</Text>
+                <Text className={`text-typography-500 ${errors.birthDate ? "text-red-500" : ""}`}>Data de nascimento*</Text>
                 <Controller
                   control={control}
-                  name="dataNascimento"
+                  name="birthDate"
                   rules={{
                     required: "A data de nascimento é obrigatória",
                     validate: (value) => {
@@ -223,8 +228,8 @@ export const SignUp = () => {
                     }
                   }}
                   render={({ field: { onChange, value } }) => (
-                  <Input variant="rounded" size="xl" className={`text-center ${errors.dataNascimento ? "border-2" : ""}`} isInvalid={errors.dataNascimento}>
-                    <InputIcon as={CalendarDaysIcon} className="m-3 -mr-1" color={errors.dataNascimento ? "red" : "currentColor"} />
+                  <Input variant="rounded" size="xl" className={`text-center ${errors.birthDate ? "border-2" : ""}`} isInvalid={errors.birthDate}>
+                    <InputIcon as={CalendarDaysIcon} className="m-3 -mr-1" color={errors.birthDate ? "red" : "currentColor"} />
                     <MaskedTextInput
                       style={{flex: 1, paddingHorizontal: 14}}
                       mask="99/99/9999"
@@ -237,7 +242,7 @@ export const SignUp = () => {
                   </Input>
                 )}
                 />
-                {errors.dataNascimento && <Text className="text-red-500 text-sm ml-5">{errors.dataNascimento.message}</Text>}
+                {errors.birthDate && <Text className="text-red-500 text-sm ml-5">{errors.birthDate.message}</Text>}
               </VStack>
 
               <Button 

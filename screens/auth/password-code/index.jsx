@@ -3,6 +3,7 @@ import { useRecovery } from "@/contexts/PasswordResetContext";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
 import { Controller, useForm } from 'react-hook-form';
+import { useSession } from "@/contexts/AuthContext";
 import { Heading } from '@/components/ui/heading';
 import { ClockIcon } from "@/components/ui/icon";
 import { VStack } from '@/components/ui/vstack';
@@ -16,13 +17,14 @@ export const PasswordCode = () => {
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
-      codigo: ""
+      code: ""
     }
   });
 
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
 
   const { getEmail, setCode, resetCodeAndEmail } = useRecovery();
+  const { getAuthHeaders } = useSession();
   const [time, setTime] = useState(60);
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export const PasswordCode = () => {
     try {
       const email = getEmail();
       if(email) {
-        const response = await axios.post(baseBackendUrl + "/auth/recuperar-senha", { email });
+        const response = await axios.post(baseBackendUrl + `/auth/password/recovery?email=${email}`);
         console.log(response.data);
         console.log("Código reenviado!");
         setTime(30); 
@@ -59,12 +61,13 @@ export const PasswordCode = () => {
 
     data.email = email;
     try {
-      const response = await axios.post(baseBackendUrl + "/auth/validar-codigo", data);
+      const response = await axios.post(baseBackendUrl + `/auth/password/validate-code?code=${data.code}`, null, getAuthHeaders());
       console.log(response.data);
-      await setCode(data.codigo);
+      await setCode(data.code);
       router.replace("auth/reset-password");
     } catch (error) {
       console.log("Erro ao resetar senha: ", error.response.data);
+      // console.log("Error response: ", error.response);
     }
   }
 
@@ -80,10 +83,10 @@ export const PasswordCode = () => {
       <FormControl className="bg-gray-50 p-5 border rounded-lg border-outline-300 w-[95%]">
         <VStack space={"xl"}>
           <VStack space="xs">
-            <Text className={`text-typography-500 ${errors.codigo ? "text-red-500" : ""}`}>Código de verificação</Text>
+            <Text className={`text-typography-500 ${errors.code ? "text-red-500" : ""}`}>Código de verificação</Text>
             <Controller
               control={control}
-              name="codigo"
+              name="code"
               rules={{
                 required: "O código de verificação é obrigatório",
                 minLength: {
@@ -96,8 +99,8 @@ export const PasswordCode = () => {
                 }
               }}
               render={({ field: { onChange, value } }) => (
-              <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.codigo ? "border-2" : ""}`} isInvalid={errors.codigo}>
-                <InputIcon as={ClockIcon} className="m-3 -mr-1" color={errors.codigo ? "red" : "currentColor"} />
+              <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.code ? "border-2" : ""}`} isInvalid={errors.code}>
+                <InputIcon as={ClockIcon} className="m-3 -mr-1" color={errors.code ? "red" : "currentColor"} />
                 <InputField
                   placeholder="123456"
                   value={value}
@@ -106,7 +109,7 @@ export const PasswordCode = () => {
               </Input>
             )}
             />
-            {errors.codigo && <Text className="text-red-500 text-sm ml-5">{errors.codigo.message}</Text>}
+            {errors.code && <Text className="text-red-500 text-sm ml-5">{errors.code.message}</Text>}
           </VStack>
 
           <VStack space="xs">

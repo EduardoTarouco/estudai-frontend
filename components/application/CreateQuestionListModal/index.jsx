@@ -7,40 +7,52 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { Input, InputField } from "@/components/ui/input";
 import { MaskedTextInput } from 'react-native-mask-text';
 import { Controller, useForm } from "react-hook-form";
+import { useSession } from "@/contexts/AuthContext";
+import { usePopUp } from "@/contexts/PopUpContext";
 import { Heading } from "@/components/ui/heading";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Text } from "react-native";
 import { useState } from "react";
+import axios from "axios";
 
-export const CreateQuestionListModal = ({ disciplina = null }) => {
+export const CreateQuestionListModal = ({ onCreated, disciplina = null }) => {
 
   const { control, setValue, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
-      nome: "",
-      descricao: "",
-      filtroDisciplina: disciplina,
-      filtroAno: "2009",
-      quantidadeQuestoes: "",
-      incluirRespondidas: false,
-      incluirCertas: false,
-      incluirErradas: false,
-      quantidadeQuestoes: ""
+        name: "",
+        description: "",
+        filterYear: "2023",
+        filterSubject: disciplina,
+        questionsCount: "",
+        includeAnswered: false,
+        questionIds: []
     }
   });
 
+  const { getAuthHeaders } = useSession();
+  const popUp = usePopUp();
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL
   const [showModal, setShowModal] = useState(false);
   const [incluirRespondidas, setIncluirRespondidas] = useState(false);
 
   const onSubmit = async (data) => {
     try {
-      console.log("Form data submitted:", data);
-      //const response = await axios.post(baseBackendUrl + "/auth/cadastro", data);
-      //console.log("resposta do backend: ", response.data);
+      let questions = [];
+      for (let i = 1; i <= parseInt(data.questionsCount); i++) {
+        questions.push(i);
+      }
+      data.questions = questions;
+
+      const response = await axios.post(baseBackendUrl + "/custom-lists", data, getAuthHeaders());
+      console.log("Lista de questões criada com sucesso: ", response.data);
       setShowModal(false);
+      onCreated();
     } catch (error) {
-      //console.log(error.response.data);
+      if (error.response && error.response.data && error.response.data.message) {
+        popUp.showDefaultToast("Erro ao criar lista de questões", error.response.data.message, "negative", "top");
+      }
+      console.error("Erro ao realizar cadastro", error.response);
     }
   }
 
@@ -64,13 +76,13 @@ export const CreateQuestionListModal = ({ disciplina = null }) => {
           <ModalBody>
             <VStack space="xl">
               <VStack space="xs">
-                <Text className={`text-typography-500 ${errors.nome ? "text-red-500" : ""}`}>Nome*</Text>
+                <Text className={`text-typography-500 ${errors.name ? "text-red-500" : ""}`}>Nome*</Text>
                 <Controller
                   control={control}
-                  name="nome"
+                  name="name"
                   rules={{ required: "O nome é obrigatório" }}
                   render={({ field: { onChange, value } }) => (
-                    <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.nome ? "border-2" : ""}`} isInvalid={errors.nome}>
+                    <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.name ? "border-2" : ""}`} isInvalid={errors.name}>
                       <InputField
                         placeholder="Nome da lista"
                         value={value}
@@ -79,14 +91,14 @@ export const CreateQuestionListModal = ({ disciplina = null }) => {
                     </Input>
                   )}
                 />
-                {errors.nome && <Text className="text-red-500 text-sm ml-5">{errors.nome.message}</Text>}
+                {errors.name && <Text className="text-red-500 text-sm ml-5">{errors.name.message}</Text>}
               </VStack>
 
               <VStack space="xs">
                 <Text className="text-typography-500">Descrição</Text>
                 <Controller
                   control={control}
-                  name="descricao"
+                  name="description"
                   render={({ field: { onChange, value } }) => (
                     <Textarea variant="rounded" size="xl" className="min-w-[250px] text-center">
                       <TextareaInput
@@ -102,16 +114,14 @@ export const CreateQuestionListModal = ({ disciplina = null }) => {
               <VStack space="xs">
                 <Controller
                   control={control}
-                  name="filtroAno"
+                  name="filterYear"
                   render={({ field: { onChange, value } }) => (
                     <SelectButton
-                      className={`min-w-[250px] text-center ${errors.filtroAno ? "border-2" : ""}`}
+                      className={`min-w-[250px] text-center ${errors.filterYear ? "border-2" : ""}`}
                       setSelected={onChange}
                       selectedValue={value}
                       title="Ano*"
-                      items={["2009", "2010", "2011", "2012", "2013", 
-                              "2014", "2015", "2016", "2017", "2018", 
-                              "2019", "2020", "2021", "2022", "2023"]}
+                      items={["2022", "2023"]}
                     />
                   )}
                 />
@@ -120,7 +130,7 @@ export const CreateQuestionListModal = ({ disciplina = null }) => {
               <VStack space="xs">
                 <Controller
                   control={control}
-                  name="incluirRespondidas"
+                  name="includeAnswered"
                   render={({ field: { onChange, value } }) => (
                     <Checkbox 
                       size="lg"
@@ -128,8 +138,8 @@ export const CreateQuestionListModal = ({ disciplina = null }) => {
                       onChange={() => {
                         onChange(!value); 
                         setIncluirRespondidas(!incluirRespondidas);
-                        setValue("incluirCertas", false);
-                        setValue("incluirErradas", false);
+                        // setValue("includeCorrect", false);
+                        // setValue("includeWrong", false);
                       }}
                     >
                       <CheckboxIndicator>
@@ -139,10 +149,11 @@ export const CreateQuestionListModal = ({ disciplina = null }) => {
                     </Checkbox>
                   )}
                 />
+                  {/* Código ainda não integrado
                   <HStack space="md" className="ml-5">
                     <Controller
                       control={control}
-                      name="incluirCertas"
+                      name="includeCorrect"
                       render={({ field: { onChange, value } }) => (
                         <Checkbox 
                           size="lg"
@@ -160,7 +171,7 @@ export const CreateQuestionListModal = ({ disciplina = null }) => {
                     
                     <Controller
                       control={control}
-                      name="incluirErradas"
+                      name="includeWrong"
                       render={({ field: { onChange, value } }) => (
                         <Checkbox 
                           size="lg"
@@ -175,20 +186,20 @@ export const CreateQuestionListModal = ({ disciplina = null }) => {
                         </Checkbox>
                       )}
                     />
-                  </HStack>
+                  </HStack> */}
               </VStack>
               <VStack space="xs">
-                <Text className={`text-typography-500 ${errors.quantidadeQuestoes ? "text-red-500" : ""}`}>quantidade de questoes*</Text>
+                <Text className={`text-typography-500 ${errors.questionsCount ? "text-red-500" : ""}`}>Quantidade de questoes*</Text>
                 <Controller
                   control={control}
-                  name="quantidadeQuestoes"
+                  name="questionsCount"
                   rules={{
                     required: "É obrigatório informar a quantidade de questões",
                     max: {value: 50, message: "O máximo de questões por lista é 50" },
                     min: {value: 1,  message: "O mínimo de questões por lista é 1" }
                   }}
                   render={({ field: { onChange, value } }) => (
-                  <Input variant="rounded" size="xl" className={`text-center ${errors.quantidadeQuestoes ? "border-2" : ""}`} isInvalid={errors.quantidadeQuestoes}>
+                  <Input variant="rounded" size="xl" className={`text-center ${errors.questionsCount ? "border-2" : ""}`} isInvalid={errors.questionsCount}>
                     <MaskedTextInput
                       style={{flex: 1, paddingHorizontal: 14}}
                       mask="99"
@@ -201,7 +212,7 @@ export const CreateQuestionListModal = ({ disciplina = null }) => {
                   </Input>
                 )}
                 />
-                {errors.quantidadeQuestoes && <Text className="text-red-500 text-sm ml-5">{errors.quantidadeQuestoes.message}</Text>}
+                {errors.questionsCount && <Text className="text-red-500 text-sm ml-5">{errors.questionsCount.message}</Text>}
               </VStack>
             </VStack>
           </ModalBody>

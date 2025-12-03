@@ -1,14 +1,15 @@
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity, Text, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 
 /**
  * Componente que representa um item de matéria (subject) na tela inicial.
  * @param {string} title - Título da matéria a ser exibido.
  * @param {string} href - Identificador da matéria para navegação.
+ * @param {string} icon - Caminho para uma imagem para renderizar atrás do texto do componente.
  * @param {string} color - Cor de fundo do item (opções: "default", "blue", "green", "purple", "red").
  * @param {string} size - Tamanho do item (opções: "sm", "md", "lg", "xl").
  */
-export const SubjectItem = ({ title, href, color = "default", size = "lg" }) => {
+export const SubjectItem = ({ title, href, icon, color = "default", size = "lg" }) => {
 
 	const router = useRouter();
 
@@ -25,8 +26,8 @@ export const SubjectItem = ({ title, href, color = "default", size = "lg" }) => 
 			md: "w-20 h-20",
 			lg: "w-32 h-32",
 			xl: "w-40 h-40",
-			textSm: "font-semibold text-2xl",
-			textLg: "font-bold text-4xl"
+			textSm: "font-bold text-2xl",
+			textLg: "font-extrabold text-4xl"
 		}
 	};
 
@@ -40,6 +41,7 @@ export const SubjectItem = ({ title, href, color = "default", size = "lg" }) => 
 			}}
 		>
 			{/* Componentes de moedas e streak serão adicionado aqui no futuro, ao invés do Text */}
+			{icon && <Image className="absolute w-3/4 h-3/4" source={icon} />}
 			<Text className={`${size === "lg" || size === "xl" ? variantStyles.size.textLg : variantStyles.size.textSm}`}>{title}</Text>
 		</TouchableOpacity>
 	);

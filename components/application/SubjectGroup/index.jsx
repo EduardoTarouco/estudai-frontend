@@ -9,36 +9,38 @@ import { VStack } from '@/components/ui/vstack';
  */
 export const SubjectGroup = ({ size }) => {
 	const subjectsObject = [
-		{ title: "LING", color: "blue",   href: "linguagens" },
-		{ title: "HUM",  color: "green",  href: "humanas" },
-		{ title: "NAT",  color: "purple", href: "naturezas" },
-		{ title: "MAT",  color: "red",    href: "matematica" }
+		{ title: "LING", color: "blue",   href: "linguagens", icon: require("@/assets/images/subjectIcons/linguagens.png") },
+		{ title: "HUM",  color: "green",  href: "humanas",    icon: require("@/assets/images/subjectIcons/humanas.png") },
+		{ title: "NAT",  color: "purple", href: "naturezas",  icon: require("@/assets/images/subjectIcons/naturezas.png") },
+		{ title: "MAT",  color: "red",    href: "matematica", icon: require("@/assets/images/subjectIcons/matematica.png") }
 	]
 
 	const firstRow = subjectsObject.slice(0, subjectsObject.length/2);
 	const secondRow = subjectsObject.slice(subjectsObject.length/2, subjectsObject.length);
 
 	return (
-		<VStack space={"md"} className="bg-gray-600 p-4 rounded-lg">
+		<VStack space={"md"} className="bg-gray-950 p-4 rounded-lg">
 			<HStack space={"md"}>
-				{firstRow.map(({ title, color, href }) => (
+				{firstRow.map(({ title, color, href, icon }) => (
 					<SubjectItem 
 						key={href} 
 						title={title} 
 						color={color} 
 						href={href} 
 						size={size}
+						icon={icon}
 					/>
 				))}
 			</HStack>
 			<HStack space={"md"}>
-				{secondRow.map(({ title, color, href }) => (
+				{secondRow.map(({ title, color, href, icon }) => (
 					<SubjectItem 
 						key={href} 
 						title={title} 
 						color={color} 
 						href={href} 
 						size={size}
+						icon={icon}
 					/>
 				))}
 			</HStack>
