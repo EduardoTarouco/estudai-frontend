@@ -13,8 +13,8 @@ export const QuestionListItem = ({ list, onExclusion, questionListId, questionLi
   const { getAuthHeaders } = useSession();
 
   const router = useRouter();
-  const answered = correct + wrong;
-  const percentage = Math.round((answered * 100) / total);
+  const answered = (correct || 0) + (wrong || 0);
+  const percentage = total > 0 ? Math.round((answered * 100) / total) : 0;
 
   const date = new Date(creationDate);
   const localDate = date.toLocaleDateString("pt-BR");
