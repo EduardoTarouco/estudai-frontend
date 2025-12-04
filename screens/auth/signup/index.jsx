@@ -38,6 +38,8 @@ export const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   // Lógica do que acontece ao enviar o formulário com sucesso.
   // Essa função só é chamada se os dados forem validados.
   const onSubmit = async ({confirmPassword, ...data}) => {
@@ -51,10 +53,12 @@ export const SignUp = () => {
     try {
       const response = await axios.post(baseBackendUrl + "/auth/register", data);
       console.log("Resposta do backend: ", response.data);
+      setErrorMessage("");
       router.replace("/auth/login");
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
         popUp.showDefaultToast("Erro ao realizar cadastro", error.response.data.message, "negative", "top");
+        setErrorMessage(error.response.data.message);
       }
       console.error("Erro ao realizar cadastro", error.response);
     }
@@ -244,6 +248,8 @@ export const SignUp = () => {
                 />
                 {errors.birthDate && <Text className="text-red-500 text-sm ml-5">{errors.birthDate.message}</Text>}
               </VStack>
+
+              {errorMessage ? <Text className="text-red-500 text-sm ml-5">{errorMessage}</Text> : null}
 
               <Button 
                 action={"primary"} 

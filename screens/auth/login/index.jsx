@@ -3,7 +3,7 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "@/components/ui/icon";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, set, useForm } from 'react-hook-form';
 import { useSession } from "@/contexts/AuthContext";
 import { usePopUp } from "@/contexts/PopUpContext";
 import { Heading } from '@/components/ui/heading';
@@ -28,15 +28,19 @@ export const Login = () => {
   const popUp = usePopUp();
   const [showPassword, setShowPassword] = useState(false);
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   // Lógica do que acontece ao enviar o formulário com sucesso.
   // Essa função só é chamada se os dados forem validados.
   const onSubmit = async (data) => {
     try {
       await signIn(data);
+      setErrorMessage("");
       router.replace("home");
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
         popUp.showDefaultToast("Erro ao realizar cadastro", error.response.data.message, "negative", "top");
+        setErrorMessage(error.response.data.message);
       }
       console.error("Erro ao realizar cadastro", error.response);
     }
@@ -112,6 +116,8 @@ export const Login = () => {
                 />
                 {errors.password && <Text className="text-red-500 text-sm ml-5">{errors.password.message}</Text>}
               </VStack>
+
+              {errorMessage ? <Text className="text-red-500 text-sm ml-5">{errorMessage}</Text> : null}
 
               <Button 
                 action={"primary"} 
