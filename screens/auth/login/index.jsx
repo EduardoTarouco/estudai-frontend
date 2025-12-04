@@ -48,17 +48,17 @@ export const Login = () => {
   };
 
   return (
-    <SafeAreaView className="bg-green-200 flex-1">
+    <SafeAreaView className="flex-1">
       <KeyboardAvoidingView
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardShouldPersistTaps="handled"
         style={{ flex: 1 }}
       >
-        <View className="bg-green-200 flex-1 flex justify-center items-center gap-2 p-5">
+        <View className="bg-estudaiBg-light flex-1 flex justify-center items-center gap-2 p-5">
           <VStack className="flex justify-center items-center m-2">
             <Heading size={"4xl"}>Login</Heading>
-            <Text>Entre na sua conta e comece a utilizar o Estudaí</Text>
+            <Text className="font-medium">Entre na sua conta e comece a utilizar o Estudaí</Text>
           </VStack>
 
           <FormControl className="bg-gray-50 p-5 border rounded-lg border-outline-300 w-[95%]">

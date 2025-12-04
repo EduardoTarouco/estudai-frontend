@@ -11,7 +11,7 @@ export const Home = () => {
   const { signOut } = useSession();
 
   return (
-    <View className="flex-1">
+    <View className="bg-estudaiBg flex-1">
       <EstudaiHeader />
       <VStack space={"md"} className="flex-1 p-5 items-center">
         <SubjectGroup size={"xl"} />

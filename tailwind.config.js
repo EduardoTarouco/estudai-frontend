@@ -20,6 +20,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        estudaiBg: {
+          DEFAULT: '#3b82f6',
+          dark: "#2563eb",
+          light: "#60a5fa",
+          lighter: "#3E97F2"
+        },
         primary: {
           0: 'rgb(var(--color-primary-0)/<alpha-value>)',
           50: 'rgb(var(--color-primary-50)/<alpha-value>)',
