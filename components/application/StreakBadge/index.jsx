@@ -24,7 +24,7 @@ export const StreakBadge = () => {
   }, []);
 
   return (
-    <View className="bg-gray-950 flex-row items-center justify-around w-full rounded-xl p-3 py-5">
+    <View className="bg-gray-950 flex-row items-center justify-center w-full rounded-xl p-3 py-5 gap-8">
       <Flame size={96} strokeWidth={3} color="lime" />
       <Text className="text-5xl font-extrabold text-white">{String(todayStreak ?? 0).padStart(3, "0")}</Text>
     </View>
