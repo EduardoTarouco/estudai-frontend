@@ -1,6 +1,7 @@
 import { CreateQuestionListModal } from "@/components/application/CreateQuestionListModal";
 import { QuestionListHeader } from "@/components/application/headers/QuestionListHeader";
 import { QuestionListItem } from "@/components/application/QuestionListItem";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import { View, Text, FlatList } from "react-native";
 import { useSession } from "@/contexts/AuthContext";
 import { useLocalSearchParams } from "expo-router";
