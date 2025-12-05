@@ -1,7 +1,7 @@
 import { useSession } from "@/contexts/AuthContext";
 import { getUserCoins } from "./coinsProvider";
 import { useEffect, useState } from "react";
-import { Coins } from "lucide-react-native";
+import { Gem } from "lucide-react-native";
 import { View, Text } from "react-native";
 
 export const CoinsBadge = () => {
@@ -24,7 +24,7 @@ export const CoinsBadge = () => {
 
   return (
     <View className="bg-gray-950 flex-row items-center justify-center w-full rounded-xl p-3 py-5 gap-8">
-      <Coins size={96} strokeWidth={3} color="yellow" />
+      <Gem size={96} strokeWidth={2} color="#60a5fa" />
       <Text className="text-5xl font-extrabold text-white">{String(coins ?? 0).padStart(4, "0")}</Text>
     </View>
   );

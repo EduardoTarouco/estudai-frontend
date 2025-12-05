@@ -11,14 +11,13 @@ import { useSession } from "@/contexts/AuthContext";
 import { usePopUp } from "@/contexts/PopUpContext";
 import { Heading } from "@/components/ui/heading";
 import { VStack } from "@/components/ui/vstack";
-import { HStack } from "@/components/ui/hstack";
 import { Text } from "react-native";
 import { useState } from "react";
 import axios from "axios";
 
 export const CreateQuestionListModal = ({ onCreated, disciplina = null }) => {
 
-  const { control, setValue, handleSubmit, formState: { errors } } = useForm({
+  const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
         name: "",
         description: "",
@@ -224,7 +223,7 @@ export const CreateQuestionListModal = ({ onCreated, disciplina = null }) => {
             <Button
               variant="solid"
               action="negative"
-              className="mr-3"
+              className="mr-3 border-black border-2 border-b-4 rounded-3xl"
               onPress={() => {
                 setShowModal(false);
               }}
@@ -232,7 +231,7 @@ export const CreateQuestionListModal = ({ onCreated, disciplina = null }) => {
               <ButtonText>Cancelar</ButtonText>
             </Button>
             <Button
-              className="bg-blue-500"
+              className="bg-blue-500 border-black border-2 border-b-4 rounded-3xl"
               onPress={handleSubmit(onSubmit)}
             >
               <ButtonText>Criar</ButtonText>
@@ -245,10 +244,10 @@ export const CreateQuestionListModal = ({ onCreated, disciplina = null }) => {
         action={"primary"}
         variant={"solid"}
         size={"lg"}
-        className="w-full mb-2 bg-blue-500"
+        className="bg-green-500 w-full rounded-3xl border-black border-2 border-b-4 mb-2"
         onPress={() => { setShowModal(true) }}
       >
-        <ButtonText>Nova lista</ButtonText>
+        <ButtonText className="text-white">Nova lista</ButtonText>
       </Button>
     </>
   );

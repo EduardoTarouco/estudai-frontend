@@ -24,7 +24,9 @@ export const AnswerQuestions = () => {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [questionMarkdown, setQuestionMarkdown] = useState("");
   const [question, setQuestion] = useState(questionList[0] ?? null);
+
   const [selectedAlternative, setSelectedAlternative] = useState(null);
+
   const [answeredQuestions, setAnsweredQuestions] = useState({});
 
   const handleAnswer = async (letter) => {
@@ -71,7 +73,6 @@ ${question.context}
 `
 
     setQuestionMarkdown(markdown);
-    console.log("Mudou para a questão: ", question);
   }, [question]);
 
   const handlePreviousQuestion = () => {

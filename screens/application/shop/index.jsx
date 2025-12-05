@@ -134,7 +134,7 @@ export const Shop = () => {
         onCategoryChange={setSelectedCategory}
       />
       
-      <ScrollView className="flex-1 bg-white">
+      <ScrollView className="flex-1 bg-estudaiBg">
         <View className="flex-row flex-wrap justify-center px-2 py-4">
           {filteredRewards.map((reward) => (
             <RewardCard

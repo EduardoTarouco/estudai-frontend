@@ -27,14 +27,16 @@ export const ShopHeader = ({ coins = 0, streak = 0 }) => {
       </View>
 
       {/* Área azul claro com título e mascote */}
-      <View className="bg-sky-200 w-full">
+      <View className="bg-gray-950 w-full">
         <HStack space="md" className="justify-between items-center px-4 py-4">
-          <Heading size="3xl" className="text-black font-bold">
+          <Heading size="3xl" className="text-white font-bold">
             Loja de Recompensas
           </Heading>
           {/* Mascote - usando emoji como placeholder, pode ser substituído por imagem */}
           <View className="w-16 h-16 items-center justify-center">
-            <Text className="text-5xl">💡</Text>
+            <Image 
+              className="w-16 h-16"
+              source={require("@/assets/images/shopScreen/mascote-shop.png")}/>
           </View>
         </HStack>
       </View>

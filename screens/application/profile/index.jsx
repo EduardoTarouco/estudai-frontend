@@ -1,6 +1,6 @@
 import { EstudaiHeader } from "@/components/application/headers/EstudaiHeader";
 import { Button, ButtonText, ButtonIcon } from '@/components/ui/button';
-import { DoorOpen, Coins, Flame, Scroll } from 'lucide-react-native';
+import { DoorOpen, Gem, Flame, Scroll } from 'lucide-react-native';
 import { useFocusEffect } from "@react-navigation/native";
 import { useSession } from "@/contexts/AuthContext";
 import { Divider } from '@/components/ui/divider';
@@ -72,7 +72,7 @@ export const Profile = () => {
           
           <Text className="text-2xl font-bold text-gray-50">Quantidade de moedas:</Text>
             <View className="flex-row items-center gap-2">
-              <Coins size={32} strokeWidth={2} color="yellow" />
+              <Gem size={32} strokeWidth={2} color="#60a5fa" />
               <Text className="text-lg font-medium text-gray-50">{userData?.coins || 0}</Text>
             </View>
 

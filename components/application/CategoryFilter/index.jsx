@@ -16,7 +16,7 @@ const CATEGORIES = [
  */
 export const CategoryFilter = ({ selectedCategory, onCategoryChange }) => {
   return (
-    <View className="bg-sky-200 px-4 py-3">
+    <View className="bg-gray-950 px-4 py-3">
       <HStack space="sm">
         {CATEGORIES.map((category) => {
           const Icon = category.icon;
