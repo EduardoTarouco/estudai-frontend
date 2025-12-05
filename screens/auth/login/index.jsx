@@ -28,15 +28,19 @@ export const Login = () => {
   const popUp = usePopUp();
   const [showPassword, setShowPassword] = useState(false);
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   // Lógica do que acontece ao enviar o formulário com sucesso.
   // Essa função só é chamada se os dados forem validados.
   const onSubmit = async (data) => {
     try {
       await signIn(data);
+      setErrorMessage("");
       router.replace("home");
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
         popUp.showDefaultToast("Erro ao realizar cadastro", error.response.data.message, "negative", "top");
+        setErrorMessage(error.response.data.message);
       }
       console.error("Erro ao realizar cadastro", error.response);
     }
@@ -44,20 +48,20 @@ export const Login = () => {
   };
 
   return (
-    <SafeAreaView className="bg-green-200 flex-1">
+    <SafeAreaView className="flex-1">
       <KeyboardAvoidingView
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardShouldPersistTaps="handled"
         style={{ flex: 1 }}
       >
-        <View className="bg-green-200 flex-1 flex justify-center items-center gap-2 p-5">
+        <View className="bg-estudaiBg-light flex-1 flex justify-center items-center gap-2 p-5">
           <VStack className="flex justify-center items-center m-2">
             <Heading size={"4xl"}>Login</Heading>
-            <Text>Entre na sua conta e comece a utilizar o Estudaí</Text>
+            <Text className="font-medium text-center">Entre na sua conta e comece a utilizar o Estudaí</Text>
           </VStack>
 
-          <FormControl className="bg-gray-50 p-5 border rounded-lg border-outline-300 w-[95%]">
+          <FormControl className="bg-white p-6 rounded-2xl shadow-lg w-[95%]">
             <VStack space="xl">
 
               {/* 
@@ -75,7 +79,7 @@ export const Login = () => {
                   name="email"
                   rules={{required: "O email é obrigatório"}}
                   render={({ field: { onChange, value } }) => (
-                  <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.email ? "border-2" : ""}`} isInvalid={errors.email}>
+                  <Input variant="rounded" size="xl" className={`text-center border-2`} isInvalid={errors.email}>
                     <InputIcon as={MailIcon} className="m-3 -mr-1" color={errors.email ? "red" : "currentColor"} />
                     <InputField
                       placeholder="Estudante@gmail.com"
@@ -96,7 +100,7 @@ export const Login = () => {
                   name="password"
                   rules={{required: "A senha é obrigatória"}}
                   render={({ field: { onChange, value } }) => (
-                  <Input variant="rounded" size="xl" className={`text-center ${errors.password ? "border-2" : ""}`} isInvalid={errors.password}>
+                  <Input variant="rounded" size="xl" className={`text-center border-2`} isInvalid={errors.password}>
                     <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.password ? "red" : "currentColor"} />
                     <InputField 
                       type={showPassword ? "text" : "password"}
@@ -113,7 +117,10 @@ export const Login = () => {
                 {errors.password && <Text className="text-red-500 text-sm ml-5">{errors.password.message}</Text>}
               </VStack>
 
-              <Button 
+              {errorMessage ? <Text className="text-red-500 text-sm ml-5">{errorMessage}</Text> : null}
+
+              <Button
+                className="bg-green-500 border-black rounded-3xl border-2 border-b-4"
                 action={"primary"} 
                 variant={"solid"} 
                 size={"lg"} 

@@ -38,6 +38,8 @@ export const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   // Lógica do que acontece ao enviar o formulário com sucesso.
   // Essa função só é chamada se os dados forem validados.
   const onSubmit = async ({confirmPassword, ...data}) => {
@@ -51,30 +53,32 @@ export const SignUp = () => {
     try {
       const response = await axios.post(baseBackendUrl + "/auth/register", data);
       console.log("Resposta do backend: ", response.data);
+      setErrorMessage("");
       router.replace("/auth/login");
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
         popUp.showDefaultToast("Erro ao realizar cadastro", error.response.data.message, "negative", "top");
+        setErrorMessage(error.response.data.message);
       }
       console.error("Erro ao realizar cadastro", error.response);
     }
   };
 
   return (
-    <SafeAreaView className="bg-yellow-200 flex-1">
+    <SafeAreaView className="flex-1">
       <KeyboardAvoidingView
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardShouldPersistTaps="handled"
         style={{ flex: 1 }}
       >
-        <View className="bg-yellow-200 flex-1 flex justify-center items-center gap-2 p-5">
+        <View className="bg-estudaiBg-light flex-1 flex justify-center items-center gap-2 p-5">
           <VStack className="flex justify-center items-center m-2">
             <Heading size={"4xl"}>Cadastro</Heading>
-            <Text>Cadastre-se e começe a utilizar o Estudai</Text>
+            <Text className="font-medium text-center">Cadastre-se e começe a utilizar o Estudai</Text>
           </VStack>
 
-          <FormControl className="bg-gray-50 p-5 border rounded-lg border-outline-300 w-[95%]">
+          <FormControl className="bg-white p-6 rounded-2xl shadow-lg w-[95%]">
             <VStack space="xl">
 
               {/* 
@@ -92,7 +96,7 @@ export const SignUp = () => {
                   name="name"
                   rules={{required: "O nome é obrigatório"}}
                   render={({ field: { onChange, value } }) => (
-                  <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.name ? "border-2" : ""}`} isInvalid={errors.name}>
+                  <Input variant="rounded" size="xl" className={`min-w-[250px] text-center border-2`} isInvalid={errors.name}>
                     <InputIcon as={AtSignIcon} className="m-3 -mr-1" color={errors.name ? "red" : "currentColor"} />
                     <InputField
                       placeholder="Fulano de Tal"
@@ -122,7 +126,7 @@ export const SignUp = () => {
                     }
                   }}
                   render={({ field: { onChange, value } }) => (
-                  <Input variant="rounded" size="xl" className={`min-w-[250px] text-center ${errors.email ? "border-2" : ""}`} isInvalid={errors.email}>
+                  <Input variant="rounded" size="xl" className={`min-w-[250px] text-center border-2`} isInvalid={errors.email}>
                     <InputIcon as={MailIcon} className="m-3 -mr-1" color={errors.email ? "red" : "currentColor"} />
                     <InputField
                       placeholder="Fulano@gmail.com"
@@ -149,7 +153,7 @@ export const SignUp = () => {
                     }
                   }}
                   render={({ field: { onChange, value } }) => (
-                  <Input variant="rounded" size="xl" className={`text-center ${errors.password ? "border-2" : ""}`} isInvalid={errors.password}>
+                  <Input variant="rounded" size="xl" className={`text-center border-2`} isInvalid={errors.password}>
                     <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.password ? "red" : "currentColor"} />
                     <InputField 
                       type={showPassword ? "text" : "password"}
@@ -177,7 +181,7 @@ export const SignUp = () => {
                       value === getValues("password") || "As senhas não coincidem"
                   }}
                   render={({ field: { onChange, value }}) => (
-                  <Input variant="rounded" size="xl" className={`text-center ${errors.confirmPassword ? "border-2" : ""}`} isInvalid={errors.confirmPassword}>
+                  <Input variant="rounded" size="xl" className={`text-center border-2`} isInvalid={errors.confirmPassword}>
                     <InputIcon as={LockIcon} className="m-3 -mr-1" color={errors.confirmPassword ? "red" : "currentColor"} />
                     <InputField 
                       type={showConfirmPassword ? "text" : "password"}
@@ -228,7 +232,7 @@ export const SignUp = () => {
                     }
                   }}
                   render={({ field: { onChange, value } }) => (
-                  <Input variant="rounded" size="xl" className={`text-center ${errors.birthDate ? "border-2" : ""}`} isInvalid={errors.birthDate}>
+                  <Input variant="rounded" size="xl" className={`text-center border-2`} isInvalid={errors.birthDate}>
                     <InputIcon as={CalendarDaysIcon} className="m-3 -mr-1" color={errors.birthDate ? "red" : "currentColor"} />
                     <MaskedTextInput
                       style={{flex: 1, paddingHorizontal: 14}}
@@ -245,7 +249,10 @@ export const SignUp = () => {
                 {errors.birthDate && <Text className="text-red-500 text-sm ml-5">{errors.birthDate.message}</Text>}
               </VStack>
 
+              {errorMessage ? <Text className="text-red-500 text-sm ml-5">{errorMessage}</Text> : null}
+
               <Button 
+                className="bg-green-600 border-black rounded-3xl border-2 border-b-4"
                 action={"primary"} 
                 variant={"solid"} 
                 size={"lg"} 
