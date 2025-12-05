@@ -37,6 +37,7 @@ export function SessionProvider({ children }) {
 
             setSession(JSON.stringify({
               name: response.data.name,
+              email: response.data.email,
               token: response.data.token,
               streakDays: response.data.streakDays,
               coins: response.data.coins

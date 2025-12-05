@@ -18,15 +18,15 @@ const index = () => {
         />
 
         <Text className="text-3xl font-bold text-center text-white">
-          Seja bem-vindo, sua jornada de estudos começa aqui!
+          Seja bem-vindo! Sua jornada de estudos começa aqui
         </Text>
 
         <View className="gap-3 w-full">
           <Button
-            className="bg-green-600 border-black rounded-xl border-2 border-b-4"
+            className="bg-green-500 border-black rounded-3xl border-2 border-b-4"
             action={"primary"}
             variant={"solid"}
-            size={"md"}
+            size={"lg"}
             isDisabled={false}
             onPress={() => {router.push("auth/signup")}}
           >
@@ -34,10 +34,10 @@ const index = () => {
           </Button>
           
           <Button
-            className="bg-white border-black rounded-xl border-2 border-b-4"
+            className="bg-white border-black rounded-3xl border-2 border-b-4"
             action={"secondary"}
             variant={"solid"}
-            size={"md"}
+            size={"lg"}
             isDisabled={false}
             onPress={() => {router.push("auth/login")}}
           >

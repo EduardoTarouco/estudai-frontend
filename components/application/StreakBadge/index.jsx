@@ -20,7 +20,6 @@ export const StreakBadge = () => {
 
   useEffect(() => {
     fetchStreak();
-    console.log("");
   }, []);
 
   return (
