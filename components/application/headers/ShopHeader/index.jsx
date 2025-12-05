@@ -35,7 +35,7 @@ export const ShopHeader = ({ coins = 0, streak = 0 }) => {
           {/* Mascote - usando emoji como placeholder, pode ser substituído por imagem */}
           <View className="w-16 h-16 items-center justify-center">
             <Image 
-              className="w-16 h-16"
+              className="w-16 h-16 scale-125"
               source={require("@/assets/images/shopScreen/mascote-shop.png")}/>
           </View>
         </HStack>

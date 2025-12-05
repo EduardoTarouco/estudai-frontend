@@ -1,8 +1,9 @@
+import { useFocusEffect } from "@react-navigation/native";
 import { useSession } from "@/contexts/AuthContext";
 import { getUserCoins } from "./coinsProvider";
-import { useEffect, useState } from "react";
-import { Gem } from "lucide-react-native";
+import { useCallback, useState } from "react";
 import { View, Text } from "react-native";
+import { Gem } from "lucide-react-native";
 
 export const CoinsBadge = () => {
 
@@ -18,9 +19,11 @@ export const CoinsBadge = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCoins();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchCoins();
+    }, [])
+  );
 
   return (
     <View className="bg-gray-950 flex-row items-center justify-center w-full rounded-xl p-3 py-5 gap-8">

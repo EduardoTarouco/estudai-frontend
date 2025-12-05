@@ -66,7 +66,7 @@ export const QuestionList = () => {
               creationDate={item.createdAt}
             />
           )}
-          ListEmptyComponent={<Text className="text-white text-2xl font-bold text-center">Crie uma nova lista de questões para que ela apareça aqui!</Text>}
+          ListEmptyComponent={<Text className="text-2xl font-bold text-center p-3">Crie uma nova lista de questões para que ela apareça aqui!</Text>}
         />
       </View>
     </View>

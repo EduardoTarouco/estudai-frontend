@@ -3,13 +3,12 @@ import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Button, ButtonText, ButtonIcon } from '@/components/ui/button';
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { ArrowLeft, ArrowRight } from "lucide-react-native";
-import { useState, useEffect, useMemo } from "react";
 import Markdown from "react-native-markdown-display";
 import { useSession } from '@/contexts/AuthContext';
 import { Heading } from '@/components/ui/heading';
 import { Center } from '@/components/ui/center';
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useFocusEffect } from '@react-navigation/native';
 
 export const AnswerQuestions = () => {
 
@@ -29,6 +28,26 @@ export const AnswerQuestions = () => {
 
   const [answeredQuestions, setAnsweredQuestions] = useState({});
 
+  const fetchAnsweredQuestions = async () => {
+    try {
+      const listAnswers = await axios.get(`${baseBackendUrl}/list-answers/list/${allListData.id}`, getAuthHeaders());
+
+      if (!listAnswers.data || listAnswers.data.length === 0) {
+        setAnsweredQuestions({});
+        return;
+      }
+
+      setAnsweredQuestions(listAnswers.data.reduce((acc, answer) => {
+          acc[answer.questionId] = answer;
+          return acc;
+        }, {})
+      );
+      console.log("Respostas carregadas com sucesso!", listAnswers.data);
+    } catch (error) {
+      console.error("Erro ao carregar respostas do usuário: ", error);
+    }
+  }
+
   const handleAnswer = async (letter) => {
     try {
       const postData = {
@@ -37,24 +56,19 @@ export const AnswerQuestions = () => {
         userAnswer: letter,
         responseTimeSeconds: Math.floor((new Date().getTime() - question.startTime.getTime()) / 1000)
       };
-      const response = await axios.post(`${baseBackendUrl}/list-answers`, postData, getAuthHeaders());
+      const listResponse = await axios.post(`${baseBackendUrl}/list-answers`, postData, getAuthHeaders());
       setSelectedAlternative(letter);
 
-      const isCorrect = response.data.isCorrect;
-
-      setAnsweredQuestions(prev => ({
-        ...prev,
-        [question.index]: {
-          userAnswer: postData.userAnswer,
-          correct: isCorrect,
-          correctAlternative: question.correctAlternative
-        }
-      }));
-      console.log("Resposta enviada com sucesso!", response.data);
+      await fetchAnsweredQuestions();
+      console.log("Resposta enviada com sucesso!", listResponse.data);
     } catch (error) {
       console.error("Erro ao enviar resposta: ", error);
     }
   };
+
+  useEffect(() => {
+    fetchAnsweredQuestions();
+  }, []);
 
   // Atualiza a questão atual quando o índice da questão muda
   useEffect(() => {
@@ -66,6 +80,12 @@ export const AnswerQuestions = () => {
   useEffect(() => {
     if (!question) return;
 
+    console.log("Questão atual =>", question.id);
+    console.log("Respondidas =>", Object.keys(answeredQuestions));
+
+    const answer = answeredQuestions[question.id];
+    setSelectedAlternative(answer ? answer.userAnswer : null);
+
     const markdown = `
 ${question.context}
 
@@ -73,7 +93,7 @@ ${question.context}
 `
 
     setQuestionMarkdown(markdown);
-  }, [question]);
+  }, [question, answeredQuestions]);
 
   const handlePreviousQuestion = () => {
     if (questionIndex > 0) {
@@ -110,7 +130,7 @@ ${question.context}
             const isSelected = selectedAlternative === alternative.letter;
             const isCorrect = alternative.isCorrect;
 
-            const showResult = answeredQuestions[question.index];
+            const showResult = answeredQuestions[question.id];
 
             let bgColor = "white";
             if (showResult) {
@@ -128,7 +148,7 @@ ${question.context}
               white: "bg-white",
               red: "bg-red-600",
               green: "bg-green-500",
-              gray: "bg-gray-300"
+              gray: "bg-gray-200"
             };
 
             return (
@@ -152,7 +172,7 @@ ${question.context}
 
           <View className="w-full flex flex-row justify-between p-2 my-2">
             <Button
-              className={`${questionIndex === 0 ? 'opacity-85' : ''}`}
+              className={`${questionIndex === 0 ? 'opacity-85' : ''} rounded-3xl border-black border-2 border-b-4`}
               disabled={questionIndex === 0}
               action={"primary"}
               variant={"solid"}
@@ -164,7 +184,7 @@ ${question.context}
             </Button>
 
             <Button
-              className={`${questionIndex === questionList.length - 1 ? 'bg-green-400' : ''}`}
+              className={`${questionIndex === questionList.length - 1 ? 'bg-green-400' : ''} rounded-3xl border-black border-2 border-b-4`}
               action={"primary"}
               variant={"solid"}
               size={"lg"}

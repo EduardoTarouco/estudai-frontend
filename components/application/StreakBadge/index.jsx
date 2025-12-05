@@ -1,6 +1,7 @@
+import { useFocusEffect } from "@react-navigation/native";
 import { useSession } from "@/contexts/AuthContext";
 import { getTodayStreak } from "./streakProvider";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Flame } from "lucide-react-native";
 import { View, Text } from "react-native";
 
@@ -18,9 +19,11 @@ export const StreakBadge = () => {
     }
   };
 
-  useEffect(() => {
-    fetchStreak();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchStreak();
+    }, [])
+  );
 
   return (
     <View className="bg-gray-950 flex-row items-center justify-center w-full rounded-xl p-3 py-5 gap-8">

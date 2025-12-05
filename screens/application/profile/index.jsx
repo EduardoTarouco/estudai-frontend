@@ -14,7 +14,7 @@ export const Profile = () => {
   const { signOut, getAuthHeaders, session } = useSession();
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
   const [userData, setUserData] = useState({});
-  const [quantidadeListas, setQuantidadeListas] = useState(0);
+  const [listas, setListas] = useState([]);
 
   const fetchUserData = async () => {
     try {
@@ -28,9 +28,11 @@ export const Profile = () => {
   const fetchQuantidadeListas = async () => {
     try {
       const response = await axios.get(`${baseBackendUrl}/custom-lists`, getAuthHeaders());
-      setQuantidadeListas(response.data.length);
+      const listasData = response.data;
+
+      setListas(listasData);
     } catch (error) {
-      console.error("Error fetching list count: ", error);
+      console.error("Erro ao buscar listas: ", error);
     }
   };
 
@@ -40,6 +42,11 @@ export const Profile = () => {
       fetchQuantidadeListas();
     }, [])
   );
+
+  const linguagens = listas.filter(x => x.filterSubject === "linguagens").length;
+  const humanas    = listas.filter(x => x.filterSubject === "humanas").length;
+  const naturezas  = listas.filter(x => x.filterSubject === "naturezas").length;
+  const matematica = listas.filter(x => x.filterSubject === "matematica").length;
 
   return (
     <View className="flex-1">
@@ -56,21 +63,20 @@ export const Profile = () => {
             resizeMode="contain"
             className="
               scale-150
-              h-24
-              w-24
+              h-24 w-24
             "/>
         </View>
 
-        <View className="bg-gray-950 items-start w-full p-4 rounded-lg">
-          <Text className="text-2xl font-bold text-gray-50">Streak atual:</Text>
+        <View className="bg-gray-950 items-start w-full p-4 pl-5 rounded-lg">
+          <Text className="text-2xl font-bold text-gray-50">Streak atual</Text>
             <View className="flex-row items-center gap-2">
               <Flame size={32} strokeWidth={2} color="lime" />
-              <Text className="text-lg font-medium text-gray-50">{userData?.streakDays || 0}</Text>
+              <Text className="text-lg font-medium text-gray-50">{userData?.streakDays || 0} {userData?.streakDays == 1 ? "dia" : "dias"}</Text>
             </View>
 
           <Divider className="my-2" />
           
-          <Text className="text-2xl font-bold text-gray-50">Quantidade de moedas:</Text>
+          <Text className="text-2xl font-bold text-gray-50">Quantidade de gemas</Text>
             <View className="flex-row items-center gap-2">
               <Gem size={32} strokeWidth={2} color="#60a5fa" />
               <Text className="text-lg font-medium text-gray-50">{userData?.coins || 0}</Text>
@@ -80,8 +86,26 @@ export const Profile = () => {
 
           <Text className="text-2xl font-bold text-gray-50">Quantidade de listas criadas</Text>
             <View className="flex-row items-center gap-2">
-              <Scroll size={32} strokeWidth={2} color="gray" />
-              <Text className="text-lg font-medium text-gray-50">{quantidadeListas ?? 0}</Text>
+              <Scroll size={32} strokeWidth={2} color="yellow" />
+              <Text className="text-lg font-medium text-gray-50">{listas.length} {listas.length == 1 ? "lista" : "listas"} ao todo</Text>
+            </View>
+            <View className="px-6 mt-2 w-full">
+              <View className="flex-row items-center gap-2 py-1">
+                <Scroll size={24} strokeWidth={2} color="#60a4f9" />
+                <Text className="text-md font-medium text-gray-50">{linguagens} {linguagens == 1 ? "lista" : "listas"} de linguagens</Text>
+              </View>
+              <View className="flex-row items-center gap-2 py-1">
+                <Scroll size={24} strokeWidth={2} color="#49dd7f" />
+                <Text className="text-md font-medium text-gray-50">{humanas} {humanas == 1 ? "lista" : "listas"} de humanas</Text>
+              </View>
+              <View className="flex-row items-center gap-2 py-1">
+                <Scroll size={24} strokeWidth={2} color="#bf83fc" />
+                <Text className="text-md font-medium text-gray-50">{naturezas} {naturezas == 1 ? "lista" : "listas"} de naturezas</Text>
+              </View>
+              <View className="flex-row items-center gap-2 py-1">
+                <Scroll size={24} strokeWidth={2} color="#f77073" />
+                <Text className="text-md font-medium text-gray-50">{matematica} {matematica == 1 ? "lista" : "listas"} de matematica</Text>
+              </View>
             </View>
         </View>
 
