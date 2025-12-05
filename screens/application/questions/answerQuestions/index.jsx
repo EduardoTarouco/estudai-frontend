@@ -9,6 +9,7 @@ import { useSession } from '@/contexts/AuthContext';
 import { Heading } from '@/components/ui/heading';
 import { Center } from '@/components/ui/center';
 import axios from "axios";
+import { useFocusEffect } from '@react-navigation/native';
 
 export const AnswerQuestions = () => {
 
@@ -29,14 +30,15 @@ export const AnswerQuestions = () => {
   const handleAnswer = async (letter) => {
     try {
       const postData = {
+        customListId: allListData.id,
         questionId: question.id,
         userAnswer: letter,
         responseTimeSeconds: Math.floor((new Date().getTime() - question.startTime.getTime()) / 1000)
       };
-      await axios.post(`${baseBackendUrl}/answers`, postData, getAuthHeaders());
+      const response = await axios.post(`${baseBackendUrl}/list-answers`, postData, getAuthHeaders());
       setSelectedAlternative(letter);
 
-      const isCorrect = letter === question.correctAlternative;
+      const isCorrect = response.data.isCorrect;
 
       setAnsweredQuestions(prev => ({
         ...prev,
@@ -46,7 +48,7 @@ export const AnswerQuestions = () => {
           correctAlternative: question.correctAlternative
         }
       }));
-      console.log("Resposta enviada com sucesso!");
+      console.log("Resposta enviada com sucesso!", response.data);
     } catch (error) {
       console.error("Erro ao enviar resposta: ", error);
     }
@@ -76,6 +78,9 @@ ${question.context}
     if (questionIndex > 0) {
       setQuestionIndex(prev => prev - 1);
       setSelectedAlternative(null);
+    } else {
+      // Se está na primeira questão, volta para a listagem
+      router.back();
     }
   };
 

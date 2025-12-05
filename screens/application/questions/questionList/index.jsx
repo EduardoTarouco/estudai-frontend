@@ -4,7 +4,9 @@ import { QuestionListItem } from "@/components/application/QuestionListItem";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import { View, Text, FlatList } from "react-native";
 import { useSession } from "@/contexts/AuthContext";
-import { useState, useCallback } from "react";
+import { useLocalSearchParams } from "expo-router";
+import { useState, useEffect, useCallback } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import axios from "axios";
 
 export const QuestionList = () => {
@@ -15,22 +17,30 @@ export const QuestionList = () => {
   const { title, color, href } = useLocalSearchParams();
   const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
-      // Atualmente, puxa todas as listas, independentemente da disciplina
-      const response = await axios.get(`${baseBackendUrl}/custom-lists`, getAuthHeaders());
+      // Filtra listas por matéria usando o parâmetro subject
+      const url = href 
+        ? `${baseBackendUrl}/custom-lists?subject=${href}`
+        : `${baseBackendUrl}/custom-lists`;
+      const response = await axios.get(url, getAuthHeaders());
       setQuestions(response.data);
       console.log(response.data);
     } catch (error) {
       console.error("Erro ao buscar questões:", error);
     }
-  }
+  }, [href, baseBackendUrl, getAuthHeaders]);
 
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  // Atualiza os dados quando a tela recebe foco (quando volta de outra tela)
   useFocusEffect(
     useCallback(() => {
       fetchData();
-    }, [href])
-);
+    }, [fetchData])
+  );
 
   return (
     <View className="flex-1">
@@ -51,9 +61,9 @@ export const QuestionList = () => {
               questionList={item.questions}
               title={item.name}
               description={item?.description}
-              total={item.questionsId?.length || "nulo"}
-              correct={item.right?.length || "nulo"}
-              wrong={item.wrong?.length || "nulo"}
+              total={item.questions?.length || item.questionsCount || 0}
+              correct={item.correctAnswers || 0}
+              wrong={item.wrongAnswers || 0}
               creationDate={item.createdAt}
             />
           )}

@@ -38,13 +38,17 @@ export const CreateQuestionListModal = ({ onCreated, disciplina = null }) => {
 
   const onSubmit = async (data) => {
     try {
-      let questions = [];
-      for (let i = 1; i <= parseInt(data.questionsCount); i++) {
-        questions.push(i);
-      }
-      data.questions = questions;
+      // Garante que filterSubject seja enviado (obrigatório no backend)
+      const payload = {
+        name: data.name,
+        description: data.description,
+        filterSubject: data.filterSubject || disciplina,
+        filterYear: data.filterYear ? parseInt(data.filterYear) : null,
+        questionsCount: data.questionsCount ? parseInt(data.questionsCount) : null,
+        includeAnswered: data.includeAnswered || false
+      };
 
-      const response = await axios.post(baseBackendUrl + "/custom-lists", data, getAuthHeaders());
+      const response = await axios.post(baseBackendUrl + "/custom-lists", payload, getAuthHeaders());
       console.log("Lista de questões criada com sucesso: ", response.data);
       setShowModal(false);
       onCreated();
