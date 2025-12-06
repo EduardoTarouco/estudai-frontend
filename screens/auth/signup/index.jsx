@@ -252,7 +252,7 @@ export const SignUp = () => {
               {errorMessage ? <Text className="text-red-500 text-sm ml-5">{errorMessage}</Text> : null}
 
               <Button 
-                className="bg-green-600 border-black rounded-3xl border-2 border-b-4"
+                className="bg-green-500 border-black rounded-3xl border-2 border-b-4"
                 action={"primary"} 
                 variant={"solid"} 
                 size={"lg"} 

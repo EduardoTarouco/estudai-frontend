@@ -44,7 +44,7 @@ export const ForgotPassword = () => {
   }
 
   return (
-    <SafeAreaView className="h-screen w-screen flex justify-center items-center gap-3 bg-gray-200">
+    <SafeAreaView className="h-screen w-screen flex justify-center items-center gap-3 bg-estudaiBg-light">
       <Heading size={"4xl"}>Esqueci a senha</Heading>
 
       <FormControl className="bg-gray-50 p-5 border rounded-lg border-outline-300 w-[95%]">
@@ -70,6 +70,7 @@ export const ForgotPassword = () => {
           </VStack>
 
           <Button 
+            className="bg-green-500 border-black rounded-3xl border-2 border-b-4"
             action={"primary"} 
             variant={"solid"} 
             size={"lg"} 
