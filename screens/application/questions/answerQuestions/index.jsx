@@ -159,7 +159,6 @@ ${question.context}
                 className={`w-full flex flex-row items-center ${bgColors[bgColor]} rounded-xl gap-2 p-2 px-4 m-1`}
                 activeOpacity={0.8}
               >
-                {}
                 <Text className="font-bold text-lg">
                   {alternative.letter}
                 </Text>

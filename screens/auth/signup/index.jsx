@@ -129,7 +129,7 @@ export const SignUp = () => {
                   <Input variant="rounded" size="xl" className={`min-w-[250px] text-center border-2`} isInvalid={errors.email}>
                     <InputIcon as={MailIcon} className="m-3 -mr-1" color={errors.email ? "red" : "currentColor"} />
                     <InputField
-                      placeholder="Fulano@gmail.com"
+                      placeholder="Estudante@gmail.com"
                       keyboardType="email-adress" 
                       value={value}
                       onChangeText={onChange}
