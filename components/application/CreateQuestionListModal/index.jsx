@@ -21,7 +21,7 @@ export const CreateQuestionListModal = ({ onCreated, disciplina = null }) => {
     defaultValues: {
         name: "",
         description: "",
-        filterYear: "2023",
+        filterYear: "2022",
         filterSubject: disciplina,
         questionsCount: "",
         includeAnswered: false,
@@ -198,7 +198,7 @@ export const CreateQuestionListModal = ({ onCreated, disciplina = null }) => {
                   name="questionsCount"
                   rules={{
                     required: "É obrigatório informar a quantidade de questões",
-                    max: {value: 50, message: "O máximo de questões por lista é 50" },
+                    max: {value: 20, message: "O máximo de questões por lista é 20" },
                     min: {value: 1,  message: "O mínimo de questões por lista é 1" }
                   }}
                   render={({ field: { onChange, value } }) => (

@@ -1,9 +1,11 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { useSession } from "@/contexts/AuthContext";
-import { getTodayStreak } from "./streakProvider";
 import { useCallback, useState } from "react";
 import { Flame } from "lucide-react-native";
 import { View, Text } from "react-native";
+import axios from "axios";
+
+const baseBackendUrl = process.env.EXPO_PUBLIC_API_URL;
 
 export const StreakBadge = () => {
 
@@ -12,8 +14,8 @@ export const StreakBadge = () => {
 
   const fetchStreak = async () => {
     try {
-      const streak = await getTodayStreak(getAuthHeaders());
-      setTodayStreak(streak);
+      const streak = await axios.get(`${baseBackendUrl}/auth/me`, getAuthHeaders());
+      setTodayStreak(streak.data.streakDays);
     } catch (error) {
       console.error("Error fetching streak data: ", error);
     }
